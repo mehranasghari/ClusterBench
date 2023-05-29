@@ -5,7 +5,7 @@ default_file=""
 input_file=""
 
 # Parse command line arguments
-while getopts "d:i:p:" opt; do
+while getopts "d:i:s:" opt; do
   case $opt in
     d) default_file=$OPTARG ;;
     i) input_file=$OPTARG ;;

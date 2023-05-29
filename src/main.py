@@ -3,7 +3,7 @@ import subprocess
 import generate_xml
 import os
 
-script_path = './../cli.sh'
+script_path = './../../cli.sh'
 arg1 = 'submit'
 
 input_file = sys.argv[1]
