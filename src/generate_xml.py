@@ -9,7 +9,7 @@ def convert_input_to_xml(input_file, defaults_file, output_file):
 
     # Read default values from JSON file
     defaults = read_default_values_from_json(defaults_file)
-    couster_address = defaults['cluster_address']
+    cluster_address = defaults['cluster_address']
     workers = defaults['workers']
     start_containers = defaults['start_containers']
     end_containers = defaults['end_containers']
