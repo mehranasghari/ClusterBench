@@ -9,7 +9,7 @@ while getopts "d:i:p:" opt; do
   case $opt in
     d) default_file=$OPTARG ;;
     i) input_file=$OPTARG ;;
-    p) prepare_file=$OPTARG ;;
+    s) script_file=$OPTARG ;;
     *) echo "Invalid option: -$OPTARG" >&2; exit 1 ;;
   esac
 done
@@ -24,4 +24,4 @@ if [[ -z $default_file ]]; then
   exit 1
 fi
 
-python3 main.py "${input_file}" "${default_file}" "${prepare_file}"
+python3 main.py "${input_file}" "${default_file}" "${script_file}"
