@@ -9,6 +9,7 @@ def convert_input_to_xml(input_file, defaults_file, output_file):
 
     # Read default values from JSON file
     defaults = read_default_values_from_json(defaults_file)
+    couster_address = defaults['cluster_address']
     workers = defaults['workers']
     start_containers = defaults['start_containers']
     end_containers = defaults['end_containers']
@@ -31,7 +32,7 @@ def convert_input_to_xml(input_file, defaults_file, output_file):
             file.write('<?xml version="1.0" encoding="UTF-8" ?>\n')
             file.write('<workload name="swift-sample" description="sample benchmark for swift">\n')
             file.write('  <storage type="swift" />\n')
-            file.write('  <auth type="swauth" config="username=test:tester;password=testing;auth_url=http://10.105.10.80:8080/auth/v1.0" />\n')
+            file.write('  <auth type="swauth" config="username=test:tester;password=testing;auth_url=http://{}:8080/auth/v1.0" />\n'.format(cluster_address))
             file.write('  <workflow>\n\n')
 
             for line in lines:
