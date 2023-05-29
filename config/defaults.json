@@ -1,0 +1,12 @@
+{
+    "workers" : "5",
+    "start_containers" : "1",
+    "end_containers" : "10",
+    "start_objects" : "1",
+    "end_objects" : "10",
+    "sizes" : "5",
+    "put" : "40",
+    "get" : "40",
+    "delete" : "40",
+    "delay" : "10"
+}
