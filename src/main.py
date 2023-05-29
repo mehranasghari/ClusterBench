@@ -3,14 +3,15 @@ import subprocess
 import generate_xml
 import os
 
-script_path = '/home/asghari/Downloads/0.4.2/cli.sh'
+script_path = './../cli.sh'
 arg1 = 'submit'
 
 input_file = sys.argv[1]
 default_file = sys.argv[2]
-prepare_file = sys.argv[3]
-temp_output_path = '/home/asghari/Downloads/0.4.2/automated-test/temp_output'
-temp_output_xml_path = '/home/asghari/Downloads/0.4.2/automated-test/temp_output.xml'
+script_file = sys.argv[3]
+
+temp_output_path = './temp_output'
+temp_output_xml_path = './temp_output.xml'
 
 input = open(input_file, "r")
 lines = input.read().split('}')
@@ -33,9 +34,7 @@ for workload_number in range(workloads):
             workload_name = l.split('{')[0].strip().rstrip()
     print(f"Workload: {workload_name} is running")
     arg2 = temp_output_file_xml
-    subprocess.call(["bash", prepare_file])
     subprocess.call(["bash", script_path, arg1, arg2])
     os.remove(temp_output_file) 
     os.remove(temp_output_file_xml)
-    print("Script output:")
     print("--------------------------------------")
