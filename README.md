@@ -3,8 +3,8 @@ ClusterBench (CBench) is a program designed to execute multiple Cosbench tests o
 
 ## Table of Contents
 
-- [Installation](#installation)
-- [Usage](#usage)
+- [Installation](#Installation)
+- [Usage](#Usage)
 - [Configuration](#configuration)
 - [Contributing](#contributing)
 - [License](#license)
@@ -28,3 +28,10 @@ To use ClusterBench, follow these steps:
      
 - If you have installed COSBench:
      
+
+## Usage
+
+To run ClusterBench, execute the main.sh script with the appropriate command-line arguments:
+     
+     ```shell
+     ./main.sh -i input -d defaults.json -s 
