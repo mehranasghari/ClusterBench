@@ -32,5 +32,5 @@ To use ClusterBench, follow these steps:
 ## Usage
 
 To run ClusterBench, execute the main.sh script with the appropriate command-line arguments:
-     ```shell
-     ./main.sh -i input -d defaults.json -s 
+  ```shell
+    ./main.sh -i input -d defaults.json -s 
