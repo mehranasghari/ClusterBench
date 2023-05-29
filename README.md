@@ -32,8 +32,9 @@ To use ClusterBench, follow these steps:
 ## Usage
 
 To run ClusterBench, execute the main.sh script with the appropriate command-line arguments:
-  ```shell
-    ./main.sh -i input -d defaults.json -s 
+    ```shell
+      ./main.sh -i input -d defaults.json -s
+
 
 ## Configuration
 
@@ -41,4 +42,3 @@ ClusterBench requires two key components for its execution:
 
 1. Input File: The input file provides the necessary parameters and configuration details for the Cosbench tests. Place the input file in the `input/` directory.
 2. Defaults File: The defaults file contains the default settings and configurations for the tests. Modify this file as needed and place it in the `config/` directory.
-
