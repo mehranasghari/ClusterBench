@@ -2,6 +2,7 @@ import sys
 import subprocess
 import generate_xml
 import os
+import time
 
 script_path = './../../cli.sh'
 arg1 = 'submit'
@@ -38,15 +39,14 @@ for workload_number in range(workloads):
     output_lines = result.stdout.splitlines()
     for line in output_lines:
         if line.find("ID"):
-            print("This is the output line:", line)
-    # while True:
-    #     file_path = os.path.join(path, filename)  # Construct the absolute file path
-    # if os.path.exists(file_path):
-    #     print(f"The file '{filename}' exists in the path '{path}'.")
-    #     return True
-    # else:
-    #     print(f"The file '{filename}' does not exist in the path '{path}'.")
-    #     return False
+            output_line = line
+    workload_id = output_line.rsplit(maxsplit=1)[-1]
+    while True:
+        output_file_path = os.path.join(output_path, output_filename)  # Construct the absolute file path
+        if os.path.exists(output_file_path):
+            print(f"The file '{output_filename}' exists in the path '{output_path}'.")
+            break
+        time.sleep(1)
     os.remove(temp_output_file) 
     os.remove(temp_output_file_xml)
     print("--------------------------------------")
