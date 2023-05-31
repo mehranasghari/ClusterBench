@@ -20,13 +20,6 @@ workloads -= 1
 
 workload_name = ""
 
-# Example usage
-path = '/path/to/folder'  # Replace with your desired path
-filename = 'example.txt'  # Replace with the name of the file you want to check
-
-check_file_exists(path, filename)
-
-
 for workload_number in range(workloads):
     temp_output_file = temp_output_path + "_" + str(workload_number)
     temp_output_file_xml = temp_output_xml_path + "_" + str(workload_number)
