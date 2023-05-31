@@ -20,6 +20,13 @@ workloads -= 1
 
 workload_name = ""
 
+# Example usage
+path = '/path/to/folder'  # Replace with your desired path
+filename = 'example.txt'  # Replace with the name of the file you want to check
+
+check_file_exists(path, filename)
+
+
 for workload_number in range(workloads):
     temp_output_file = temp_output_path + "_" + str(workload_number)
     temp_output_file_xml = temp_output_xml_path + "_" + str(workload_number)
@@ -34,7 +41,16 @@ for workload_number in range(workloads):
             workload_name = l.split('{')[0].strip().rstrip()
     print(f"Workload: {workload_name} is running")
     arg2 = temp_output_file_xml
-    subprocess.call(["bash", script_path, arg1, arg2])
+    # subprocess.call(["bash", script_path, arg1, arg2])
+    result = subprocess.call(["bash", script_path, arg1, arg2])
+    # while True:
+    #     file_path = os.path.join(path, filename)  # Construct the absolute file path
+    # if os.path.exists(file_path):
+    #     print(f"The file '{filename}' exists in the path '{path}'.")
+    #     return True
+    # else:
+    #     print(f"The file '{filename}' does not exist in the path '{path}'.")
+    #     return False
     os.remove(temp_output_file) 
     os.remove(temp_output_file_xml)
     print("--------------------------------------")
