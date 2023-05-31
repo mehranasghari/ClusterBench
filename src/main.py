@@ -34,8 +34,8 @@ for workload_number in range(workloads):
             workload_name = l.split('{')[0].strip().rstrip()
     print(f"Workload: {workload_name} is running")
     arg2 = temp_output_file_xml
-    # subprocess.call(["bash", script_path, arg1, arg2])
     result = subprocess.call(["bash", script_path, arg1, arg2])
+    print(result)
     # while True:
     #     file_path = os.path.join(path, filename)  # Construct the absolute file path
     # if os.path.exists(file_path):
