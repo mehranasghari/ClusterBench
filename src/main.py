@@ -52,7 +52,7 @@ for workload_number in range(workloads):
         time.sleep(1)
     resutl_file_path = os.path.join(result_path, workload_name)
     print(resutl_file_path)
-    os.makedirs(result_path)
+    os.mkdir(result_path)
 
     os.remove(temp_output_file)
     os.remove(temp_output_file_xml)
