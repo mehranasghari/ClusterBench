@@ -50,7 +50,7 @@ for workload_number in range(workloads):
             print(f"The file '{output_filename}' exists in the path '{output_path}'.")
             break
         time.sleep(1)
-    resutl_file_path = os.path.join(result_path, workload_name)
+    result_file_path = os.path.join(result_path, workload_name)
     os.mkdir(result_file_path)
 
     os.remove(temp_output_file)
