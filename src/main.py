@@ -51,6 +51,7 @@ for workload_number in range(workloads):
             break
         time.sleep(1)
     resutl_file_path = os.path.join(result_path, workload_name)
+    print(resutl_file_path)
     os.makedirs(result_path)
 
     os.remove(temp_output_file)
