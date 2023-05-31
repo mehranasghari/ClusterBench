@@ -44,6 +44,7 @@ for workload_number in range(workloads):
             output_line = line
     workload_id = output_line.rsplit(maxsplit=1)[-1]
     output_filename = workload_id + "-swift-sample"
+    print(f"Workload ID is: {workload_id}")
     while True:
         output_file_path = os.path.join(output_path, output_filename)  # Construct the absolute file path
         if os.path.exists(output_file_path):
