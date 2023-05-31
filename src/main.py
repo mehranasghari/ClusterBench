@@ -6,6 +6,7 @@ import time
 
 script_path = './../../cli.sh'
 output_path = './../../archive/'
+result_path = './../../result/'
 arg1 = 'submit'
 
 input_file = sys.argv[1]
@@ -49,6 +50,9 @@ for workload_number in range(workloads):
             print(f"The file '{output_filename}' exists in the path '{output_path}'.")
             break
         time.sleep(1)
+    resutl_file_path = os.join(result_path, workload_name)
+    os.makedirs(result_path)
+
     os.remove(temp_output_file)
     os.remove(temp_output_file_xml)
     print("--------------------------------------")
