@@ -5,6 +5,7 @@ import os
 import time
 
 script_path = './../../cli.sh'
+output_path = './../../archive/'
 arg1 = 'submit'
 
 input_file = sys.argv[1]
@@ -41,12 +42,13 @@ for workload_number in range(workloads):
         if line.find("ID"):
             output_line = line
     workload_id = output_line.rsplit(maxsplit=1)[-1]
+    output_filename = workload_id + "-swift-sample"
     while True:
         output_file_path = os.path.join(output_path, output_filename)  # Construct the absolute file path
         if os.path.exists(output_file_path):
             print(f"The file '{output_filename}' exists in the path '{output_path}'.")
             break
         time.sleep(1)
-    os.remove(temp_output_file) 
+    os.remove(temp_output_file)
     os.remove(temp_output_file_xml)
     print("--------------------------------------")
