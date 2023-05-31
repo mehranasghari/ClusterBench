@@ -34,7 +34,19 @@ for workload_number in range(workloads):
             workload_name = l.split('{')[0].strip().rstrip()
     print(f"Workload: {workload_name} is running")
     arg2 = temp_output_file_xml
-    subprocess.call(["bash", script_path, arg1, arg2])
+    result = subprocess.run(["bash", script_path, arg1, arg2], stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
+    output_lines = result.stdout.splitlines()
+    for line in output_lines:
+        if line.find("ID"):
+            print("This is the output line:", line)
+    # while True:
+    #     file_path = os.path.join(path, filename)  # Construct the absolute file path
+    # if os.path.exists(file_path):
+    #     print(f"The file '{filename}' exists in the path '{path}'.")
+    #     return True
+    # else:
+    #     print(f"The file '{filename}' does not exist in the path '{path}'.")
+    #     return False
     os.remove(temp_output_file) 
     os.remove(temp_output_file_xml)
     print("--------------------------------------")
