@@ -3,6 +3,7 @@ import subprocess
 import generate_xml
 import os
 import time
+import shutil
 
 script_path = './../../cli.sh'
 output_path = './../../archive/'
@@ -53,6 +54,9 @@ for workload_number in range(workloads):
         time.sleep(1)
     result_file_path = os.path.join(result_path, workload_name)
     os.mkdir(result_file_path)
+    output_csv_path = output_file_path + ".csv"
+    result_csv_path = result_file_path + ".csv"
+    shutil.copy2(output_csv_path,result_csv_path)
 
     os.remove(temp_output_file)
     os.remove(temp_output_file_xml)
