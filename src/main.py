@@ -77,12 +77,11 @@ for workload_number in range(workloads):
                 last_main_completed_time = row[24]
 
     time_file_path = os.path.join(result_file_path, 'time')
-    print(time_file_path)
     time_file = open(time_file_path, "w")
     start_time = first_main_launching_time.split('@')[1].strip()
     end_time = last_main_completed_time.split('@')[1].strip()
     time = start_time + ',' + end_time
-    file.write(time)
+    time_file.write(time)
     time_file.close()
     print(f"start time was: {first_main_launching_time}")
     print(f"completed time was: {last_main_completed_time}")
