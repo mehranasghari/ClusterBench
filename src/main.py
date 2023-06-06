@@ -65,7 +65,7 @@ for workload_number in range(workloads):
     os.remove(temp_output_file_xml)
 
     with open(result_csv_path, 'r') as csv_file:
-        reader = csv.reader(csv_file, delimiter='\t')
+        reader = csv.reader(csv_file, delimiter='\n')
 
         first_main_launching_time = None
         last_main_completed_time = None
