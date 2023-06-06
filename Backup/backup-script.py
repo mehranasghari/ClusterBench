@@ -93,5 +93,5 @@ def process_input_file(file_path_input):
                 print("\033[91mDeleting Directory failed.\033[0m")
             print("*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-**-*-*-*-*-*-*-*-*-*-*")
 
-input_file = "input.txt"
+input_file = "./input.txt"
 process_input_file(input_file)
