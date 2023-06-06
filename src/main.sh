@@ -14,14 +14,4 @@ while getopts "d:i:s:" opt; do
   esac
 done
 
-# Check if required arguments are provided
-# if [[ -z $input_file ]]; then
-#   echo "Input file is required. Usage: script.sh -d default_file -i input_file" >&2
-#   exit 1
-# fi
-# if [[ -z $default_file ]]; then
-#   echo "Input file is required. Usage: script.sh -d default_file -i input_file" >&2
-#   exit 1
-# fi
-
 python3 main.py "${input_file}" "${default_file}" "${script_file}"
