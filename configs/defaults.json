@@ -1,5 +1,8 @@
 {
     "cluster_address" : "10.105.10.80",
+    "benchmark_path" : "../config/benchmark.cfg",
+    "default_path" : "../config/defaults.json",
+    "script_path" : "../config/additional-scripts.sh",
     "workers" : "5",
     "start_containers" : "1",
     "end_containers" : "10",
