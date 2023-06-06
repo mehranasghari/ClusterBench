@@ -19,12 +19,12 @@ def process_input_file(file_path_input):
         lines = f.readlines()
         for line in lines:
             start_datetime, end_datetime = line.strip().split(",")
-            start_date, start_time = start_datetime.split("T")
-            end_date, end_time = end_datetime.split("T")
+            start_date, start_time = start_datetime.split(" ")
+            end_date, end_time = end_datetime.split(" ")
 
             # Delete 'Z' from the end of time
-            start_time = start_time.rstrip("Z")
-            end_time = end_time.rstrip("Z")
+           # start_time = start_time.rstrip("Z")
+           # end_time = end_time.rstrip("Z")
 
             # Convert to datetime objects
             start_datetime = datetime.datetime.strptime(start_date + " " + start_time, "%Y-%m-%d %H:%M:%S")
