@@ -29,13 +29,13 @@ def save_times_to_file(time_list, output_file):
         output.write("\n".join(time_list))
 
 # Specify the directory path
-directory_path = "/root/cosBench/ClusterBench/result"
+directory_path = "./../result"
 
 # Collect times from the subdirectories
 times = collect_times(directory_path)
 
 # Save the times to the output file
-output_file = "/root/scripts/input.txt"
+output_file = "./input.txt"
 save_times_to_file(times, output_file)
 
 print("Times collected and saved to", output_file)
