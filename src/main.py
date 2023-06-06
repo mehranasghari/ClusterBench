@@ -6,7 +6,7 @@ import time
 
 script_path = './../../cli.sh'
 output_path = './../../archive/'
-result_path = './../../result/'
+result_path = './../result/'
 arg1 = 'submit'
 
 input_file = sys.argv[1]
