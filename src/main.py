@@ -7,7 +7,7 @@ import time
 script_path = './../../cli.sh'
 output_path = './../../archive/'
 result_path = './../result/'
-arg1 = 'submit'
+submit = 'submit'
 
 input_file = sys.argv[1]
 default_file = sys.argv[2]
@@ -36,8 +36,8 @@ for workload_number in range(workloads):
         if '{' in l:
             workload_name = l.split('{')[0].strip().rstrip()
     print(f"Workload {workload_name} is running ...")
-    arg2 = temp_output_file_xml
-    result = subprocess.run(["bash", script_path, arg1, arg2], stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
+    workload_file = temp_output_file_xml
+    result = subprocess.run(["bash", script_path, submit, workload_file], stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
     output_lines = result.stdout.splitlines()
     for line in output_lines:
         if line.find("ID"):
