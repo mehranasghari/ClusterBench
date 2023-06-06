@@ -46,9 +46,9 @@ for workload_number in range(workloads):
     output_filename = workload_id + "-swift-sample"
     print(f"Workload ID is: {workload_id}")
     while True:
-        output_file_path = os.path.join(output_path, output_filename)  # Construct the absolute file path
+        output_file_path = os.path.join(output_path, output_filename)  # Construct the absolute output file path
         if os.path.exists(output_file_path):
-            print(f"The file '{output_filename}' exists in the path '{output_path}'.")
+            # print(f"The file '{output_filename}' exists in the path '{output_path}'.")
             break
         time.sleep(1)
     result_file_path = os.path.join(result_path, workload_name)
