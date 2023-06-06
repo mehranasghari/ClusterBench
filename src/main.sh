@@ -14,4 +14,5 @@ while getopts "d:i:s:" opt; do
   esac
 done
 
+# Call the main program
 python3 main.py "${input_file}" "${default_file}" "${script_file}"
