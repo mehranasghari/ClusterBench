@@ -87,5 +87,4 @@ for workload_number in range(workloads):
     print(f"completed time was: {last_main_completed_time}")
     print("--------------------------------------")
 
-subprocess.call(['python3', './../Backup/time-collector.py'])
-subprocess.call(['python3', './../Backup/backup-script.py'])
+subprocess.call(['python3', './../Backup/backup-script.py -t ', 'test-name']) # TO DO
