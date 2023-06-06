@@ -2,9 +2,14 @@ import sys
 import subprocess
 import generate_xml
 import os
+import time
+import shutil
+import csv
 
 script_path = './../../cli.sh'
-arg1 = 'submit'
+output_path = './../../archive/'
+result_path = './../result/'
+submit = 'submit'
 
 input_file = sys.argv[1]
 default_file = sys.argv[2]
@@ -32,18 +37,52 @@ for workload_number in range(workloads):
     for l in every_line:
         if '{' in l:
             workload_name = l.split('{')[0].strip().rstrip()
-    print(f"Workload: {workload_name} is running")
-    arg2 = temp_output_file_xml
-    result = subprocess.call(["bash", script_path, arg1, arg2])
-    print(result)
-    # while True:
-    #     file_path = os.path.join(path, filename)  # Construct the absolute file path
-    # if os.path.exists(file_path):
-    #     print(f"The file '{filename}' exists in the path '{path}'.")
-    #     return True
-    # else:
-    #     print(f"The file '{filename}' does not exist in the path '{path}'.")
-    #     return False
-    os.remove(temp_output_file) 
+    print(f"Workload {workload_name} is running ...")
+    workload_file = temp_output_file_xml
+    result = subprocess.run(["bash", script_path, submit, workload_file], stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
+    output_lines = result.stdout.splitlines()
+    for line in output_lines:
+        if line.find("ID"):
+            output_line = line
+    workload_id = output_line.rsplit(maxsplit=1)[-1]
+    output_filename = workload_id + "-swift-sample"
+    print(f"Workload ID is: {workload_id}")
+    while True:
+        output_file_path = os.path.join(output_path, output_filename)  # Construct the absolute output file path
+        if os.path.exists(output_file_path):
+            # print(f"The file '{output_filename}' exists in the path '{output_path}'.")
+            break
+        time.sleep(1)
+    result_file_path = os.path.join(result_path, workload_name)
+    os.mkdir(result_file_path)
+    output_csv_path = os.path.join(output_file_path, output_filename)
+    output_csv_path += ".csv"
+    result_csv_path = os.path.join(result_file_path, workload_name)
+    result_csv_path += ".csv"
+    shutil.copy2(output_csv_path,result_csv_path)
+
+    os.remove(temp_output_file)
     os.remove(temp_output_file_xml)
+
+    with open(result_csv_path, 'r') as csv_file:
+        reader = csv.reader(csv_file)
+
+        first_main_launching_time = None
+        last_main_completed_time = None
+
+        for row in reader:
+            if row[0].endswith('main'):
+                if first_main_launching_time is None:
+                    first_main_launching_time = row[21]
+                last_main_completed_time = row[24]
+
+    time_file_path = os.path.join(result_file_path, 'time')
+    time_file = open(time_file_path, "w")
+    start_time = first_main_launching_time.split('@')[1].strip()
+    end_time = last_main_completed_time.split('@')[1].strip()
+    start_end_time = start_time + ',' + end_time
+    time_file.write(start_end_time)
+    time_file.close()
+    print(f"start time was: {first_main_launching_time}")
+    print(f"completed time was: {last_main_completed_time}")
     print("--------------------------------------")
