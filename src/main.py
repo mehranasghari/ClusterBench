@@ -77,7 +77,7 @@ for workload_number in range(workloads):
                 last_main_completed_time = row[24]
 
     time_file_path = os.path.join(result_file_path, 'time')
-    time_file = open(time_file_path, 'w')
+    time_file = open(time_file_path, "w")
     start_time = first_main_launching_time.split('@')[1].strip()
     end_time = last_main_completed_time.split('@')[1].strip()
     time = start_time + ',' + end_time
