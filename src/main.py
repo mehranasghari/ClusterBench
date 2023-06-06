@@ -35,7 +35,7 @@ for workload_number in range(workloads):
     for l in every_line:
         if '{' in l:
             workload_name = l.split('{')[0].strip().rstrip()
-    print(f"Workload: {workload_name} is running")
+    print(f"Workload {workload_name} is running ...")
     arg2 = temp_output_file_xml
     result = subprocess.run(["bash", script_path, arg1, arg2], stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
     output_lines = result.stdout.splitlines()
