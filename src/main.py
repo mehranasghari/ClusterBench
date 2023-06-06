@@ -71,7 +71,7 @@ for workload_number in range(workloads):
         last_main_completed_time = None
 
         for row in reader:
-            if row[0].find("main"):
+            if row[0].endswith('main'):
                 print(row)
                 # if first_main_launching_time is None:
                 #     first_main_launching_time = row[21]
