@@ -94,6 +94,7 @@ for workload_number in range(workloads):
     # Create result directory of workload
     result_file_path = os.path.join(result_path, workload_name)
     if os.path.exists(result_file_path):
+        print(result_file_path)
         if result_file_path.endswith('_'):
             repeat_number = int(result_file_path.split('_')[-1]) + 1
             print(f"repeat number {repeat_number}")
