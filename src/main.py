@@ -6,19 +6,24 @@ import time
 import shutil
 import csv
 
-script_path = './../../cli.sh'
-output_path = './../../archive/'
+# Getting arguments from main.sh
+# Arguments are: input file, default file and script file
+input_file_path = sys.argv[1]
+default_file_path = sys.argv[2]
+script_file_path = sys.argv[3]
+
+# Defining paths
+cosbench_command = './../../cli.sh'
+archive_path = './../../archive/'
 result_path = './../result/'
 submit = 'submit'
 
-input_file = sys.argv[1]
-default_file = sys.argv[2]
-script_file = sys.argv[3]
-
+# Defining temporary path for generating xml config file
 temp_output_path = './temp_output'
 temp_output_xml_path = './temp_output.xml'
 
-input = open(input_file, "r")
+# Splitting input file to workloads 
+input = open(input_file_path, "r")
 lines = input.read().split('}')
 workloads = len(lines)
 workloads -= 1
@@ -26,44 +31,67 @@ workloads -= 1
 workload_name = ""
 
 for workload_number in range(workloads):
-    temp_output_file = temp_output_path + "_" + str(workload_number)
-    temp_output_file_xml = temp_output_xml_path + "_" + str(workload_number)
-    file = open(temp_output_file, "w")
+
+    # Create a temporary file and xml for each workload
+    temp_output_file_path = temp_output_path + "_" + str(workload_number)
+    temp_output_file_xml_path = temp_output_xml_path + "_" + str(workload_number)
+    file = open(temp_output_file_path, "w")
     file.write(lines[workload_number])
     file.close()
-    generate_xml.convert_input_to_xml(temp_output_file, default_file, temp_output_file_xml)
-    file = open(temp_output_file, 'r')
+
+    # Generate config.xml file
+    generate_xml.convert_input_to_xml(temp_output_file_path, default_file_path, temp_output_file_xml_path)
+
+    # Find the name of workload
+    file = open(temp_output_file_path, 'r')
     every_line = file.readlines()
     for l in every_line:
         if '{' in l:
             workload_name = l.split('{')[0].strip().rstrip()
+
+    # Start workload
     print(f"Workload {workload_name} is running ...")
-    workload_file = temp_output_file_xml
-    result = subprocess.run(["bash", script_path, submit, workload_file], stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
+    workload_file_path = temp_output_file_xml_path
+    result = subprocess.run(["bash", cosbench_command, submit, workload_file_path], stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
+    
+    # Extract ID of workload
     output_lines = result.stdout.splitlines()
     for line in output_lines:
         if line.find("ID"):
             output_line = line
     workload_id = output_line.rsplit(maxsplit=1)[-1]
-    output_filename = workload_id + "-swift-sample"
+
+    # Generate archive file name of workload
+    archive_file_name = workload_id + "-swift-sample"
     print(f"Workload ID is: {workload_id}")
+
+    # Check every second if the workload is ended or not
     while True:
-        output_file_path = os.path.join(output_path, output_filename)  # Construct the absolute output file path
-        if os.path.exists(output_file_path):
-            # print(f"The file '{output_filename}' exists in the path '{output_path}'.")
+        archive_file_path = os.path.join(archive_path, archive_file_name)
+        if os.path.exists(archive_file_path):
             break
         time.sleep(1)
+
+    # Create result directory of workload
     result_file_path = os.path.join(result_path, workload_name)
     os.mkdir(result_file_path)
-    output_csv_path = os.path.join(output_file_path, output_filename)
-    output_csv_path += ".csv"
+
+    # Create archive csv file
+    archive_csv_path = os.path.join(archive_file_path, archive_file_name)
+    archive_csv_path += ".csv"
+
+    # Create result csv file
     result_csv_path = os.path.join(result_file_path, workload_name)
     result_csv_path += ".csv"
-    shutil.copy2(output_csv_path,result_csv_path)
 
-    os.remove(temp_output_file)
-    os.remove(temp_output_file_xml)
+    # Copy csv file from archive to result directory
+    shutil.copy2(archive_csv_path,result_csv_path)
 
+    # Remove config.xml file
+    os.remove(temp_output_file_path)
+    os.remove(temp_output_file_xml_path)
+
+    # Find start of first main and end of last main
     with open(result_csv_path, 'r') as csv_file:
         reader = csv.reader(csv_file)
 
@@ -76,6 +104,7 @@ for workload_number in range(workloads):
                     first_main_launching_time = row[21]
                 last_main_completed_time = row[24]
 
+    # Write time of workload in time file
     time_file_path = os.path.join(result_file_path, 'time')
     time_file = open(time_file_path, "w")
     start_time = first_main_launching_time.split('@')[1].strip()
@@ -83,8 +112,8 @@ for workload_number in range(workloads):
     start_end_time = start_time + ',' + end_time
     time_file.write(start_end_time)
     time_file.close()
-    print(f"start time was: {first_main_launching_time}")
-    print(f"completed time was: {last_main_completed_time}")
+
+
     print("--------------------------------------")
 
 subprocess.call(['python3', './../Backup/backup-script.py -t ', 'test-name']) # TO DO
