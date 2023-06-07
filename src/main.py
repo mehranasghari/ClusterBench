@@ -116,4 +116,4 @@ for workload_number in range(workloads):
 
     print("--------------------------------------")
 
-subprocess.call(['python3', './../Backup/backup-script.py', '-t', workload_name])
+subprocess.call(['python3', './../Backup/backup_script.py', '-t', workload_name])
