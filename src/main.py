@@ -95,6 +95,16 @@ for workload_number in range(workloads):
     result_file_path = os.path.join(result_path, workload_name)
     os.mkdir(result_file_path)
 
+    # Create and copy workload.log
+    archive_log_file = os.path.join(archive_file_path, 'workload.log') 
+    result_log_file = os.path.join(archive_file_path, 'workload.log')
+    shutil.copy2(archive_log_file, result_log_file)
+
+    # Create and copy workload-config.xml
+    archive_config_file = os.path.join(archive_file_path, 'workload-config.xml') 
+    result_config_file = os.path.join(archive_file_path, 'workload-config.xml')
+    shutil.copy2(archive_config_file, result_config_file)
+
     # Create archive csv file
     archive_csv_path = os.path.join(archive_file_path, archive_file_name)
     archive_csv_path += ".csv"
