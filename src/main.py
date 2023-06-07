@@ -114,6 +114,5 @@ for workload_number in range(workloads):
     time_file.close()
 
 
+    subprocess.call(['python3', './../Backup/backup_script.py', '-t', workload_name])
     print("--------------------------------------")
-
-subprocess.call(['python3', './../Backup/backup_script.py', '-t', workload_name])
