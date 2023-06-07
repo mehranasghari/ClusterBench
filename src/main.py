@@ -94,15 +94,14 @@ for workload_number in range(workloads):
     # Create result directory of workload
     result_file_path = os.path.join(result_path, workload_name)
     if os.path.exists(result_file_path):
-        print(result_file_path)
-        if result_file_path.endswith('_'):
-            repeat_number = int(result_file_path.split('_')[-1]) + 1
-            print(f"repeat number {repeat_number}")
-            result_file_tail = '_' + str(repeat_number) + '_'
-            result_file_path += result_file_tail
-        else:
-            result_file_tail = '_' + '1' + '_'
-            result_file_path += result_file_tail
+        result_file_tail = '_' + '1' + '_'
+        result_file_path += result_file_tail
+        while os.path.exists(result_file_path):
+            splitted_result_file = result_file_path.split('_')
+            repeat_number = int(splitted_result_file[-2]) + 1
+            print(f"repeat number is {repeat_number}")
+            splitted_result_file[-2] = str(repeat_number)
+            result_file_path = '_'.join(splitted_result_file)
     os.mkdir(result_file_path)
 
     # Create and copy workload.log
