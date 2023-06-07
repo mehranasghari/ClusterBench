@@ -16,7 +16,10 @@ script_file_path = sys.argv[3]
 cosbench_command = './../../cli.sh'
 archive_path = './../../archive/'
 result_path = './../result/'
+pre_test_script_path = './pre-run.sh'
+backup_script_path = './../Backup/backup_script.py'
 submit = 'submit'
+max_pre_test_script_failure = 3
 
 # Defining temporary path for generating xml config file
 temp_output_path = './temp_output'
@@ -49,11 +52,27 @@ for workload_number in range(workloads):
         if '{' in l:
             workload_name = l.split('{')[0].strip().rstrip()
 
+    # Execute the script before running the test
+    print("Executing pre-test script script ...")
+    time.sleep(1)
+    pre_test_script_failure_num = 0
+    for i in range(max_pre_test_script_failure):
+        pre_test_script = subprocess.run([pre_test_script_path, workload_name])
+        if pre_test_script.returncode == 0:
+            print("Pre-test script executed successfully!")
+            break
+        else:
+            print("Pre-test script executed with failure!")
+            pre_test_script_failure_num += 1
+        time.sleep(1)
+    if pre_test_script_failure_num == 3:
+        exit()
+
     # Start workload
     print(f"Workload {workload_name} is running ...")
     workload_file_path = temp_output_file_xml_path
     result = subprocess.run(["bash", cosbench_command, submit, workload_file_path], stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
-    
+
     # Extract ID of workload
     output_lines = result.stdout.splitlines()
     for line in output_lines:
@@ -114,5 +133,5 @@ for workload_number in range(workloads):
     time_file.close()
 
 
-    subprocess.call(['python3', './../Backup/backup_script.py', '-t', workload_name])
+    subprocess.call(['python3', backup_script_path, '-t', workload_name])
     print("--------------------------------------")
