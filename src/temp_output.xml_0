@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<workload name="swift-sample" description="sample benchmark for swift">
+  <storage type="swift" />
+  <auth type="swauth" config="username=test:tester;password=testing;auth_url=http://10.105.10.80:8080/auth/v1.0" />
+  <workflow>
+
+    <workstage name="init">
+      <work type="init" workers="20" config="containers=r(1,10)" />
+    </workstage>
+
+    <workstage name="prepare">
+      <work type="prepare" workers="20" config="containers=r(1,10);objects=r(1,10);sizes=c(4)KB" />
+    </workstage>
+
+    <workstage name="delay" closuredelay="5">
+            <work name="delay" type="delay">
+                <operation type="delay"/>
+            </work>
+    </workstage>
+
+    <workstage name="main">
+      <work name="main" workers="30" totalBytes="100">
+        <operation type="write" ratio="100" config="containers=r(1,10);objects=r(1,10);sizes=c(4)KB" />
+        <operation type="read" ratio="0" config="containers=r(1,10);objects=r(1,10)" />
+        <operation type="delete" ratio="0" config="containers=r(1,10);objects=r(1,10)" />
+      </work>
+    </workstage>
+
+    <workstage name="main">
+      <work name="main" workers="30" totalBytes="100">
+        <operation type="write" ratio="100" config="containers=r(1,10);objects=r(1,10);sizes=c(4)KB" />
+        <operation type="read" ratio="0" config="containers=r(1,10);objects=r(1,10)" />
+        <operation type="delete" ratio="0" config="containers=r(1,10);objects=r(1,10)" />
+      </work>
+    </workstage>
+
+  </workflow>
+</workload>

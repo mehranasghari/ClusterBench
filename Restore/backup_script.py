@@ -57,8 +57,9 @@ def process_input_file(file_path_input):
             start_date_dir = start_date_dir[2:]
             end_date_dir = end_date.replace("-", "")
             end_date_dir = end_date_dir[2:]
-
+            global backup_dir
             backup_dir = start_date_dir + "T" + final_time_start_backup + "_" + end_date_dir + "T" +final_time_end_backup
+           # print(backup_dir)
             backup_path = "/var/lib/influxdb/test-backup/" + backup_dir
             os.makedirs(backup_path, exist_ok=True)
 
@@ -81,6 +82,7 @@ def process_input_file(file_path_input):
 
             # Tar all backup files in the directory
             tar_file_path = backup_path + ".tar.gz"
+            #print(tar_file_path)
             tar_command = f"docker exec -it influxdb tar -czvf {tar_file_path} -C {backup_path} . > /dev/null"
             tar_process = subprocess.run(tar_command, shell=True)
             if tar_process.returncode == 0:
@@ -99,6 +101,71 @@ def process_input_file(file_path_input):
                 print("\033[91mDeleting Directory failed.\033[0m")
             print("*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-**-*-*-*-*-*-*-*-*-*-*")
 
-#input_file = "input.txt"
-input_file = "./result/"+testDirectory+"/time"
+input_file = "./../result/"+testDirectory+"/time"
 process_input_file(input_file)
+
+
+
+print ("\n\n\n")
+print ("*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* END OF BACKUP *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*")
+print ("*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* START RESTORE *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*")
+print ("\n\n\n")
+
+#info
+container_name = 'influxdb2'
+database_name = 'opentsdb'
+
+#print ("imported backup_dir is : ", backup_dir+".tar.gz")
+
+# argParser = argparse.ArgumentParser()
+# argParser.add_argument("-f", "--filename", help="file backup name  (.tar.gz file name/)")
+# args = argParser.parse_args()
+# #file_name = args.filename
+
+
+# Drop database
+
+command = f"influx -execute 'drop database {database_name}'"
+os.system(f"docker exec -it {container_name} {command}")
+print(" -------------------- Drop database Done!  --------------------")
+
+def extract_tar_gz(file_path, extraction_path):
+    try:
+        # Create the extraction directory if it doesn't exist
+        os.makedirs(extraction_path, exist_ok=True)
+
+        # Extract the .tar.gz file to the desired path
+        subprocess.run(['tar', '-xf', file_path, '-C', extraction_path], check=True)
+
+        print('\033[92mExtraction successful!\033[0m')
+
+    except subprocess.CalledProcessError:
+        print('\033[91mExtraction failed!\033[0m')
+
+
+# Example usage
+file_name = backup_dir+".tar.gz"
+file_path = f"/root/monster/hayoola-mc/influxdb-data/test-backup/{file_name}"
+extraction_path = '/mnt/sdb/influx-test/influxdb-data/untarred-files/'
+
+extract_tar_gz(file_path, extraction_path)
+
+
+print("------------------ Start Restore  ------------------")
+command2 = "influxd restore -portable /var/lib/influxdb/untarred-files/"
+os.system(f"docker exec -it {container_name} {command2} > /dev/null")
+print("------------------ END Restore  ------------------")
+
+
+print("------------ Start remove files ------------")
+command3 = "rm -rf /mnt/sdb/influx-test/influxdb-data/untarred-files/*"
+os.system(f"{command3}")
+print("------------ END remove files --------------------")
+
+
+print("------------ Start moving file ------------")
+command4 = f"mv /root/monster/hayoola-mc/influxdb-data/test-backup/{file_name}  /mnt/sdb/influx-test/influxdb-data/tarred-files/"
+os.system(f"{command4}")
+print("------------ end moving file ------------")
+
+print ("\n*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* END RESTORE *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*")
