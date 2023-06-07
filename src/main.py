@@ -53,6 +53,7 @@ for workload_number in range(workloads):
     # Execute the script before running the test
     print("Executing pre-test script script ...")
     time.sleep(1)
+    count = 0
     for i in range(3):
         pre_test_script = subprocess.run([pre_test_script_path, workload_name])
         if pre_test_script.returncode == 0:
@@ -60,7 +61,10 @@ for workload_number in range(workloads):
             break
         else:
             print("Pre-test script executed with failure!")
+            count += 1
         time.sleep(1)
+    if count == 3:
+        exit()
 
     # Start workload
     print(f"Workload {workload_name} is running ...")
