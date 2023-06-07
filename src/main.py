@@ -96,6 +96,7 @@ for workload_number in range(workloads):
     if os.path.exists(result_file_path):
         if result_file_path.endswith('_'):
             repeat_number = int(result_file_path.split('_')[-1]) + 1
+            print(f"repeat number {repeat_number}")
             result_file_tail = '_' + str(repeat_number) + '_'
             result_file_path += result_file_tail
         else:
