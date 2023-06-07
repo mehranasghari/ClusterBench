@@ -16,7 +16,7 @@ script_file_path = sys.argv[3]
 cosbench_command = './../../cli.sh'
 archive_path = './../../archive/'
 result_path = './../result/'
-pre_run_script = './pre-run.sh'
+pre_test_script_path = './pre-run.sh'
 submit = 'submit'
 
 # Defining temporary path for generating xml config file
@@ -53,15 +53,20 @@ for workload_number in range(workloads):
     # Execute the script before running the test
     print("Executing pre-test script script ...")
     time.sleep(1)
-    subprocess.call([pre_run_script, workload_name])
-    print("Pre-test script executed successfully!")
-    time.sleep(1)
+    for i in range(3):
+        pre_test_script = subprocess.run([pre_test_script_path, workload_name])
+        if pre_test_script.returncode == 0:
+            print("Pre-test script executed successfully!")
+            break
+        else:
+            print("Pre-test script executed with failure!")
+        time.sleep(1)
 
     # Start workload
     print(f"Workload {workload_name} is running ...")
     workload_file_path = temp_output_file_xml_path
     result = subprocess.run(["bash", cosbench_command, submit, workload_file_path], stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
-    
+
     # Extract ID of workload
     output_lines = result.stdout.splitlines()
     for line in output_lines:
