@@ -5,6 +5,7 @@ __pycache__/
 
 # Results
 result/
+app/temp*
 
 # VScode extensions
 .vscode
