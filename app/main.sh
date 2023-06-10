@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # Default values
-default_file=""
-input_file=""
+default_file="./../conf/defaults.json"
+input_file="./../conf/benchmark.cfg"
 
 # Parse command line arguments
 while getopts "d:i:s:" opt; do
