@@ -16,6 +16,7 @@ To use ClusterBench, follow these steps:
 1. Clone the repository:
 
 - If you have not installed COSBench:
+
      ```shell
      mkdir cosBench
      wget https://github.com/intel-cloud/cosbench/releases/download/v0.4.2.c4/0.4.2.c4.zip
