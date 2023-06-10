@@ -26,19 +26,19 @@ EOF
 
 # Default input and default files
 default_file="./../conf/defaults.json"
-input_file="./../conf/benchmark.cfg"
+benchmark_file="./../conf/benchmark.cfg"
 scirpt_file="./pre_test_script.sh"
 
 # Parse command line arguments
 while getopts "d:b:s:" opt; do
   case $opt in
-    d) default_file=$OPTARG ;;
-    b) input_file=$OPTARG ;;
-    s) script_file=$OPTARG ;;
+    d | --default-file) default_file=$OPTARG ;;
+    b | --benchmark-file) benchmark_file=$OPTARG ;;
+    s | --script-file) script_file=$OPTARG ;;
     *) Usage; exit 1 ;;
   esac
 done
 
 
 # Call the main program
-python3 main.py "${input_file}" "${default_file}" "${script_file}"
+python3 main.py "${benchmark_file}" "${default_file}" "${script_file}"
