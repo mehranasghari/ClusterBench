@@ -35,7 +35,7 @@ while getopts "d:b:s:" opt; do
     d) default_file=$OPTARG ;;
     b) input_file=$OPTARG ;;
     s) script_file=$OPTARG ;;
-    *) Usage; echo "Invalid option: -$OPTARG" >&2; exit 1 ;;
+    *) Usage; exit 1 ;;
   esac
 done
 
