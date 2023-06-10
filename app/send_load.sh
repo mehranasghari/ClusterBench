@@ -30,15 +30,26 @@ benchmark_file="./../conf/benchmark.cfg"
 scirpt_file="./pre_test_script.sh"
 
 # Parse command line arguments
-while getopts "d:b:s:" opt; do
-  case $opt in
-    d | --default-file) default_file=$OPTARG ;;
-    b | --benchmark-file) benchmark_file=$OPTARG ;;
-    s | --script-file) script_file=$OPTARG ;;
+# while getopts "d:b:s:" opt; do
+#   case $opt in
+#     d | --default-file) default_file=$OPTARG ;;
+#     b | --benchmark-file) benchmark_file=$OPTARG ;;
+#     s | --script-file) script_file=$OPTARG ;;
+#     *) Usage; exit 1 ;;
+#   esac
+# done
+
+options=$(getopt -o d:b:s: --long default-file:,benchmark-file:,script-file: -n "$0" -- "$@")
+eval set -- "$options"
+while true; do
+  case $1 in
+    -d | --default-file) default_file=$2; shift 2 ;;
+    -b | --benchmark-file) input_file=$2; shift 2 ;;
+    -s | --script-file) script_file=$2; shift 2 ;;
+    --) shift; break ;;
     *) Usage; exit 1 ;;
   esac
 done
-
 
 # Call the main program
 python3 main.py "${benchmark_file}" "${default_file}" "${script_file}"
