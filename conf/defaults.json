@@ -1,7 +1,7 @@
 {
     "cluster_address" : "10.105.10.80",
-    "benchmark_path" : "../config/benchmark.cfg",
-    "default_path" : "../config/defaults.json",
+    "benchmark_path" : "../conf/benchmark.cfg",
+    "default_path" : "../conf/defaults.json",
     "workers" : "5",
     "start_containers" : "1",
     "end_containers" : "10",
@@ -10,6 +10,6 @@
     "sizes" : "5",
     "put" : "40",
     "get" : "40",
-    "delete" : "40",
+    "delete" : "20",
     "delay" : "10"
 }
