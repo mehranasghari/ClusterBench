@@ -28,10 +28,6 @@ def process_input_file(file_path_input):
             start_date, start_time = start_datetime.split(" ")
             end_date, end_time = end_datetime.split(" ")
 
-            # Delete 'Z' from the end of time
-           # start_time = start_time.rstrip("Z")
-           # end_time = end_time.rstrip("Z")
-
             # Convert to datetime objects
             start_datetime = datetime.datetime.strptime(start_date + " " + start_time, "%Y-%m-%d %H:%M:%S")
             end_datetime = datetime.datetime.strptime(end_date + " " + end_time, "%Y-%m-%d %H:%M:%S")
@@ -39,11 +35,10 @@ def process_input_file(file_path_input):
             # Convert to standard format (time only)
             start_time_standard = start_datetime.strftime("%H:%M:%S")
             end_time_standard = end_datetime.strftime("%H:%M:%S")
+
             # Remove all ":" for backup file name
             final_time_start_backup = start_time_standard.replace(":", "")
             final_time_end_backup = end_time_standard.replace(":", "")
-            # print("final_time_start_backup : " , final_time_start_backup)
-            # print("final_time_end_backup" , final_time_end_backup)
 
             final_time_end = (end_datetime + datetime.timedelta(seconds=y)).strftime("%H:%M:%S")
             final_time_start = (start_datetime - datetime.timedelta(seconds=x)).strftime("%H:%M:%S")
@@ -59,16 +54,13 @@ def process_input_file(file_path_input):
             end_date_dir = end_date_dir[2:]
             global backup_dir
             backup_dir = start_date_dir + "T" + final_time_start_backup + "_" + end_date_dir + "T" +final_time_end_backup
-           # print(backup_dir)
+
             backup_path = "/var/lib/influxdb/test-backup/" + backup_dir
             os.makedirs(backup_path, exist_ok=True)
 
             start_time_backup = start_date + "T" + final_time_start + "Z"
             end_time_backup = end_date + "T" + final_time_end + "Z"
-            #print("start_time_backup:", start_time_backup)
-            #print("end_time_backup:", end_time_backup)
-            #print("Backup directory:", backup_path)
-            #print()
+
 
             # Perform backup using influxd backup command
             backup_command = f"docker exec -it influxdb influxd backup -portable -start {start_time_backup} -end {end_time_backup} {backup_path} >/dev/null "
@@ -79,10 +71,11 @@ def process_input_file(file_path_input):
             else:
                 print("\033[91mBackup failed.\033[0m")
             print()
+            cp_command = f"cp -r ./../result/{testDirectory} /root/monster/hayoola-mc/influxdb-data/test-backup/{backup_dir}"
+            cp_process = subprocess.run(cp_command, shell=True)
 
             # Tar all backup files in the directory
             tar_file_path = backup_path + ".tar.gz"
-            #print(tar_file_path)
             tar_command = f"docker exec -it influxdb tar -czvf {tar_file_path} -C {backup_path} . > /dev/null"
             tar_process = subprocess.run(tar_command, shell=True)
             if tar_process.returncode == 0:
@@ -90,6 +83,7 @@ def process_input_file(file_path_input):
             else:
                 print("\033[91mCompression failed.\033[0m")
             print()
+
 
             # Delete backup directory
             delete_command = f"docker exec -it influxdb rm -rf {backup_path}"
@@ -114,13 +108,6 @@ print ("\n\n\n")
 #info
 container_name = 'influxdb2'
 database_name = 'opentsdb'
-
-print ("imported backup_dir is : ", backup_dir+".tar.gz")
-
-# argParser = argparse.ArgumentParser()
-# argParser.add_argument("-f", "--filename", help="file backup name  (.tar.gz file name/)")
-# args = argParser.parse_args()
-# #file_name = args.filename
 
 
 # Drop database
