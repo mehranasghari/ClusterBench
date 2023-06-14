@@ -53,7 +53,7 @@ for workload_number in range(workloads):
             workload_name = l.split('{')[0].strip().rstrip()
 
     # Execute the script before running the test
-    print("\n")
+    print()
     print("Executing pre-test script script ...")
     time.sleep(1)
     pre_test_script_failure_num = 0
@@ -66,7 +66,7 @@ for workload_number in range(workloads):
             print("Pre-test script executed with failure!")
             pre_test_script_failure_num += 1
         time.sleep(1)
-    print("\n")
+    print()
     if pre_test_script_failure_num == 3:
         exit()
 
@@ -74,7 +74,7 @@ for workload_number in range(workloads):
     print(f"Workload {workload_name} is running ...")
     workload_file_path = temp_output_file_xml_path
     result = subprocess.run(["bash", cosbench_command, submit, workload_file_path], stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
-    print("\n")
+    print()
 
     # Extract ID of workload
     output_lines = result.stdout.splitlines()
@@ -86,7 +86,7 @@ for workload_number in range(workloads):
     # Generate archive file name of workload
     archive_file_name = workload_id + "-swift-sample"
     print(f"Workload ID is: {workload_id}")
-    print("\n")
+    print()
 
     # Check every second if the workload is ended or not
     while True:
