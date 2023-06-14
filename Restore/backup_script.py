@@ -82,7 +82,6 @@ def process_input_file(file_path_input):
 
             # Tar all backup files in the directory
             tar_file_path = backup_path + ".tar.gz"
-            #print(tar_file_path)
             tar_command = f"docker exec -it influxdb tar -czvf {tar_file_path} -C {backup_path} . > /dev/null"
             tar_process = subprocess.run(tar_command, shell=True)
             if tar_process.returncode == 0:
