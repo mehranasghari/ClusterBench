@@ -109,7 +109,7 @@ for workload_number in range(workloads):
             result_file_path = '_'.join(splitted_result_file)
 
     os.mkdir(result_file_path)
-    print(result_file_path.split('/')[-1])
+    final_workload_name = result_file_path.split('/')[-1]
 
     # Create and copy workload.log
     archive_log_file = os.path.join(archive_file_path, 'workload.log') 
@@ -159,5 +159,5 @@ for workload_number in range(workloads):
     time_file.close()
 
 
-    # subprocess.call(['python3', backup_script_path, '-t', workload_name])
+    subprocess.call(['python3', backup_script_path, '-t', final_workload_name])
     print("--------------------------------------")
