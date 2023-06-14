@@ -30,7 +30,6 @@ input = open(input_file_path, "r")
 lines = input.read().split('}')
 workloads = len(lines)
 workloads -= 1
-global final_workload_name
 workload_name = ""
 
 for workload_number in range(workloads):
@@ -109,6 +108,7 @@ for workload_number in range(workloads):
             result_file_path = '_'.join(splitted_result_file)
 
     os.mkdir(result_file_path)
+    global final_workload_name
     final_workload_name = result_file_path.split('/')[-1]
 
     # Create and copy workload.log
