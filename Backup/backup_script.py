@@ -2,7 +2,12 @@ import datetime
 import os
 import subprocess
 import argparse
+<<<<<<< HEAD
 import shutil
+=======
+from influxdb import InfluxDBClient
+import os
+>>>>>>> 50957a943f7300f431524c4696090fdfccf816d5
 
 argParser = argparse.ArgumentParser()
 argParser.add_argument("-t", "--testname", help="Test Name (Directory in Result/)")
@@ -169,20 +174,36 @@ extract_tar_gz(file_path, extraction_path)
 
 print("------------------ Start Restore  ------------------")
 command2 = "influxd restore -portable /var/lib/influxdb/untarred-files/"
+<<<<<<< HEAD
+=======
+#os.system(f"docker exec -it {container_name} {command2} > /dev/null")
+>>>>>>> 50957a943f7300f431524c4696090fdfccf816d5
 completed_process = subprocess.run(["docker", "exec", "-it", container_name, command2], stdout=subprocess.DEVNULL)
 
 if completed_process.returncode == 0:
     print("\033[92mRestore Done Successfully.\033[0m")  # Print green message
 else:
+<<<<<<< HEAD
     print("\033[91mRestore Failed.\033[0m")  # Print red message
+=======
+    print("\033[91mRestore Failed failed.\033[0m")  # Print red message
+>>>>>>> 50957a943f7300f431524c4696090fdfccf816d5
 
 print("------------------ END Restore  ------------------")
 
 
 print("------------ Start remove files ------------")
+<<<<<<< HEAD
 #command3 = "rm -rf /mnt/sdb/influx-test/influxdb-data/untarred-files/"
 
 #completed_process = subprocess.run(command3, shell=True)
+=======
+#command3 = "rm -rf /mnt/sdb/influx-test/influxdb-data/untarred-files/*"
+#os.system(f"{command3}")
+command3 = "rm -rf /mnt/sdb/influx-test/influxdb-data/untarred-files/"
+
+completed_process = subprocess.run(command3, shell=True)
+>>>>>>> 50957a943f7300f431524c4696090fdfccf816d5
 
 if completed_process.returncode == 0:
     print("\033[92mFiles removes successfully.\033[0m")  # Print green message
@@ -192,7 +213,12 @@ print("------------ END remove files --------------------")
 
 
 print("------------ Start moving file ------------")
+<<<<<<< HEAD
 
+=======
+#command4 = f"mv /root/monster/hayoola-mc/influxdb-data/test-backup/{file_name}  /mnt/sdb/influx-test/influxdb-data/tarred-files/"
+#os.system(f"{command4}")
+>>>>>>> 50957a943f7300f431524c4696090fdfccf816d5
 command4 = f"mv /root/monster/hayoola-mc/influxdb-data/test-backup/{file_name} /mnt/sdb/influx-test/influxdb-data/tarred-files/"
 
 completed_process = subprocess.run(command4, shell=True)
