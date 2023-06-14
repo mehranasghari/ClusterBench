@@ -1,11 +1,11 @@
-#from influxdb import InfluxDBClient
-#import os
+from influxdb import InfluxDBClient
+import os
 
 # Set up the InfluxDB connection
 host = 'localhost'
 port = 8086
 database = 'opentsdb'
-#client = InfluxDBClient(host=host, port=port, database=database)
+client = InfluxDBClient(host=host, port=port, database=database)
 
 # Set variables
 group_by = 'time(10s)'
@@ -18,21 +18,28 @@ query = 'SELECT mean("value") *-1 FROM "netdata.disk.sdb.writes" WHERE ("host" =
 
 
 query = query.format(group_by=group_by,host=host,start_time_query=start_time_query,end_time_query=end_time_query)
-# query = query.format(host=host)
-# query = query.format(start_time_query=start_time_query)
-# query = query.format(end_time_query=end_time_query)
-
-#result = client.query(query)
+result = client.query(query)
 print(query)
 
 print("*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*")
 # Save the query result to a file and clear the query result.tx with echonig "" to it.
-#output_file = './query_result.txt'
-#os.system("echo "" > ./query_result.txt")
+output_file = './query_result.txt'
+os.system("echo "" > ./query_result.txt")
 
-#with open(output_file, 'w') as file:
-#    for series in result:
-#        for point in series:
-#            file.write(str(point) + '\n')
+with open(output_file, 'w') as file:
+   for series in result:
+       for point in series:
+           file.write(str(point) + '\n')
 
-#print(f"Query result saved to {output_file}")
+print(f"Query result saved to {output_file}")
+
+
+# Read the contents of the file
+with open("query_result.txt", "r") as file:
+    content = file.read()
+
+# Check if the file is empty and display a message 
+if content.strip() == "":
+    print("\033[31mNo data in query_result.txt!\033[0m")  # Red message
+else:
+    print("\033[32mData found in query_result.txt!\033[0m")  # Green message

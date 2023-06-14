@@ -34,7 +34,6 @@ with open(input_file_path, 'r') as input_file, open(output_file_path, 'w', newli
 
 # Print a message to indicate the CSV file has been created
 print(f"Results saved to {output_file_path}")
-=======
 # Specify the file path and name
 file_path = './result.py'
 
