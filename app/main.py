@@ -30,7 +30,7 @@ input = open(input_file_path, "r")
 lines = input.read().split('}')
 workloads = len(lines)
 workloads -= 1
-
+global final_workload_name
 workload_name = ""
 
 for workload_number in range(workloads):
