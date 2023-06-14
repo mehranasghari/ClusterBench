@@ -109,8 +109,7 @@ for workload_number in range(workloads):
             result_file_path = '_'.join(splitted_result_file)
 
     os.mkdir(result_file_path)
-    print("hereeeeeeeeeeeeeeeee")
-    print(result_file_path)
+    print(result_file_path.split('/')[-1])
 
     # Create and copy workload.log
     archive_log_file = os.path.join(archive_file_path, 'workload.log') 
