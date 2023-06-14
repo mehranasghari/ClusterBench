@@ -54,7 +54,7 @@ for workload_number in range(workloads):
 
     # Execute the script before running the test
     print()
-    print("Executing pre-test script script ...")
+    print("Executing pre-test script ...")
     time.sleep(1)
     pre_test_script_failure_num = 0
     for i in range(max_pre_test_script_failure):
