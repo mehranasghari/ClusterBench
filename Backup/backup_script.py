@@ -101,20 +101,19 @@ def process_input_file(file_path_input):
             delete_process = subprocess.run(delete_command, shell=True)
             delete_check = delete_process.returncode
             if delete_process.returncode == 0:
+                print()
                 print("\033[92mDeleting Directory Completed successfully.\033[0m")
             else:
+                print()
                 print("\033[91mDeleting Directory failed.\033[0m")
                 sys.exit(1)
 
 input_file = "./../result/"+testDirectory+"/time"
 process_input_file(input_file)
 
-
-
-print ("\n\n\n")
 print ("*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* END OF BACKUP *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*")
 print ("*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* START RESTORE *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*")
-print ("\n\n\n")
+
 
 #info
 container_name = 'influxdb2'
@@ -123,10 +122,10 @@ database_name = 'opentsdb'
 
 
 # Drop database
-
+# -------------------- START Drop database --------------------
 command = f"influx -execute 'drop database {database_name}'"
 os.system(f"docker exec -it {container_name} {command}")
-print(" -------------------- Drop database Done!  --------------------")
+# --------------------  END Drop database --------------------
 
 def extract_tar_gz(file_path, extraction_path):
     try:
@@ -140,7 +139,7 @@ def extract_tar_gz(file_path, extraction_path):
 
     except subprocess.CalledProcessError:
         print('\033[91mExtraction failed!\033[0m')
-
+        sys.exit(1)
 
 # Example usage
 file_name = backup_dir+".tar.gz"
@@ -158,7 +157,7 @@ if exit_code == 0:
     print("\033[92mRestore Done successfully.\033[0m")  # Print message in green
 else:
     print("\033[91mRestore failed.\033[0m")  # Print message in red
-
+    sys.exit(1)
 # ------------------ END Restore  ------------------
 
 # ------------ Start remove files ------------
@@ -170,6 +169,7 @@ if completed_process.returncode == 0:
     print("\033[92mFiles removes successfully.\033[0m")  # Print green message
 else:
     print("\033[91mRemoving files failed.\033[0m")  # Print red message
+    sys.exit(1)
 # ------------ END remove files --------------------
 
 # ------------ Start moving file ------------
@@ -182,7 +182,7 @@ if completed_process.returncode == 0:
     print("\033[92mFile moved successfully.\033[0m")  
 else:
     print("\033[91mFailed to move the file.\033[0m")  
-
+    sys.exit(1)
 # ------------ end moving file ------------
 
 print ("\n*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* END RESTORE *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*")
@@ -238,7 +238,7 @@ for host in hosts:
            for point in series:
                file.write(str(point) + '\n')
 
-    print(f"Query result saved to {output_file}")
+    print(f"CSV for {host} saved to {output_file}")
 
 
     # Check the contents of query_result.txt file

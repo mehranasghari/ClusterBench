@@ -1,6 +1,0 @@
-m-r1z1s1-controller
-m-r1z1s2-controller
-m-r1z1s3-controller
-m-r1z1s4-controller
-m-r1z1s5-controller
-m-r1z1s6-controller
