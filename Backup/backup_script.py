@@ -238,7 +238,7 @@ for host in hosts:
            for point in series:
                file.write(str(point) + '\n')
 
-    print(f"CSV for {host} result saved to {output_file}")
+    print(f"CSV for {host} saved to {output_file}")
 
 
     # Check the contents of query_result.txt file
