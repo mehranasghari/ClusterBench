@@ -1,6 +1,8 @@
 import subprocess
 from influxdb import InfluxDBClient
 import os
+import calendar
+from datetime import datetime
 
 hosts_file_path = "./hosts.txt"
 # Set up the InfluxDB connection
@@ -9,10 +11,14 @@ port = 8086
 database = 'opentsdb'
 client = InfluxDBClient(host=host, port=port, database=database)
 
+# Set time to run query
+#start_time_query = start_date+" "+start_time
+#end_time_query = end_date+" "+end_time
+
 # Set variables
 group_by = 'time(10s)'
-start_time_query = '1686142165000'
-end_time_query = '1686142177000'
+#start_time_query = calendar.timegm(datetime.strptime(time_string, "%Y-%m-%d %H:%M:%S").astimezone(datetime.now().astimezone().tzinfo).timetuple()) * 1000
+#end_time_query = '1686142177000'
 csv_address = '/mnt/sdb/influx-test/influxdb-data/tarred-files'
 
 
