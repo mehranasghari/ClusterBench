@@ -12,9 +12,9 @@ print ("*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* START OF BACKUP *-*-*-*-*-*-*-*-*-*-*-*-
 argParser = argparse.ArgumentParser()
 argParser.add_argument("-t", "--testname", help="Test Name (Directory in Result/)")
 args = argParser.parse_args()
-global testDirectory
 testDirectory = args.testname
-
+global testDirectory2
+testDirectory2 = args.testname
 def read_values_from_file(file_path):
     values = []
     with open(file_path, "r") as f:
@@ -231,7 +231,7 @@ for host in hosts:
 
 
     # Save the query result to a file and clear the query result.tx with echonig "" to it.
-    output_file = f'{csv_address}/{host}_{testDirectory}.txt'
+    output_file = f'{csv_address}/{host}_{testDirectory2}.txt'
 
     with open(output_file, 'w') as file:
        for series in result:
