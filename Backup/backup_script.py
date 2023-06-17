@@ -193,8 +193,8 @@ print ("\n-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* START EXPORT CSV FILE *-*-*-*-*-*-*-*-*
 
 
 from datetime import datetime
+hosts_file_path = "./../Hosts/hosts.txt"
 
-hosts_file_path = "./hosts.txt"
 # Set up the InfluxDB connection
 host = 'localhost'
 port = 8086
