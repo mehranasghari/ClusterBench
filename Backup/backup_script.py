@@ -8,7 +8,7 @@ import subprocess
 import calendar
 import sys
 
-print ("*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* START OF BACKUP *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*")
+print ("*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* START OF BACKUP *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*")
 argParser = argparse.ArgumentParser()
 argParser.add_argument("-t", "--testname", help="Test Name (Directory in Result/)")
 args = argParser.parse_args()
@@ -134,7 +134,7 @@ def extract_tar_gz(file_path, extraction_path):
 
         # Extract the .tar.gz file to the desired path
         subprocess.run(['tar', '-xf', file_path, '-C', extraction_path], check=True)
-
+        print()
         print('\033[92mExtraction successful!\033[0m')
 
     except subprocess.CalledProcessError:
@@ -154,6 +154,7 @@ command2 = "influxd restore -portable /var/lib/influxdb/untarred-files/"
 exit_code = os.system(f"docker exec -it {container_name} {command2} > /dev/null")
 
 if exit_code == 0:
+    print()
     print("\033[92mRestore Done successfully.\033[0m")  # Print message in green
 else:
     print("\033[91mRestore failed.\033[0m")  # Print message in red
@@ -166,6 +167,7 @@ command3 = "rm -rf /mnt/sdb/influx-test/influxdb-data/untarred-files/"
 completed_process = subprocess.run(command3, shell=True)
 
 if completed_process.returncode == 0:
+    print()
     print("\033[92mFiles removes successfully.\033[0m")  # Print green message
 else:
     print("\033[91mRemoving files failed.\033[0m")  # Print red message
@@ -179,13 +181,14 @@ command4 = f"mv /root/monster/hayoola-mc/influxdb-data/test-backup/{file_name} /
 completed_process = subprocess.run(command4, shell=True)
 
 if completed_process.returncode == 0:
+    print()
     print("\033[92mFile moved successfully.\033[0m")  
 else:
     print("\033[91mFailed to move the file.\033[0m")  
     sys.exit(1)
 # ------------ end moving file ------------
 
-print ("\n*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* END RESTORE *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*")
+print ("*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* END RESTORE *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*")
 print ("\n*-*-*-*-*-*-*-*-*-*-*-*-*-*-* START EXPORT CSV FILE *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*")
 
 
@@ -240,14 +243,4 @@ for host in hosts:
 
     print(f"CSV for {host} saved to {output_file}")
 
-
-    # Check the contents of query_result.txt file
-    #with open("query_result.txt", "r") as result_file:
-     #   result = result_file.read().strip()
-
-    # Check if the file is empty or not and display a message accordingly
-    #if not result:
-    #    print(f"\033[31mFile query_result.txt is empty for host: {host}\033[0m")  # Red message
-    #else:
-    #    print(f"\033[32mFile query_result.txt is not empty for host: {host}\033[0m")  # Green message
 print ("\n-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* END EXPORT CSV FILE *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*")
