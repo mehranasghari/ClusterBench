@@ -6,15 +6,15 @@ import shutil
 from influxdb import InfluxDBClient
 import subprocess
 import calendar
-#from datetime import datetime
+import sys
 
 print ("*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* START OF BACKUP *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*")
 argParser = argparse.ArgumentParser()
 argParser.add_argument("-t", "--testname", help="Test Name (Directory in Result/)")
 args = argParser.parse_args()
-global testDirectory
 testDirectory = args.testname
-
+global testDirectory2
+testDirectory2 = args.testname
 def read_values_from_file(file_path):
     values = []
     with open(file_path, "r") as f:
@@ -65,13 +65,10 @@ def process_input_file(file_path_input):
             end_date_dir = end_date_dir[2:]
             global backup_dir
             backup_dir = start_date_dir + "T" + final_time_start_backup + "_" + end_date_dir + "T" +final_time_end_backup
-
             backup_path = "/var/lib/influxdb/test-backup/" + backup_dir
             os.makedirs(backup_path, exist_ok=True)
-
             start_time_backup = start_date + "T" + final_time_start + "Z"
             end_time_backup = end_date + "T" + final_time_end + "Z"
-
 
             # Perform backup using influxd backup command
             backup_command = f"docker exec -it influxdb influxd backup -portable -start {start_time_backup} -end {end_time_backup} {backup_path} >/dev/null "
@@ -81,6 +78,7 @@ def process_input_file(file_path_input):
                 print("\033[92mBackup successful.\033[0m")
             else:
                 print("\033[91mBackup failed.\033[0m")
+                sys.exit(1)
             print()
             cp_command = f"cp -r ./../result/{testDirectory} /root/monster/hayoola-mc/influxdb-data/test-backup/{backup_dir}"
             cp_process = subprocess.run(cp_command, shell=True)
@@ -96,6 +94,7 @@ def process_input_file(file_path_input):
                 print("\033[92mCompression successful.\033[0m")
             else:
                 print("\033[91mCompression failed.\033[0m")
+                sys.exit(1)
 
             # Delete backup directory
             delete_command = f"docker exec -it influxdb rm -rf {backup_path}"
@@ -105,7 +104,7 @@ def process_input_file(file_path_input):
                 print("\033[92mDeleting Directory Completed successfully.\033[0m")
             else:
                 print("\033[91mDeleting Directory failed.\033[0m")
-            print("*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-**-*-*-*-*-*-*-*-*-*-*")
+                sys.exit(1)
 
 input_file = "./../result/"+testDirectory+"/time"
 process_input_file(input_file)
@@ -150,7 +149,7 @@ extraction_path = '/mnt/sdb/influx-test/influxdb-data/untarred-files/'
 
 extract_tar_gz(file_path, extraction_path)
 
-print("------------------ Start Restore  ------------------")
+#------------------ Start Restore  ------------------
 command2 = "influxd restore -portable /var/lib/influxdb/untarred-files/"
 #os.system(f"docker exec -it {container_name} {command2} ")
 exit_code = os.system(f"docker exec -it {container_name} {command2} > /dev/null")
@@ -160,10 +159,9 @@ if exit_code == 0:
 else:
     print("\033[91mRestore failed.\033[0m")  # Print message in red
 
-print("------------------ END Restore  ------------------")
+# ------------------ END Restore  ------------------
 
-
-print("------------ Start remove files ------------")
+# ------------ Start remove files ------------
 
 command3 = "rm -rf /mnt/sdb/influx-test/influxdb-data/untarred-files/"
 completed_process = subprocess.run(command3, shell=True)
@@ -172,10 +170,9 @@ if completed_process.returncode == 0:
     print("\033[92mFiles removes successfully.\033[0m")  # Print green message
 else:
     print("\033[91mRemoving files failed.\033[0m")  # Print red message
-print("------------ END remove files --------------------")
+# ------------ END remove files --------------------
 
-
-print("------------ Start moving file ------------")
+# ------------ Start moving file ------------
 
 command4 = f"mv /root/monster/hayoola-mc/influxdb-data/test-backup/{file_name} /mnt/sdb/influx-test/influxdb-data/tarred-files/"
 
@@ -186,15 +183,15 @@ if completed_process.returncode == 0:
 else:
     print("\033[91mFailed to move the file.\033[0m")  
 
-print("------------ end moving file ------------")
+# ------------ end moving file ------------
 
 print ("\n*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* END RESTORE *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*")
-print ("\n-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* START EXPORT CSV FILE *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*")
+print ("\n*-*-*-*-*-*-*-*-*-*-*-*-*-*-* START EXPORT CSV FILE *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*")
 
 
 from datetime import datetime
+hosts_file_path = "./../Hosts/hosts.txt"
 
-hosts_file_path = "./hosts.txt"
 # Set up the InfluxDB connection
 host = 'localhost'
 port = 8086
@@ -232,9 +229,9 @@ for host in hosts:
     result = client.query(query)
 
 
-    print("*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*")
+
     # Save the query result to a file and clear the query result.tx with echonig "" to it.
-    output_file = f'{csv_address}/{host}_{testDirectory}.txt'
+    output_file = f'{csv_address}/{host}_{testDirectory2}.txt'
 
     with open(output_file, 'w') as file:
        for series in result:
