@@ -2,9 +2,11 @@ import datetime
 import os
 import subprocess
 import argparse
+import shutil
 from influxdb import InfluxDBClient
 import os
 
+print ("*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* START OF BACKUP *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*")
 argParser = argparse.ArgumentParser()
 argParser.add_argument("-t", "--testname", help="Test Name (Directory in Result/)")
 args = argParser.parse_args()
@@ -78,14 +80,15 @@ def process_input_file(file_path_input):
 
             # Tar all backup files in the directory
             tar_file_path = backup_path + ".tar.gz"
+
+            # Tar all backup files in the directory
+            tar_file_path = backup_path + ".tar.gz"
             tar_command = f"docker exec -it influxdb tar -czvf {tar_file_path} -C {backup_path} . > /dev/null"
             tar_process = subprocess.run(tar_command, shell=True)
             if tar_process.returncode == 0:
                 print("\033[92mCompression successful.\033[0m")
             else:
                 print("\033[91mCompression failed.\033[0m")
-            print()
-
 
             # Delete backup directory
             delete_command = f"docker exec -it influxdb rm -rf {backup_path}"
@@ -110,6 +113,7 @@ print ("\n\n\n")
 #info
 container_name = 'influxdb2'
 database_name = 'opentsdb'
+
 
 
 # Drop database
@@ -139,25 +143,22 @@ extraction_path = '/mnt/sdb/influx-test/influxdb-data/untarred-files/'
 
 extract_tar_gz(file_path, extraction_path)
 
-
 print("------------------ Start Restore  ------------------")
 command2 = "influxd restore -portable /var/lib/influxdb/untarred-files/"
-#os.system(f"docker exec -it {container_name} {command2} > /dev/null")
-completed_process = subprocess.run(["docker", "exec", "-it", container_name, command2], stdout=subprocess.DEVNULL)
+#os.system(f"docker exec -it {container_name} {command2} ")
+exit_code = os.system(f"docker exec -it {container_name} {command2} > /dev/null")
 
-if completed_process.returncode == 0:
-    print("\033[92mRestore Done Successfully.\033[0m")  # Print green message
+if exit_code == 0:
+    print("\033[92mRestore Done successfully.\033[0m")  # Print message in green
 else:
-    print("\033[91mRestore Failed failed.\033[0m")  # Print red message
+    print("\033[91mRestore failed.\033[0m")  # Print message in red
 
 print("------------------ END Restore  ------------------")
 
 
 print("------------ Start remove files ------------")
-#command3 = "rm -rf /mnt/sdb/influx-test/influxdb-data/untarred-files/*"
-#os.system(f"{command3}")
-command3 = "rm -rf /mnt/sdb/influx-test/influxdb-data/untarred-files/"
 
+command3 = "rm -rf /mnt/sdb/influx-test/influxdb-data/untarred-files/"
 completed_process = subprocess.run(command3, shell=True)
 
 if completed_process.returncode == 0:
@@ -168,16 +169,15 @@ print("------------ END remove files --------------------")
 
 
 print("------------ Start moving file ------------")
-#command4 = f"mv /root/monster/hayoola-mc/influxdb-data/test-backup/{file_name}  /mnt/sdb/influx-test/influxdb-data/tarred-files/"
-#os.system(f"{command4}")
+
 command4 = f"mv /root/monster/hayoola-mc/influxdb-data/test-backup/{file_name} /mnt/sdb/influx-test/influxdb-data/tarred-files/"
 
 completed_process = subprocess.run(command4, shell=True)
 
 if completed_process.returncode == 0:
-    print("\033[92mFile moved successfully.\033[0m")  # Print green message
+    print("\033[92mFile moved successfully.\033[0m")  
 else:
-    print("\033[91mFailed to move the file.\033[0m")  # Print red message
+    print("\033[91mFailed to move the file.\033[0m")  
 
 print("------------ end moving file ------------")
 
