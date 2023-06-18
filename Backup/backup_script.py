@@ -134,7 +134,6 @@ def extract_tar_gz(file_path, extraction_path):
 
         # Extract the .tar.gz file to the desired path
         subprocess.run(['tar', '-xf', file_path, '-C', extraction_path], check=True)
-        print()
         print('\033[92mExtraction successful!\033[0m')
 
     except subprocess.CalledProcessError:
