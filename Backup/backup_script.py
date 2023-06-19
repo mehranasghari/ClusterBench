@@ -112,17 +112,12 @@ def process_input_file(file_path_input):
 
 input_file = "./../result/"+testDirectory+"/time"
 process_input_file(input_file)
-
-
 print ("*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* END OF BACKUP *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*")
 print ("*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* START RESTORE *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*")
-
 
 #info
 container_name = 'influxdb2'
 database_name = 'opentsdb'
-
-
 
 # Drop database
 # -------------------- START Drop database --------------------
@@ -163,7 +158,6 @@ else:
 # ------------------ END Restore  ------------------
 
 # ------------ Start remove files ------------
-
 command3 = "rm -rf /mnt/sdb/influx-test/influxdb-data/untarred-files/"
 completed_process = subprocess.run(command3, shell=True)
 
@@ -178,7 +172,6 @@ else:
 
 
 # ------------ Start moving file ------------
-
 command4 = f"mv /root/monster/hayoola-mc/influxdb-data/test-backup/{file_name} /mnt/sdb/influx-test/influxdb-data/tarred-files/"
 
 completed_process = subprocess.run(command4, shell=True)
@@ -232,8 +225,6 @@ for host in hosts:
 
     query = query.format(group_by=group_by,host=host,start_time_query=start_time_query,end_time_query=end_time_query)
     result = client.query(query)
-
-
 
     # Save the query result to a file and clear the query result.tx with echonig "" to it.
     output_file = f'{csv_address}/{host}_{testDirectory2}.txt'
