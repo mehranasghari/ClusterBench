@@ -2,7 +2,6 @@ import datetime
 import os
 import subprocess
 import argparse
-import shutil
 from influxdb import InfluxDBClient
 import subprocess
 import calendar
@@ -242,4 +241,4 @@ for host in hosts:
 
     print(f"CSV for {host} saved to {output_file}")
 
-print ("\n-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* END EXPORT CSV FILE *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*")
+print ("\n*-*-*-*-*-*-*-*-*-*-*-*-*-* END EXPORT CSV FILE *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*")
