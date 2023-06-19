@@ -14,6 +14,7 @@ args = argParser.parse_args()
 testDirectory = args.testname
 global testDirectory2
 testDirectory2 = args.testname
+
 def read_values_from_file(file_path):
     values = []
     with open(file_path, "r") as f:
@@ -30,10 +31,12 @@ def process_input_file(file_path_input):
     with open(file_path_input, "r") as f:
         lines = f.readlines()
         for line in lines:
+            
             global start_date
             global start_time
             global end_date
             global end_time
+
             start_datetime, end_datetime = line.strip().split(",")
             start_date, start_time = start_datetime.split(" ")
             end_date, end_time = end_datetime.split(" ")
@@ -110,6 +113,7 @@ def process_input_file(file_path_input):
 input_file = "./../result/"+testDirectory+"/time"
 process_input_file(input_file)
 
+
 print ("*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* END OF BACKUP *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*")
 print ("*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* START RESTORE *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*")
 
@@ -148,7 +152,6 @@ extract_tar_gz(file_path, extraction_path)
 
 #------------------ Start Restore  ------------------
 command2 = "influxd restore -portable /var/lib/influxdb/untarred-files/"
-#os.system(f"docker exec -it {container_name} {command2} ")
 exit_code = os.system(f"docker exec -it {container_name} {command2} > /dev/null")
 
 if exit_code == 0:
@@ -171,6 +174,8 @@ else:
     print("\033[91mRemoving files failed.\033[0m")  # Print red message
     sys.exit(1)
 # ------------ END remove files --------------------
+
+
 
 # ------------ Start moving file ------------
 
@@ -202,8 +207,7 @@ client = InfluxDBClient(host=host, port=port, database=database)
 # Set time to run query
 start_time = start_date+" "+start_time
 end_time = end_date+" "+end_time
-#print ("start_time is : ",start_time)
-#print ("end_time is : ",end_time)
+
 
 # Set variables
 group_by = 'time(10s)'
