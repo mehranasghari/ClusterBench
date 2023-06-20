@@ -98,7 +98,7 @@ def process_input_file(file_path_input):
             #else:
              #   print("\033[91mCompression failed.\033[0m")
               #  sys.exit(1)
-	    #MV BACKUP.TAR.GZ TO influxdb2
+	        #MV BACKUP.TAR.GZ TO influxdb2
             #os.makedirs(f"/root/monster/hayoola-mc/influxdb-data/test-backup/{backup_dir}/backup", exist_ok=True)
             mv_command = f"mv /root/monster/hayoola-mc/influxdb-data/test-backup/*  /mnt/sdb/influx-test/influxdb-data/tarred-files/"
             mv_process = subprocess.run(mv_command, shell=True)
@@ -211,8 +211,9 @@ group_by = 'time(10s)'
 start_time_query = calendar.timegm(datetime.strptime(start_time, "%Y-%m-%d %H:%M:%S").astimezone(datetime.now().astimezone().tzinfo).timetuple()) * 1000
 end_time_query = calendar.timegm(datetime.strptime(end_time, "%Y-%m-%d %H:%M:%S").astimezone(datetime.now().astimezone().tzinfo).timetuple()) * 1000
 csv_address = f'/mnt/sdb/influx-test/influxdb-data/tarred-files/{backup_dir}/csv'
+image_address = f'/mnt/sdb/influx-test/influxdb-data/tarred-files/{backup_dir}/images'
 os.makedirs(csv_address, exist_ok=True)
-
+os.makedirs(image_address, exist_ok=True)
 
 # Read the hosts from the file
 with open(hosts_file_path, "r") as file:
@@ -242,5 +243,3 @@ for host in hosts:
     print(f"CSV for {host} saved to {output_file}")
 
 print ("\n-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* END EXPORT CSV FILE *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*")
-
-print ("\n*-*-*-*-*-*-*-*-*-*-*-*-*-* END EXPORT CSV FILE *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*")
