@@ -31,7 +31,7 @@ def process_input_file(file_path_input):
     with open(file_path_input, "r") as f:
         lines = f.readlines()
         for line in lines:
-            
+
             global start_date
             global start_time
             global end_date
@@ -98,10 +98,10 @@ def process_input_file(file_path_input):
             #else:
              #   print("\033[91mCompression failed.\033[0m")
               #  sys.exit(1)
-	    #MV BACKUP.TAR.GZ TO DIR
+	    #MV BACKUP.TAR.GZ TO influxdb2
             #os.makedirs(f"/root/monster/hayoola-mc/influxdb-data/test-backup/{backup_dir}/backup", exist_ok=True)
-            #mv_command = f"mv /root/monster/hayoola-mc/influxdb-data/test-backup/*.tar.gz /root/monster/hayoola-mc/influxdb-data/test-backup/{backup_dir}/backup"
-            #mv_process = subprocess.run(mv_command, shell=True)
+            mv_command = f"mv /root/monster/hayoola-mc/influxdb-data/test-backup/*  /mnt/sdb/influx-test/influxdb-data/tarred-files/"
+            mv_process = subprocess.run(mv_command, shell=True)
             # Delete backup directory
             delete_command = f"docker exec -it influxdb rm -rf {backup_path}"
             delete_process = subprocess.run(delete_command, shell=True)
@@ -147,11 +147,11 @@ file_name = backup_dir+".tar.gz"
 file_path = f"/root/monster/hayoola-mc/influxdb-data/test-backup/{file_name}"
 extraction_path = '/mnt/sdb/influx-test/influxdb-data/untarred-files/'
 
-extract_tar_gz(file_path, extraction_path)
-
+#extract_tar_gz(file_path, extraction_path)
+print (backup_dir)
 #------------------ Start Restore  ------------------
-command2 = "influxd restore -portable /var/lib/influxdb/untarred-files/"
-exit_code = os.system(f"docker exec -it {container_name} {command2} > /dev/null")
+command2 = f"influxd restore -portable /var/lib/influxdb/tarred-files/{backup_dir}/backup"
+exit_code = os.system(f"docker exec -it {container_name} {command2} >/dev/null ")
 
 if exit_code == 0:
     print()
@@ -185,7 +185,7 @@ if completed_process.returncode == 0:
     print("\033[92mFile moved successfully.\033[0m")  
 else:
     print("\033[91mFailed to move the file.\033[0m")  
-    sys.exit(1)
+#    sys.exit(1)
 # ------------ end moving file ------------
 
 print ("*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* END RESTORE *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*")
@@ -210,7 +210,8 @@ end_time = end_date+" "+end_time
 group_by = 'time(10s)'
 start_time_query = calendar.timegm(datetime.strptime(start_time, "%Y-%m-%d %H:%M:%S").astimezone(datetime.now().astimezone().tzinfo).timetuple()) * 1000
 end_time_query = calendar.timegm(datetime.strptime(end_time, "%Y-%m-%d %H:%M:%S").astimezone(datetime.now().astimezone().tzinfo).timetuple()) * 1000
-csv_address = '/mnt/sdb/influx-test/influxdb-data/tarred-files'
+csv_address = f'/mnt/sdb/influx-test/influxdb-data/tarred-files/{backup_dir}/csv'
+os.makedirs(csv_address, exist_ok=True)
 
 
 # Read the hosts from the file
