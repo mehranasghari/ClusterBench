@@ -2,7 +2,6 @@ import datetime
 import os
 import subprocess
 import argparse
-import shutil
 from influxdb import InfluxDBClient
 import subprocess
 import calendar
@@ -15,6 +14,7 @@ args = argParser.parse_args()
 testDirectory = args.testname
 global testDirectory2
 testDirectory2 = args.testname
+
 def read_values_from_file(file_path):
     values = []
     with open(file_path, "r") as f:
@@ -31,10 +31,12 @@ def process_input_file(file_path_input):
     with open(file_path_input, "r") as f:
         lines = f.readlines()
         for line in lines:
+            
             global start_date
             global start_time
             global end_date
             global end_time
+
             start_datetime, end_datetime = line.strip().split(",")
             start_date, start_time = start_datetime.split(" ")
             end_date, end_time = end_datetime.split(" ")
@@ -114,16 +116,12 @@ def process_input_file(file_path_input):
 
 input_file = "./../result/"+testDirectory+"/time"
 process_input_file(input_file)
-
 print ("*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* END OF BACKUP *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*")
 print ("*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* START RESTORE *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*")
-
 
 #info
 container_name = 'influxdb2'
 database_name = 'opentsdb'
-
-
 
 # Drop database
 # -------------------- START Drop database --------------------
@@ -153,7 +151,6 @@ extract_tar_gz(file_path, extraction_path)
 
 #------------------ Start Restore  ------------------
 command2 = "influxd restore -portable /var/lib/influxdb/untarred-files/"
-#os.system(f"docker exec -it {container_name} {command2} ")
 exit_code = os.system(f"docker exec -it {container_name} {command2} > /dev/null")
 
 if exit_code == 0:
@@ -165,7 +162,6 @@ else:
 # ------------------ END Restore  ------------------
 
 # ------------ Start remove files ------------
-
 command3 = "rm -rf /mnt/sdb/influx-test/influxdb-data/untarred-files/"
 completed_process = subprocess.run(command3, shell=True)
 
@@ -177,8 +173,9 @@ else:
     sys.exit(1)
 # ------------ END remove files --------------------
 
-# ------------ Start moving file ------------
 
+
+# ------------ Start moving file ------------
 command4 = f"mv /root/monster/hayoola-mc/influxdb-data/test-backup/{file_name} /mnt/sdb/influx-test/influxdb-data/tarred-files/"
 
 completed_process = subprocess.run(command4, shell=True)
@@ -207,8 +204,7 @@ client = InfluxDBClient(host=host, port=port, database=database)
 # Set time to run query
 start_time = start_date+" "+start_time
 end_time = end_date+" "+end_time
-#print ("start_time is : ",start_time)
-#print ("end_time is : ",end_time)
+
 
 # Set variables
 group_by = 'time(10s)'
@@ -234,8 +230,6 @@ for host in hosts:
     query = query.format(group_by=group_by,host=host,start_time_query=start_time_query,end_time_query=end_time_query)
     result = client.query(query)
 
-
-
     # Save the query result to a file and clear the query result.tx with echonig "" to it.
     output_file = f'{csv_address}/{host}_{testDirectory2}.txt'
 
@@ -247,3 +241,5 @@ for host in hosts:
     print(f"CSV for {host} saved to {output_file}")
 
 print ("\n-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* END EXPORT CSV FILE *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*")
+
+print ("\n*-*-*-*-*-*-*-*-*-*-*-*-*-* END EXPORT CSV FILE *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*")
