@@ -65,13 +65,14 @@ def process_input_file(file_path_input):
             end_date_dir = end_date_dir[2:]
             global backup_dir
             backup_dir = start_date_dir + "T" + final_time_start_backup + "_" + end_date_dir + "T" +final_time_end_backup
-            backup_path = "/var/lib/influxdb/test-backup/" + backup_dir
+            backup_path2 = "/var/lib/influxdb/test-backup/" + backup_dir
+            backup_path = f"/var/lib/influxdb/test-backup/{backup_dir}" + backup_dir
             os.makedirs(backup_path, exist_ok=True)
             start_time_backup = start_date + "T" + final_time_start + "Z"
             end_time_backup = end_date + "T" + final_time_end + "Z"
 
             # Perform backup using influxd backup command
-            backup_command = f"docker exec -it influxdb influxd backup -portable -start {start_time_backup} -end {end_time_backup} {backup_path} >/dev/null "
+            backup_command = f"docker exec -it influxdb influxd backup -portable -start {start_time_backup} -end {end_time_backup} {backup_path2}/backup >/dev/null "
             backup_process = subprocess.run(backup_command, shell=True)
             exit_code = backup_process.returncode
             if exit_code == 0:
@@ -80,22 +81,25 @@ def process_input_file(file_path_input):
                 print("\033[91mBackup failed.\033[0m")
                 sys.exit(1)
             print()
-            cp_command = f"cp -r ./../result/{testDirectory} /root/monster/hayoola-mc/influxdb-data/test-backup/{backup_dir}"
+            #cp and mv commands
+            os.makedirs(f"/root/monster/hayoola-mc/influxdb-data/test-backup/{backup_dir}/info", exist_ok=True)
+            cp_command = f"cp -r ./../result/{testDirectory}/* /root/monster/hayoola-mc/influxdb-data/test-backup/{backup_dir}/info/"
             cp_process = subprocess.run(cp_command, shell=True)
-
             # Tar all backup files in the directory
-            tar_file_path = backup_path + ".tar.gz"
-
+            #tar_file_path = backup_path + ".tar.gz"
             # Tar all backup files in the directory
-            tar_file_path = backup_path + ".tar.gz"
-            tar_command = f"docker exec -it influxdb tar -czvf {tar_file_path} -C {backup_path} . > /dev/null"
-            tar_process = subprocess.run(tar_command, shell=True)
-            if tar_process.returncode == 0:
-                print("\033[92mCompression successful.\033[0m")
-            else:
-                print("\033[91mCompression failed.\033[0m")
-                sys.exit(1)
-
+            #tar_file_path = backup_path2 + ".tar.gz"
+            #tar_command = f"docker exec -it influxdb tar -czvf {tar_file_path} -C {backup_path2}/backup . > /dev/null"
+            #tar_process = subprocess.run(tar_command, shell=True)
+            #if tar_process.returncode == 0:
+              #  print("\033[92mCompression successful.\033[0m")
+            #else:
+             #   print("\033[91mCompression failed.\033[0m")
+              #  sys.exit(1)
+	    #MV BACKUP.TAR.GZ TO DIR
+            #os.makedirs(f"/root/monster/hayoola-mc/influxdb-data/test-backup/{backup_dir}/backup", exist_ok=True)
+            #mv_command = f"mv /root/monster/hayoola-mc/influxdb-data/test-backup/*.tar.gz /root/monster/hayoola-mc/influxdb-data/test-backup/{backup_dir}/backup"
+            #mv_process = subprocess.run(mv_command, shell=True)
             # Delete backup directory
             delete_command = f"docker exec -it influxdb rm -rf {backup_path}"
             delete_process = subprocess.run(delete_command, shell=True)
