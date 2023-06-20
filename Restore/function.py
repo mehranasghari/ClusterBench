@@ -4,7 +4,7 @@ import csv
 # Specify the file paths
 input_file_path = './result.txt'
 output_file_path = './file.csv'
-hosts = './hosts.txt'
+hosts = './../Hosts/hosts.txt'
 
 # Open the input and output files
 with open(input_file_path, 'r') as input_file, open(output_file_path, 'w', newline='') as output_file:
@@ -35,7 +35,7 @@ with open(input_file_path, 'r') as input_file, open(output_file_path, 'w', newli
 # Print a message to indicate the CSV file has been created
 print(f"Results saved to {output_file_path}")
 # Specify the file path and name
-file_path = './result.py'
+file_path = './result.txt'
 
 # Open the file
 with open(file_path, 'r') as file:
