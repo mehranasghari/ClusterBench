@@ -87,19 +87,8 @@ def process_input_file(file_path_input):
             os.makedirs(f"/root/monster/hayoola-mc/influxdb-data/test-backup/{backup_dir}/info", exist_ok=True)
             cp_command = f"cp -r ./../result/{testDirectory}/* /root/monster/hayoola-mc/influxdb-data/test-backup/{backup_dir}/info/"
             cp_process = subprocess.run(cp_command, shell=True)
-            # Tar all backup files in the directory
-            #tar_file_path = backup_path + ".tar.gz"
-            # Tar all backup files in the directory
-            #tar_file_path = backup_path2 + ".tar.gz"
-            #tar_command = f"docker exec -it influxdb tar -czvf {tar_file_path} -C {backup_path2}/backup . > /dev/null"
-            #tar_process = subprocess.run(tar_command, shell=True)
-            #if tar_process.returncode == 0:
-              #  print("\033[92mCompression successful.\033[0m")
-            #else:
-             #   print("\033[91mCompression failed.\033[0m")
-              #  sys.exit(1)
-	    #MV BACKUP.TAR.GZ TO influxdb2
-            #os.makedirs(f"/root/monster/hayoola-mc/influxdb-data/test-backup/{backup_dir}/backup", exist_ok=True)
+
+	        #MV BACKUP.TAR.GZ TO influxdb2
             mv_command = f"mv /root/monster/hayoola-mc/influxdb-data/test-backup/*  /mnt/sdb/influx-test/influxdb-data/tarred-files/"
             mv_process = subprocess.run(mv_command, shell=True)
             # Delete backup directory
@@ -129,26 +118,7 @@ command = f"influx -execute 'drop database {database_name}'"
 os.system(f"docker exec -it {container_name} {command}")
 # --------------------  END Drop database --------------------
 
-def extract_tar_gz(file_path, extraction_path):
-    try:
-        # Create the extraction directory if it doesn't exist
-        os.makedirs(extraction_path, exist_ok=True)
 
-        # Extract the .tar.gz file to the desired path
-        subprocess.run(['tar', '-xf', file_path, '-C', extraction_path], check=True)
-        print('\033[92mExtraction successful!\033[0m')
-
-    except subprocess.CalledProcessError:
-        print('\033[91mExtraction failed!\033[0m')
-        sys.exit(1)
-
-# Example usage
-file_name = backup_dir+".tar.gz"
-file_path = f"/root/monster/hayoola-mc/influxdb-data/test-backup/{file_name}"
-extraction_path = '/mnt/sdb/influx-test/influxdb-data/untarred-files/'
-
-#extract_tar_gz(file_path, extraction_path)
-print (backup_dir)
 #------------------ Start Restore  ------------------
 command2 = f"influxd restore -portable /var/lib/influxdb/tarred-files/{backup_dir}/backup"
 exit_code = os.system(f"docker exec -it {container_name} {command2} >/dev/null ")
@@ -160,33 +130,6 @@ else:
     print("\033[91mRestore failed.\033[0m")  # Print message in red
     sys.exit(1)
 # ------------------ END Restore  ------------------
-
-# ------------ Start remove files ------------
-command3 = "rm -rf /mnt/sdb/influx-test/influxdb-data/untarred-files/"
-completed_process = subprocess.run(command3, shell=True)
-
-if completed_process.returncode == 0:
-    print()
-    print("\033[92mFiles removes successfully.\033[0m")  # Print green message
-else:
-    print("\033[91mRemoving files failed.\033[0m")  # Print red message
-    sys.exit(1)
-# ------------ END remove files --------------------
-
-
-
-# ------------ Start moving file ------------
-command4 = f"mv /root/monster/hayoola-mc/influxdb-data/test-backup/{file_name} /mnt/sdb/influx-test/influxdb-data/tarred-files/"
-
-completed_process = subprocess.run(command4, shell=True)
-
-if completed_process.returncode == 0:
-    print()
-    print("\033[92mFile moved successfully.\033[0m")  
-else:
-    print("\033[91mFailed to move the file.\033[0m")  
-#    sys.exit(1)
-# ------------ end moving file ------------
 
 print ("*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* END RESTORE *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*")
 print ("\n*-*-*-*-*-*-*-*-*-*-*-*-*-*-* START EXPORT CSV FILE *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*")
@@ -211,8 +154,9 @@ group_by = 'time(10s)'
 start_time_query = calendar.timegm(datetime.strptime(start_time, "%Y-%m-%d %H:%M:%S").astimezone(datetime.now().astimezone().tzinfo).timetuple()) * 1000
 end_time_query = calendar.timegm(datetime.strptime(end_time, "%Y-%m-%d %H:%M:%S").astimezone(datetime.now().astimezone().tzinfo).timetuple()) * 1000
 csv_address = f'/mnt/sdb/influx-test/influxdb-data/tarred-files/{backup_dir}/csv'
+image_address = f'/mnt/sdb/influx-test/influxdb-data/tarred-files/{backup_dir}/images'
 os.makedirs(csv_address, exist_ok=True)
-
+os.makedirs(image_address, exist_ok=True)
 
 # Read the hosts from the file
 with open(hosts_file_path, "r") as file:
@@ -242,5 +186,3 @@ for host in hosts:
     print(f"CSV for {host} saved to {output_file}")
 
 print ("\n-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* END EXPORT CSV FILE *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*")
-
-print ("\n*-*-*-*-*-*-*-*-*-*-*-*-*-* END EXPORT CSV FILE *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*")
