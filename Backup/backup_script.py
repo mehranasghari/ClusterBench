@@ -129,26 +129,7 @@ command = f"influx -execute 'drop database {database_name}'"
 os.system(f"docker exec -it {container_name} {command}")
 # --------------------  END Drop database --------------------
 
-def extract_tar_gz(file_path, extraction_path):
-    try:
-        # Create the extraction directory if it doesn't exist
-        os.makedirs(extraction_path, exist_ok=True)
 
-        # Extract the .tar.gz file to the desired path
-        subprocess.run(['tar', '-xf', file_path, '-C', extraction_path], check=True)
-        print('\033[92mExtraction successful!\033[0m')
-
-    except subprocess.CalledProcessError:
-        print('\033[91mExtraction failed!\033[0m')
-        sys.exit(1)
-
-# Example usage
-file_name = backup_dir+".tar.gz"
-file_path = f"/root/monster/hayoola-mc/influxdb-data/test-backup/{file_name}"
-extraction_path = '/mnt/sdb/influx-test/influxdb-data/untarred-files/'
-
-#extract_tar_gz(file_path, extraction_path)
-print (backup_dir)
 #------------------ Start Restore  ------------------
 command2 = f"influxd restore -portable /var/lib/influxdb/tarred-files/{backup_dir}/backup"
 exit_code = os.system(f"docker exec -it {container_name} {command2} >/dev/null ")
