@@ -131,33 +131,6 @@ else:
     sys.exit(1)
 # ------------------ END Restore  ------------------
 
-# ------------ Start remove files ------------
-command3 = "rm -rf /mnt/sdb/influx-test/influxdb-data/untarred-files/"
-completed_process = subprocess.run(command3, shell=True)
-
-if completed_process.returncode == 0:
-    print()
-    print("\033[92mFiles removes successfully.\033[0m")  # Print green message
-else:
-    print("\033[91mRemoving files failed.\033[0m")  # Print red message
-    sys.exit(1)
-# ------------ END remove files --------------------
-
-
-
-# ------------ Start moving file ------------
-command4 = f"mv /root/monster/hayoola-mc/influxdb-data/test-backup/{file_name} /mnt/sdb/influx-test/influxdb-data/tarred-files/"
-
-completed_process = subprocess.run(command4, shell=True)
-
-if completed_process.returncode == 0:
-    print()
-    print("\033[92mFile moved successfully.\033[0m")  
-else:
-    print("\033[91mFailed to move the file.\033[0m")  
-#    sys.exit(1)
-# ------------ end moving file ------------
-
 print ("*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* END RESTORE *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*")
 print ("\n*-*-*-*-*-*-*-*-*-*-*-*-*-*-* START EXPORT CSV FILE *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*")
 
