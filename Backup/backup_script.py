@@ -10,20 +10,13 @@ import json
 # Specify address to address.json file
 address_file_path = "./../conf/address.json"
 
-# Process valuse in address.json
-with open(address_file_path, 'r') as file:
-        json_data = json.load(file)
-        
-extracted_variables = {}
-for key, value in json_data.items():
-    extracted_variables[key] = value
-
-# Step 4: Use the extracted variables in your code
-# For example, print the value of the 'cluster_address' variable
-print(extracted_variables['Primary_influxdb_backup_file_address'])
-
-
 print ("*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* START OF BACKUP *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*")
+# Load the JSON data from the file and define adresses as a variable 
+with open(address_file_path, 'r') as file:
+    json_data = json.load(file)
+Primary_influxdb_backup_file_address = json_data['Primary_influxdb_backup_file_address']
+mc_main_directory_address = json_data['mc_main_directory_address']
+Secondary_influxdb_address = json_data['Secondary_influxdb_address']
 
 # Process given Test name as an arqument
 argParser = argparse.ArgumentParser()
@@ -88,8 +81,8 @@ def process_input_file(file_path_input):
             # Create backup directory name
             global backup_dir_name
             backup_dir_name = start_date_dir + "T" + final_time_start_backup + "_" + end_date_dir + "T" +final_time_end_backup
-            backup_path2 = "/var/lib/influxdb/test-backup/" + backup_dir_name
-            backup_path = f"/var/lib/influxdb/test-backup/{backup_dir_name}" + backup_dir_name
+            backup_path2 = Primary_influxdb_backup_file_address + backup_dir_name
+            backup_path = f"{Primary_influxdb_backup_file_address}/{backup_dir_name}" + backup_dir_name
             os.makedirs(backup_path, exist_ok=True)
             start_time_backup = start_date + "T" + final_time_start + "Z"
             end_time_backup = end_date + "T" + final_time_end + "Z"
@@ -106,12 +99,12 @@ def process_input_file(file_path_input):
             print()
             
             # Make info directory and move all into influxdb2 mount point
-            os.makedirs(f"/root/monster/hayoola-mc/influxdb-data/test-backup/{backup_dir_name}/info", exist_ok=True)
-            cp_command = f"cp -r ./../result/{testDirectory}/* /root/monster/hayoola-mc/influxdb-data/test-backup/{backup_dir_name}/info/"
+            os.makedirs(f"{mc_main_directory_address}/{backup_dir_name}/info", exist_ok=True)
+            cp_command = f"cp -r ./../result/{testDirectory}/* {mc_main_directory_address}/{backup_dir_name}/info/"
             cp_process = subprocess.run(cp_command, shell=True)
 
 	        #MV BACKUP.TAR.GZ TO influxdb2
-            mv_command = f"mv /root/monster/hayoola-mc/influxdb-data/test-backup/*  /mnt/sdb/influx-test/influxdb-data/tarred-files/"
+            mv_command = f"mv {mc_main_directory_address}/*  {Secondary_influxdb_address}/"
             mv_process = subprocess.run(mv_command, shell=True)
             
             # Delete backup directory
