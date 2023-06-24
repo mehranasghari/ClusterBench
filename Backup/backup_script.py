@@ -2,18 +2,37 @@ import datetime
 import os
 import subprocess
 import argparse
-from influxdb import InfluxDBClient
 import subprocess
 import calendar
 import sys
+import json
+
+# Specify address to address.json file
+address_file_path = "./../conf/address.json"
+
+# Process valuse in address.json
+with open(address_file_path, 'r') as file:
+        json_data = json.load(file)
+        
+extracted_variables = {}
+for key, value in json_data.items():
+    extracted_variables[key] = value
+
+# Step 4: Use the extracted variables in your code
+# For example, print the value of the 'cluster_address' variable
+print(extracted_variables['Primary_influxdb_backup_file_address'])
+
 
 print ("*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* START OF BACKUP *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*")
+
+# Process given Test name as an arqument
 argParser = argparse.ArgumentParser()
 argParser.add_argument("-t", "--testname", help="Test Name (Directory in Result/)")
 args = argParser.parse_args()
 testDirectory = args.testname
 global testDirectory2
 testDirectory2 = args.testname
+input_file = "./../result/"+testDirectory+"/time"
 
 def read_values_from_file(file_path):
     values = []
@@ -65,10 +84,12 @@ def process_input_file(file_path_input):
             start_date_dir = start_date_dir[2:]
             end_date_dir = end_date.replace("-", "")
             end_date_dir = end_date_dir[2:]
-            global backup_dir
-            backup_dir = start_date_dir + "T" + final_time_start_backup + "_" + end_date_dir + "T" +final_time_end_backup
-            backup_path2 = "/var/lib/influxdb/test-backup/" + backup_dir
-            backup_path = f"/var/lib/influxdb/test-backup/{backup_dir}" + backup_dir
+            
+            # Create backup directory name
+            global backup_dir_name
+            backup_dir_name = start_date_dir + "T" + final_time_start_backup + "_" + end_date_dir + "T" +final_time_end_backup
+            backup_path2 = "/var/lib/influxdb/test-backup/" + backup_dir_name
+            backup_path = f"/var/lib/influxdb/test-backup/{backup_dir_name}" + backup_dir_name
             os.makedirs(backup_path, exist_ok=True)
             start_time_backup = start_date + "T" + final_time_start + "Z"
             end_time_backup = end_date + "T" + final_time_end + "Z"
@@ -83,14 +104,16 @@ def process_input_file(file_path_input):
                 print("\033[91mBackup failed.\033[0m")
                 sys.exit(1)
             print()
-            #cp and mv commands
-            os.makedirs(f"/root/monster/hayoola-mc/influxdb-data/test-backup/{backup_dir}/info", exist_ok=True)
-            cp_command = f"cp -r ./../result/{testDirectory}/* /root/monster/hayoola-mc/influxdb-data/test-backup/{backup_dir}/info/"
+            
+            # Make info directory and move all into influxdb2 mount point
+            os.makedirs(f"/root/monster/hayoola-mc/influxdb-data/test-backup/{backup_dir_name}/info", exist_ok=True)
+            cp_command = f"cp -r ./../result/{testDirectory}/* /root/monster/hayoola-mc/influxdb-data/test-backup/{backup_dir_name}/info/"
             cp_process = subprocess.run(cp_command, shell=True)
 
 	        #MV BACKUP.TAR.GZ TO influxdb2
             mv_command = f"mv /root/monster/hayoola-mc/influxdb-data/test-backup/*  /mnt/sdb/influx-test/influxdb-data/tarred-files/"
             mv_process = subprocess.run(mv_command, shell=True)
+            
             # Delete backup directory
             delete_command = f"docker exec -it influxdb rm -rf {backup_path}"
             delete_process = subprocess.run(delete_command, shell=True)
@@ -103,6 +126,5 @@ def process_input_file(file_path_input):
                 print("\033[91mDeleting Directory failed.\033[0m")
                 sys.exit(1)
 
-input_file = "./../result/"+testDirectory+"/time"
 process_input_file(input_file)
 print ("*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* END OF BACKUP *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*")
