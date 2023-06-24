@@ -10,7 +10,6 @@ import json
 # Specify address to address.json file
 address_file_path = "./../conf/address.json"
 
-print ("*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* START OF BACKUP *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*")
 # Load the JSON data from the file and define adresses as a variable 
 with open(address_file_path, 'r') as file:
     json_data = json.load(file)
@@ -26,6 +25,8 @@ testDirectory = args.testname
 global testDirectory2
 testDirectory2 = args.testname
 input_file = "./../result/"+testDirectory+"/time"
+
+print(f"*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* START OF BACKUP FOR\033[92m {testDirectory} \033[0m*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*")
 
 def read_values_from_file(file_path):
     values = []
@@ -77,13 +78,13 @@ def process_input_file(file_path_input):
             start_date_dir = start_date_dir[2:]
             end_date_dir = end_date.replace("-", "")
             end_date_dir = end_date_dir[2:]
-            
+
             # Create backup directory name
             global backup_dir_name
             backup_dir_name = start_date_dir + "T" + final_time_start_backup + "_" + end_date_dir + "T" +final_time_end_backup
             backup_path2 = Primary_influxdb_backup_file_address + backup_dir_name
             backup_path = f"{Primary_influxdb_backup_file_address}/{backup_dir_name}" + backup_dir_name
-            os.makedirs(backup_path, exist_ok=True)
+           # os.makedirs(backup_path, exist_ok=True)
             start_time_backup = start_date + "T" + final_time_start + "Z"
             end_time_backup = end_date + "T" + final_time_end + "Z"
 
@@ -97,22 +98,29 @@ def process_input_file(file_path_input):
                 print("\033[91mBackup failed.\033[0m")
                 sys.exit(1)
             print()
-            
+
             # Make info directory and move all into influxdb2 mount point
             os.makedirs(f"{mc_main_directory_address}/{backup_dir_name}/info", exist_ok=True)
             cp_command = f"cp -r ./../result/{testDirectory}/* {mc_main_directory_address}/{backup_dir_name}/info/"
             cp_process = subprocess.run(cp_command, shell=True)
 
-	        #MV BACKUP.TAR.GZ TO influxdb2
-            mv_command = f"mv {mc_main_directory_address}/*  {Secondary_influxdb_address}/"
+	    #MV BACKUP.TAR.GZ TO influxdb2 and delete original file
+            mv_command = f"cp -r {mc_main_directory_address}/*  {Secondary_influxdb_address}/"
             mv_process = subprocess.run(mv_command, shell=True)
-            
+            del_command = f"rm -rf {mc_main_directory_address}/*"
+            del_process = subprocess.run(del_command, shell=True)
+            exit_code = del_process.returncode
+            if exit_code == 0:
+                print("\033[92mFiles moved to influxdb2 location  successful.\033[0m")
+            else:
+                print("\033[91mMOving files failed.\033[0m")
+                sys.exit(1)
+            print()
             # Delete backup directory
             delete_command = f"docker exec -it influxdb rm -rf {backup_path}"
             delete_process = subprocess.run(delete_command, shell=True)
             delete_check = delete_process.returncode
             if delete_process.returncode == 0:
-                print()
                 print("\033[92mDeleting Directory Completed successfully.\033[0m")
             else:
                 print()
@@ -120,4 +128,4 @@ def process_input_file(file_path_input):
                 sys.exit(1)
 
 process_input_file(input_file)
-print ("*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* END OF BACKUP *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*")
+print(f"*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* END OF BACKUP FOR\033[92m {testDirectory} \033[0m*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*")
