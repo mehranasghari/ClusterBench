@@ -66,3 +66,16 @@ with open(file_path, 'r') as file:
     print("Count:", count)
     print("Average:", average)
 
+import csv
+
+def extract_lines_to_csv(txt_file_path, csv_file_path, num_lines=18):
+    with open(txt_file_path, 'r') as txt_file, open(csv_file_path, 'w', newline='') as csv_file:
+        lines = txt_file.readlines()[:num_lines]  # Read the specified number of lines from the text file
+
+        writer = csv.writer(csv_file)
+        for line in lines:
+            writer.writerow([line.strip()])
+txt_file_path = "path/to/your/file.txt"
+csv_file_path = "path/to/save/your/output.csv"
+
+extract_lines_to_csv(txt_file_path, csv_file_path, num_lines=18)
