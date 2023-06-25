@@ -98,7 +98,7 @@ def process_input_file(file_path_input):
             cp_command = f"cp -r ./../result/{testDirectory}/* {mc_main_directory_address}/{backup_dir_name}/info/"
             cp_process = subprocess.run(cp_command, shell=True)
 
-	    #MV BACKUP.TAR.GZ TO influxdb2 and delete original file
+	        #MV BACKUP.TAR.GZ TO influxdb2 and delete original file
             os.makedirs(Secondary_influxdb_address, exist_ok=True)
             mv_command = f"cp -r {mc_main_directory_address}/*  {Secondary_influxdb_address}/"
             mv_process = subprocess.run(mv_command, shell=True)
@@ -106,9 +106,9 @@ def process_input_file(file_path_input):
             del_process = subprocess.run(del_command, shell=True)
             exit_code = del_process.returncode
             if exit_code == 0:
-                print("\033[92mFiles moved to influxdb2 location  successful.\033[0m")
+                print("\033[92mFiles moved to influxdb2 location successfully.\033[0m")
             else:
-                print("\033[91mMOving files failed.\033[0m")
+                print("\033[91mMoving files failed.\033[0m")
                 sys.exit(1)
             print()
             # Delete backup directory
