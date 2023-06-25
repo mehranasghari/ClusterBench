@@ -14,7 +14,7 @@ hosts_file_path = "./../Hosts/hosts.txt"
 
 # Process given argument as address
 argParser = argparse.ArgumentParser()
-argParser.add_argument("-a", "--address", help="path of directory which backup directories are located.")
+argParser.add_argument("-a", "--address", help="path of directory which contain other backup directories.")
 args = argParser.parse_args()
 addressDirectory = args.testname
 input_file = "./../result/"+addressDirectory+"/time"
