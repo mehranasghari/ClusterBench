@@ -6,14 +6,14 @@ print(" *-*-*-*-*-*-*-*-*-*-*-*-*-* ATTENTION *-*-*-*-*-*-*-*-*-*-*-*-*-*-*")
 print(" DO NOT USE influxDB after running this script for at least 2 HOURS ")
 print(" *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*")
 print("\n\n\n\n")
-Print (''' This code will change the retention polcy of the influxdb from what ever it set to shard duration 1H''')
+print (''' This code will change the retention polcy of the influxdb from what ever it set to shard duration 1H''')
 
 
 
 # Receive the name of the container that influxDB is running in
-container_name = input("Please enter your InfluxDB container name (default is 'influxdb2'): ")
+container_name = input("Please enter your InfluxDB container name (default is 'influxdb'): ")
 if container_name == "":
-    container_name = "influxdb2"
+    container_name = "influxdb"
 
 # Receive the name of the retention policy
 rp_name = input("\nPlease enter your active retention policy name (default is 'autogen'): ")
