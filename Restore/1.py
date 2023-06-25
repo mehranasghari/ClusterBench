@@ -4,7 +4,6 @@ import datetime
 import os
 import subprocess
 import argparse
-from influxdb import InfluxDBClient
 import subprocess
 import calendar
 import sys
