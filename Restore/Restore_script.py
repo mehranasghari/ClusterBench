@@ -10,16 +10,30 @@ import sys
 #info
 container_name = 'influxdb2'
 database_name = 'opentsdb'
+hosts_file_path = "./../Hosts/hosts.txt"
+
+# Process given argument as address
+argParser = argparse.ArgumentParser()
+argParser.add_argument("-a", "--address", help="path of directory which backup directories are located.")
+args = argParser.parse_args()
+addressDirectory = args.testname
+input_file = "./../result/"+addressDirectory+"/time"
+
+def read_values_from_file(file_path):
+    values = []
+    with open(file_path, "r") as f:
+        lines = f.readlines()
+        for line in lines:
+            values.extend(line.strip().split(","))
+    return values
+
+
 
 print ("*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* START RESTORE *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*")
 # Drop database
-# -------------------- START Drop database --------------------
 command = f"influx -execute 'drop database {database_name}'"
 os.system(f"docker exec -it {container_name} {command}")
-# --------------------  END Drop database --------------------
 
-
-#------------------ Start Restore  ------------------
 command2 = f"influxd restore -portable /var/lib/influxdb/tarred-files/{backup_dir}/backup"
 exit_code = os.system(f"docker exec -it {container_name} {command2} >/dev/null ")
 
@@ -29,14 +43,10 @@ if exit_code == 0:
 else:
     print("\033[91mRestore failed.\033[0m")  # Print message in red
     sys.exit(1)
-# ------------------ END Restore  ------------------
 
 print ("*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* END RESTORE *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*")
 print ("\n*-*-*-*-*-*-*-*-*-*-*-*-*-*-* START EXPORT CSV FILE *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*")
 
-
-from datetime import datetime
-hosts_file_path = "./../Hosts/hosts.txt"
 
 # Set up the InfluxDB connection
 host = 'localhost'
