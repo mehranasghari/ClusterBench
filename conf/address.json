@@ -2,12 +2,4 @@
     "Primary_influxdb_backup_file_address" : "/var/lib/influxdb/test-backup",
     "mc_main_directory_address" : "/root/monster/hayoola-mc/influxdb-data/test-backup",
     "Secondary_influxdb_address" : "/mnt/sdb/influx-test/influxdb-data/tarred-files"
-
-
-
-
-
-
-
-
 }
