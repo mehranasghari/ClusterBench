@@ -3,11 +3,4 @@
     "mc_main_directory_address" : "/root/monster/hayoola-mc/influxdb-data/test-backup",
     "Secondary_influxdb_address" : "/mnt/sdb/influx-test/influxdb-data/tarred-files"
 
-
-
-
-
-
-
-
 }
