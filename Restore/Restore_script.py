@@ -6,28 +6,31 @@ from influxdb import InfluxDBClient
 import subprocess
 import calendar
 import sys
+import os
+import shutil
 
 #info
 container_name = 'influxdb2'
 database_name = 'opentsdb'
 hosts_file_path = "./../Hosts/hosts.txt"
+backup_directory_in_container = "/var/lib/influxdb/backup" # Specify the path to the directory where InfluxDB backups should be mounted within the container
 
 # Process given argument as address
 argParser = argparse.ArgumentParser()
 argParser.add_argument("-a", "--address", help="path of directory which contain other backup directories.")
 args = argParser.parse_args()
-addressDirectory = args.testname
+addressDirectory = args.address
 input_file = "./../result/"+addressDirectory+"/time"
 
-def read_values_from_file(file_path):
-    values = []
-    with open(file_path, "r") as f:
-        lines = f.readlines()
-        for line in lines:
-            values.extend(line.strip().split(","))
-    return values
-
-
+# Iterate through all subdirectories
+for dirpath, dirnames, filenames in os.walk(addressDirectory):
+    # Check if the current directory is the "backup" directory
+    if "backup" in dirnames:
+        backup_directory = os.path.join(dirpath, "backup")
+        
+        # Restore the backup files in the InfluxDB container
+        restore_command = f"docker exec {container_name} influxd restore {backup_directory_in_container}"
+        os.system(restore_command)
 
 print ("*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* START RESTORE *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*")
 # Drop database
@@ -36,15 +39,13 @@ os.system(f"docker exec -it {container_name} {command}")
 
 command2 = f"influxd restore -portable /var/lib/influxdb/tarred-files/{backup_dir}/backup"
 exit_code = os.system(f"docker exec -it {container_name} {command2} >/dev/null ")
-
 if exit_code == 0:
     print()
-    print("\033[92mRestore Done successfully.\033[0m")  # Print message in green
+    print("\033[92mRestore Done successfully.\033[0m")  
 else:
-    print("\033[91mRestore failed.\033[0m")  # Print message in red
+    print("\033[91mRestore failed.\033[0m")  
     sys.exit(1)
 
-print ("*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* END RESTORE *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*")
 print ("\n*-*-*-*-*-*-*-*-*-*-*-*-*-*-* START EXPORT CSV FILE *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*")
 
 
