@@ -45,11 +45,6 @@ def process_input_file(file_path_input):
         lines = f.readlines()
         for line in lines:
 
-            global start_date
-            global start_time
-            global end_date
-            global end_time
-
             start_datetime, end_datetime = line.strip().split(",")
             start_date, start_time = start_datetime.split(" ")
             end_date, end_time = end_datetime.split(" ")
@@ -80,11 +75,10 @@ def process_input_file(file_path_input):
             end_date_dir = end_date_dir[2:]
 
             # Create backup directory name
-            global backup_dir_name
             backup_dir_name = start_date_dir + "T" + final_time_start_backup + "_" + end_date_dir + "T" +final_time_end_backup
-            backup_path2 = Primary_influxdb_backup_file_address + backup_dir_name
-            backup_path = f"{Primary_influxdb_backup_file_address}/{backup_dir_name}" + backup_dir_name
-           # os.makedirs(backup_path, exist_ok=True)
+            backup_path2 = Primary_influxdb_backup_file_address +"/"+ backup_dir_name
+            backup_path = f"{Primary_influxdb_backup_file_address}/{backup_dir_name}" 
+            os.makedirs(backup_path, exist_ok=True)
             start_time_backup = start_date + "T" + final_time_start + "Z"
             end_time_backup = end_date + "T" + final_time_end + "Z"
 
@@ -105,6 +99,7 @@ def process_input_file(file_path_input):
             cp_process = subprocess.run(cp_command, shell=True)
 
 	    #MV BACKUP.TAR.GZ TO influxdb2 and delete original file
+            os.makedirs(Secondary_influxdb_address, exist_ok=True)
             mv_command = f"cp -r {mc_main_directory_address}/*  {Secondary_influxdb_address}/"
             mv_process = subprocess.run(mv_command, shell=True)
             del_command = f"rm -rf {mc_main_directory_address}/*"
