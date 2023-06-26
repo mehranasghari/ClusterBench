@@ -6,6 +6,7 @@ import subprocess
 import calendar
 import sys
 import json
+import time
 
 # Specify address to address.json file
 address_file_path = "./../conf/address.json"
@@ -25,6 +26,9 @@ testDirectory = args.testname
 global testDirectory2
 testDirectory2 = args.testname
 input_file = "./../result/"+testDirectory+"/time"
+
+# Add a 1-minute delay
+time.sleep(60)
 
 print(f"*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* START OF BACKUP FOR\033[92m {testDirectory} \033[0m*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*")
 
@@ -111,7 +115,7 @@ def process_input_file(file_path_input):
             del_command = f"rm -rf {mc_main_directory_address}/{backup_dir_name}/backup/*"
             del_process = subprocess.run(del_command , shell=True)
 
-            # Make info directory and move all into influxdb2 mount point
+            # Make info directory and move all into influxdb2 mount points
             os.makedirs(f"{mc_main_directory_address}/{backup_dir_name}/info", exist_ok=True)
             cp_command = f"cp -r ./../result/{testDirectory}/* {mc_main_directory_address}/{backup_dir_name}/info/"
             cp_process = subprocess.run(cp_command, shell=True)
