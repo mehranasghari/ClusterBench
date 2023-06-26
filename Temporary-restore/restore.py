@@ -16,7 +16,7 @@ Secondary_influxdb_DB_name = json_data['Secondary_influxdb_DB_name']
 Secondary_influxdb_address_in_host = json_data['Secondary_influxdb_address_in_host']
 # Process given directory name as an arqument
 argParser = argparse.ArgumentParser()
-argParser.add_argument("-d", "--directoryname", help="Directory Name (Directory in which contain *.tar,gz)")
+argParser.add_argument("-d", "--directoryname", help="Directory Name (Directory which contain *.tar,gz)")
 args = argParser.parse_args()
 directoryname = args.directoryname
 
