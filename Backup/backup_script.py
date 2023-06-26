@@ -38,13 +38,14 @@ def read_values_from_file(file_path):
 
 def process_input_file(file_path_input):
     # set config time in seconds manually
-    x = 13200
-    y = 12000
+    x = 600
+    y = 600
 
     with open(file_path_input, "r") as f:
         lines = f.readlines()
         for line in lines:
-
+            
+            # Split and process input time
             start_datetime, end_datetime = line.strip().split(",")
             start_date, start_time = start_datetime.split(" ")
             end_date, end_time = end_datetime.split(" ")
@@ -61,6 +62,7 @@ def process_input_file(file_path_input):
             final_time_start_backup = start_time_standard.replace(":", "")
             final_time_end_backup = end_time_standard.replace(":", "")
 
+            # Chnage time to UTC and verify the 10m time change
             final_time_end = (end_datetime + datetime.timedelta(seconds=y)).strftime("%H:%M:%S")
             final_time_start = (start_datetime - datetime.timedelta(seconds=x)).strftime("%H:%M:%S")
 
@@ -74,7 +76,7 @@ def process_input_file(file_path_input):
             end_date_dir = end_date.replace("-", "")
             end_date_dir = end_date_dir[2:]
 
-            # Create backup directory name
+            # Create backup directory name structure
             backup_dir_name = start_date_dir + "T" + final_time_start_backup + "_" + end_date_dir + "T" +final_time_end_backup
             backup_path2 = Primary_influxdb_backup_file_address +"/"+ backup_dir_name
             backup_path = f"{Primary_influxdb_backup_file_address}/{backup_dir_name}" 
@@ -94,7 +96,7 @@ def process_input_file(file_path_input):
             print()
 
             # Tar backup files and delete extra files
-            tar_command = f"tar -cf {mc_main_directory_address}/{backup_dir_name}/{backup_dir_name}.tar.gz -C {mc_main_directory_address}/{backup_dir_name}/backup {mc_main_directory_address}/{backup_dir_name} .  > /dev/null"
+            tar_command = f"tar -cf {mc_main_directory_address}/{backup_dir_name}/backup.tar.gz -C {mc_main_directory_address}/{backup_dir_name}/backup {mc_main_directory_address}/{backup_dir_name} > /dev/null"
             tar_process = subprocess.run(tar_command, shell=True)
             exit_code = tar_process.returncode
             if exit_code == 0:
@@ -102,18 +104,21 @@ def process_input_file(file_path_input):
             else:
                 print("\033[91mTar failed.\033[0m")
                 sys.exit(1)
-            print()
+                print()
+            
+            # Delete backup directory files
+            del_command = f"rm -rf {mc_main_directory_address}/{backup_dir_name}/backup/*"
+            del_process = subprocess.run(del_command , shell=True)
+
             # Make info directory and move all into influxdb2 mount point
             os.makedirs(f"{mc_main_directory_address}/{backup_dir_name}/info", exist_ok=True)
             cp_command = f"cp -r ./../result/{testDirectory}/* {mc_main_directory_address}/{backup_dir_name}/info/"
             cp_process = subprocess.run(cp_command, shell=True)
 
-	    #MV BACKUP.TAR.GZ TO influxdb2 and delete original file
+	        #MV BACKUP.TAR.GZ TO influxdb2 and delete original file
             os.makedirs(Secondary_influxdb_address, exist_ok=True)
             mv_command = f"mv -f {mc_main_directory_address}/*  {Secondary_influxdb_address}/"
             mv_process = subprocess.run(mv_command, shell=True)
-            #del_command = f"rm -rf {mc_main_directory_address}/*"
-            #del_process = subprocess.run(del_command, shell=True)
             exit_code = mv_process.returncode
             if exit_code == 0:
                 print("\033[92mFiles moved to influxdb2 location successfully.\033[0m")
@@ -121,16 +126,5 @@ def process_input_file(file_path_input):
                 print("\033[91mMoving files failed.\033[0m")
                 sys.exit(1)
             print()
-            # Delete backup directory
-            #delete_command = f"docker exec -it influxdb rm -rf {backup_path}"
-            #delete_process = subprocess.run(delete_command, shell=True)
-            #delete_check = delete_process.returncode
-            #if delete_process.returncode == 0:
-            #    print("\033[92mDeleting Directory Completed successfully.\033[0m")
-            #else:
-             #   print()
-              #  print("\033[91mDeleting Directory failed.\033[0m")
-              #  sys.exit(1)
-            #print ("start-time : ", type(start_time_backup), "\nend-time : ", end_time_backup, "\nbackup_path2 : ", backup_path2, "\n")
 process_input_file(input_file)
 print(f"*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* END OF BACKUP FOR\033[92m {testDirectory} \033[0m*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*")
