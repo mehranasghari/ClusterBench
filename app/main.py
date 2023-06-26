@@ -159,4 +159,4 @@ for workload_number in range(workloads):
 
 
     subprocess.call(['python3', backup_script_path, '-t', final_workload_name])
-    print("--------------------------------------")
+    #print("--------------------------------------")
