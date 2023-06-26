@@ -45,7 +45,7 @@ else:
    print() 
 
 # Restore on influxdb
-restore_command = f"docker exec -it {Secondary_influxdb_container_name} influxd restore -portable {Secondary_influxdb_container_name}/{directoryname}/backup/ >/dev/null"
+restore_command = f"docker exec -it {Secondary_influxdb_container_name} influxd restore -portable {Secondry_influxdb_in_container_address}/{directoryname}/backup/ >/dev/null"
 restore_process = subprocess.run(restore_command, shell=True)
 exit_code = restore_process.returncode
 if exit_code == 0:
