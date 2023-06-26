@@ -6,6 +6,7 @@ import subprocess
 import calendar
 import sys
 import json
+import time
 
 # Specify address to address.json file
 address_file_path = "./../conf/address.json"
@@ -13,9 +14,13 @@ address_file_path = "./../conf/address.json"
 # Load the JSON data from the file and define adresses as a variable 
 with open(address_file_path, 'r') as file:
     json_data = json.load(file)
-Primary_influxdb_backup_file_address = json_data['Primary_influxdb_backup_file_address']
-mc_main_directory_address = json_data['mc_main_directory_address']
-Secondary_influxdb_address = json_data['Secondary_influxdb_address']
+Primary_influxdb_in_container_address = json_data['Primary_influxdb_in_container_address']
+Primary_influxdb_address_in_host = json_data['Primary_influxdb_address_in_host']
+Secondary_influxdb_address_in_host = json_data['Secondary_influxdb_address_in_host']
+Primary_influxdb_container_name = json_data['Primary_influxdb_container_name']
+Secondaryi_nfluxdb_container_name = json_data['Secondaryi_nfluxdb_container_name']
+Time_add_to_end_of_test = json_data['Time_add_to_end_of_test']
+Time_reduce_from_first_of_test = json_data['Time_reduce_from_first_of_test']
 
 # Process given Test name as an arqument
 argParser = argparse.ArgumentParser()
@@ -25,6 +30,9 @@ testDirectory = args.testname
 global testDirectory2
 testDirectory2 = args.testname
 input_file = "./../result/"+testDirectory+"/time"
+
+# Add a 1-minute delay
+time.sleep(60)
 
 print(f"*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* START OF BACKUP FOR\033[92m {testDirectory} \033[0m*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*")
 
@@ -38,8 +46,8 @@ def read_values_from_file(file_path):
 
 def process_input_file(file_path_input):
     # set config time in seconds manually
-    x = 13200
-    y = 12000
+    x = 12600 + Time_add_to_end_of_test
+    y = 12600 - Time_reduce_from_first_of_test
 
     with open(file_path_input, "r") as f:
         lines = f.readlines()
@@ -78,14 +86,14 @@ def process_input_file(file_path_input):
 
             # Create backup directory name structure
             backup_dir_name = start_date_dir + "T" + final_time_start_backup + "_" + end_date_dir + "T" +final_time_end_backup
-            backup_path2 = Primary_influxdb_backup_file_address +"/"+ backup_dir_name
-            backup_path = f"{Primary_influxdb_backup_file_address}/{backup_dir_name}" 
+            backup_path2 = Primary_influxdb_in_container_address +"/"+ backup_dir_name
+            backup_path = f"{Primary_influxdb_in_container_address}/{backup_dir_name}" 
             os.makedirs(backup_path, exist_ok=True)
             start_time_backup = start_date + "T" + final_time_start + "Z"
             end_time_backup = end_date + "T" + final_time_end + "Z"
 
             # Perform backup using influxd backup command
-            backup_command = f"docker exec -it influxdb influxd backup -portable -start {start_time_backup} -end {end_time_backup} {backup_path2}/backup >/dev/null "
+            backup_command = f"docker exec -it {Primary_influxdb_container_name} influxd backup -portable -start {start_time_backup} -end {end_time_backup} {backup_path2}/backup >/dev/null "
             backup_process = subprocess.run(backup_command, shell=True)
             exit_code = backup_process.returncode
             if exit_code == 0:
@@ -96,32 +104,33 @@ def process_input_file(file_path_input):
             print()
 
             # Tar backup files and delete extra files
-            tar_command = f"tar -cf {mc_main_directory_address}/{backup_dir_name}/backup.tar.gz -C {mc_main_directory_address}/{backup_dir_name}/backup . > /dev/null 2>&1"
+            tar_command = f"tar -cf {Primary_influxdb_address_in_host}/{backup_dir_name}/backup.tar.gz -C {Primary_influxdb_address_in_host}/{backup_dir_name}/backup . > /dev/null 2>&1"
             tar_process = subprocess.run(tar_command, shell=True)
             exit_code = tar_process.returncode
             if exit_code == 0:
                 print("\033[92mTar successful.\033[0m")
+                print()
             else:
                 print("\033[91mTar failed.\033[0m")
                 sys.exit(1)
                 print()
 
             # Delete backup directory files
-            del_command = f"rm -rf {mc_main_directory_address}/{backup_dir_name}/backup/*"
+            del_command = f"rm -rf {Primary_influxdb_address_in_host}/{backup_dir_name}/backup/*"
             del_process = subprocess.run(del_command , shell=True)
 
-            # Make info directory and move all into influxdb2 mount point
-            os.makedirs(f"{mc_main_directory_address}/{backup_dir_name}/info", exist_ok=True)
-            cp_command = f"cp -r ./../result/{testDirectory}/* {mc_main_directory_address}/{backup_dir_name}/info/"
+            # Make info directory and move all into influxdb2 mount points
+            os.makedirs(f"{Primary_influxdb_address_in_host}/{backup_dir_name}/info", exist_ok=True)
+            cp_command = f"cp -r ./../result/{testDirectory}/* {Primary_influxdb_address_in_host}/{backup_dir_name}/info/"
             cp_process = subprocess.run(cp_command, shell=True)
 
 	        #MV BACKUP.TAR.GZ TO influxdb2 and delete original file
-            os.makedirs(Secondary_influxdb_address, exist_ok=True)
-            mv_command = f"mv -f {mc_main_directory_address}/*  {Secondary_influxdb_address}/"
+            os.makedirs(Secondary_influxdb_address_in_host, exist_ok=True)
+            mv_command = f"mv -f {Primary_influxdb_address_in_host}/*  {Secondary_influxdb_address_in_host}/"
             mv_process = subprocess.run(mv_command, shell=True)
             exit_code = mv_process.returncode
             if exit_code == 0:
-                print("\033[92mFiles moved to influxdb2 location successfully.\033[0m")
+                print(f"\033[92mFiles moved to {Secondaryi_nfluxdb_container_name} location successfully.\033[0m")
             else:
                 print("\033[91mMoving files failed.\033[0m")
                 sys.exit(1)
