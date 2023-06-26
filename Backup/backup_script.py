@@ -38,8 +38,8 @@ def read_values_from_file(file_path):
 
 def process_input_file(file_path_input):
     # set config time in seconds manually
-    x = 600
-    y = 600
+    x = 13200
+    y = 12000
 
     with open(file_path_input, "r") as f:
         lines = f.readlines()
@@ -96,11 +96,12 @@ def process_input_file(file_path_input):
             print()
 
             # Tar backup files and delete extra files
-            tar_command = f"tar -cf {mc_main_directory_address}/{backup_dir_name}/backup.tar.gz -C {mc_main_directory_address}/{backup_dir_name}/backup {mc_main_directory_address}/{backup_dir_name} > /dev/null"
+            tar_command = f"tar -cf {mc_main_directory_address}/{backup_dir_name}/backup.tar.gz -C {mc_main_directory_address}/{backup_dir_name}/backup . > /dev/null 2>&1"
             tar_process = subprocess.run(tar_command, shell=True)
             exit_code = tar_process.returncode
             if exit_code == 0:
                 print("\033[92mTar successful.\033[0m")
+                print()
             else:
                 print("\033[91mTar failed.\033[0m")
                 sys.exit(1)
