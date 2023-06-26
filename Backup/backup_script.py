@@ -44,7 +44,7 @@ def process_input_file(file_path_input):
     with open(file_path_input, "r") as f:
         lines = f.readlines()
         for line in lines:
-            
+
             # Split and process input time
             start_datetime, end_datetime = line.strip().split(",")
             start_date, start_time = start_datetime.split(" ")
@@ -106,7 +106,7 @@ def process_input_file(file_path_input):
                 print("\033[91mTar failed.\033[0m")
                 sys.exit(1)
                 print()
-            
+
             # Delete backup directory files
             del_command = f"rm -rf {mc_main_directory_address}/{backup_dir_name}/backup/*"
             del_process = subprocess.run(del_command , shell=True)
