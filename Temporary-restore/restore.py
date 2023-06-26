@@ -27,10 +27,10 @@ drop_command = f"docker exec -it {Secondary_influxdb_container_name} influx -exe
 drop_process = subprocess.run(drop_command, shell=True)
 exit_code = drop_process.returncode
 if exit_code == 0:
-   print("\033[92mDatabase {Secondary_influxdb_DB_name} successfully.\033[0m")
+   print(f"\033[92mDatabase {Secondary_influxdb_DB_name} successfully.\033[0m")
    print()
 else:
-   print("\033[91mDropping {Secondary_influxdb_DB_name} failed.\033[0m")
+   print(f"\033[91mDropping {Secondary_influxdb_DB_name} failed.\033[0m")
    print()
 
 # Extract the backup.tar.gz
