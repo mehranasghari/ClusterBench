@@ -17,7 +17,7 @@ Primary_influxdb_in_container_address = json_data['Primary_influxdb_in_container
 Primary_influxdb_address_in_host = json_data['Primary_influxdb_address_in_host']
 Secondary_influxdb_address_in_host = json_data['Secondary_influxdb_address_in_host']
 Primary_influxdb_container_name = json_data['Primary_influxdb_container_name']
-Secondaryi_nfluxdb_container_name = json_data['Secondaryi_nfluxdb_container_name']
+Secondary_influxdb_container_name = json_data['Secondary_influxdb_container_name']
 Time_add_to_end_of_test = json_data['Time_add_to_end_of_test']
 Time_reduce_from_first_of_test = json_data['Time_reduce_from_first_of_test']
 
