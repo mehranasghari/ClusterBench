@@ -129,7 +129,7 @@ def process_input_file(file_path_input):
             mv_process = subprocess.run(mv_command, shell=True)
             exit_code = mv_process.returncode
             if exit_code == 0:
-                print(f"\033[92mFiles moved to {Secondaryi_nfluxdb_container_name} location successfully.\033[0m")
+                print(f"\033[92mFiles moved to {Secondary_influxdb_container_name} location successfully.\033[0m")
             else:
                 print("\033[91mMoving files failed.\033[0m")
                 sys.exit(1)
