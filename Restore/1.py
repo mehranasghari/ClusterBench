@@ -26,11 +26,11 @@ args = argParser.parse_args()
 directorypath = args.directorypath
 
 # Check that fiven address is not empty and check the correct path 
-if directorypath == "":
-    directorypath = Secondary_influxdb_address_in_host
-elif directorypath != f"{Secondary_influxdb_address_in_host}/*":
-   print(f"\033[91mGiven Path is not in mountpoint of Secondary influxdb\033[0")
-   directorypath = input("\nEnter address in Secondary influxdb which contain backup directories : ")
+#if directorypath == "":
+ #   directorypath = Secondary_influxdb_address_in_host
+#elif directorypath != f"{Secondary_influxdb_address_in_host}/*":
+  # print(f"\033[91mGiven Path is not in mountpoint of Secondary influxdb\033[0")
+  # directorypath = input("\nEnter address in Secondary influxdb which contain backup directories : ")
 backup_dir_list = os.listdir(directorypath)
 
 for dir_backup in backup_dir_list:
@@ -60,7 +60,7 @@ for dir_backup in backup_dir_list:
       break
 
     # Restore on influxdb
-    restore_command = f"docker exec -it {Secondary_influxdb_container_name} influxd restore -portable {directorypath}/{dir_backup}/backup/ >/dev/null"
+    restore_command = f"docker exec -it {Secondary_influxdb_container_name} influxd restore -portable {Secondry_influxdb_in_container_address}/{dir_backup}/backup/ >/dev/null"
     restore_process = subprocess.run(restore_command, shell=True)
     exit_code = restore_process.returncode
     if exit_code == 0:
@@ -77,7 +77,8 @@ for dir_backup in backup_dir_list:
     exit_code_mkdir = mkdir_process.returncode
 
     # Read time of backup from each directory
-    time_file_path = f"{Secondary_influxdb_container_name}/{dir_backup}/info/time"
+    from datetime import datetime
+    time_file_path = f"{Secondary_influxdb_address_in_host}/{dir_backup}/info/time"
     with open(time_file_path, "r") as file:
         time_str = file.read().strip()
         time_values = time_str.split(",")
