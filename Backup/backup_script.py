@@ -2,7 +2,6 @@ import datetime
 import os
 import subprocess
 import argparse
-import subprocess
 import calendar
 import sys
 import json
@@ -46,8 +45,8 @@ def read_values_from_file(file_path):
 
 def process_input_file(file_path_input):
     # set config time in seconds manually
-    x = 12600 + int(Time_add_to_end_of_test)
-    y = 12600 - int(Time_reduce_from_first_of_test)
+    x = 12600 + Time_add_to_end_of_test
+    y = 12600 - Time_reduce_from_first_of_test
 
     with open(file_path_input, "r") as f:
         lines = f.readlines()
