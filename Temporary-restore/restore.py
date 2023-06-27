@@ -16,7 +16,7 @@ Secondary_influxdb_DB_name = json_data['Secondary_influxdb_DB_name']
 Secondary_influxdb_address_in_host = json_data['Secondary_influxdb_address_in_host']
 # Process given directory name as an arqument
 argParser = argparse.ArgumentParser()
-argParser.add_argument("-d", "--directoryname", help="Directory Name (Directory in which contain *.tar,gz)")
+argParser.add_argument("-d", "--directoryname", help="Directory Name (Directory which contain *.tar,gz)")
 args = argParser.parse_args()
 directoryname = args.directoryname
 
@@ -27,10 +27,10 @@ drop_command = f"docker exec -it {Secondary_influxdb_container_name} influx -exe
 drop_process = subprocess.run(drop_command, shell=True)
 exit_code = drop_process.returncode
 if exit_code == 0:
-   print("\033[92mDatabase {Secondary_influxdb_DB_name} successfully.\033[0m")
+   print(f"\033[92mDatabase {Secondary_influxdb_DB_name} successfully.\033[0m")
    print()
 else:
-   print("\033[91mDropping {Secondary_influxdb_DB_name} failed.\033[0m")
+   print(f"\033[91mDropping {Secondary_influxdb_DB_name} failed.\033[0m")
    print()
 
 # Extract the backup.tar.gz

@@ -2,7 +2,6 @@ import datetime
 import os
 import subprocess
 import argparse
-import subprocess
 import calendar
 import sys
 import json
@@ -18,7 +17,7 @@ Primary_influxdb_in_container_address = json_data['Primary_influxdb_in_container
 Primary_influxdb_address_in_host = json_data['Primary_influxdb_address_in_host']
 Secondary_influxdb_address_in_host = json_data['Secondary_influxdb_address_in_host']
 Primary_influxdb_container_name = json_data['Primary_influxdb_container_name']
-Secondaryi_nfluxdb_container_name = json_data['Secondaryi_nfluxdb_container_name']
+Secondary_influxdb_container_name = json_data['Secondary_influxdb_container_name']
 Time_add_to_end_of_test = json_data['Time_add_to_end_of_test']
 Time_reduce_from_first_of_test = json_data['Time_reduce_from_first_of_test']
 
@@ -46,8 +45,8 @@ def read_values_from_file(file_path):
 
 def process_input_file(file_path_input):
     # set config time in seconds manually
-    x = 12600 + int(Time_add_to_end_of_test)
-    y = 12600 - int(Time_reduce_from_first_of_test)
+    x = 12600 + Time_add_to_end_of_test
+    y = 12600 - Time_reduce_from_first_of_test
 
     with open(file_path_input, "r") as f:
         lines = f.readlines()

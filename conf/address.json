@@ -8,5 +8,5 @@
     "Secondary_influxdb_DB_name" : "opentsdb",
     "Secondary_influxdb_container_name" : "influxdb2",
     "Secondary_influxdb_address_in_host" : "/mnt/sdb/influx-test/influxdb-data/tarred-files",
-    "Secondry_influxdb_in_container_address" : "/var/lib/influxdb/tarred-files/"
+    "Secondry_influxdb_in_container_address" : "/var/lib/influxdb/tarred-files"
 }
