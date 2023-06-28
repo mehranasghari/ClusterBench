@@ -24,13 +24,6 @@ argParser = argparse.ArgumentParser()
 argParser.add_argument("-d", "--directorypath", help="Directory path (Directory which contain backup directories)")
 args = argParser.parse_args()
 directorypath = args.directorypath
-
-# Check that fiven address is not empty and check the correct path 
-#if directorypath == "":
- #   directorypath = Secondary_influxdb_address_in_host
-#elif directorypath != f"{Secondary_influxdb_address_in_host}/*":
-  # print(f"\033[91mGiven Path is not in mountpoint of Secondary influxdb\033[0")
-  # directorypath = input("\nEnter address in Secondary influxdb which contain backup directories : ")
 backup_dir_list = os.listdir(directorypath)
 
 for dir_backup in backup_dir_list:
@@ -116,4 +109,3 @@ for dir_backup in backup_dir_list:
             print(f"CSV for {host} saved to {output_file}")
         
         # Process the csv files
-        
