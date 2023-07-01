@@ -1,7 +1,7 @@
 import json
 
 def convert_panel_json_to_influxdb_query(panel_json):
-    # Load the JSON from file or API response
+    # Load the JSON from file
     json_data = json.loads(panel_json)
 
     # Extract query information
