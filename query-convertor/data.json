@@ -1,290 +1,4066 @@
 {
-    "id": 39,
-    "gridPos": {
-      "h": 7,
-      "w": 8,
-      "x": 0,
-      "y": 0
-    },
-    "type": "graph",
-    "title": "CPU - S1",
-    "transformations": [
-      {
-        "id": "calculateField",
-        "options": {
-          "alias": "Mean - all",
-          "mode": "reduceRow",
-          "reduce": {
-            "include": [],
-            "reducer": "sum"
-          },
-          "replaceFields": false
+  "id": 30,
+  "gridPos": {
+    "h": 5,
+    "w": 24,
+    "x": 0,
+    "y": 27
+  },
+  "type": "table",
+  "title": "ALL $hostIs",
+  "transformations": [
+    {
+      "id": "calculateField",
+      "options": {
+        "alias": "Mean-Disk-BW-Read",
+        "mode": "reduceRow",
+        "reduce": {
+          "include": [
+            "sdb-r",
+            "sdc-r",
+            "sdd-r",
+            "sde-r",
+            "sdf-r",
+            "sdg-r",
+            "sdh-r",
+            "sdi-r",
+            "sdj-r",
+            "sdk-r",
+            "sdl-r"
+          ],
+          "reducer": "mean"
         }
       }
-    ],
-    "thresholds": [],
-    "pluginVersion": "8.0.0",
-    "legend": {
-      "avg": false,
-      "current": false,
-      "max": false,
-      "min": false,
-      "show": true,
-      "total": false,
-      "values": false
     },
-    "aliasColors": {},
-    "dashLength": 10,
-    "fill": 1,
-    "lines": true,
-    "linewidth": 1,
-    "nullPointMode": "null",
-    "options": {
-      "alertThreshold": true
+    {
+      "id": "calculateField",
+      "options": {
+        "alias": "Mean-Disk-BW-Write",
+        "mode": "reduceRow",
+        "reduce": {
+          "include": [
+            "sdb-w",
+            "sdc-w",
+            "sdd-w",
+            "sde-w",
+            "sdf-w",
+            "sdg-w",
+            "sdh-w",
+            "sdi-w",
+            "sdj-w",
+            "sdk-w",
+            "sdl-w"
+          ],
+          "reducer": "mean"
+        }
+      }
     },
-    "pointradius": 2,
-    "renderer": "flot",
-    "seriesOverrides": [],
-    "spaceLength": 10,
-    "targets": [
-      {
-        "alias": "User - s1",
-        "datasource": {
-          "type": "influxdb",
-          "uid": "06O86T24z"
-        },
-        "groupBy": [
-          {
-            "params": [
-              "$timeVariable"
-            ],
-            "type": "time"
-          },
-          {
-            "params": [
-              "none"
-            ],
-            "type": "fill"
-          }
-        ],
-        "measurement": "netdata.system.cpu.user",
-        "orderByTime": "ASC",
-        "policy": "default",
-        "query": "SELECT mean(\"value\") FROM \"netdata.system.cpu.user\" WHERE (\"host\" =~ /^$hostIs$/) AND $timeFilter GROUP BY time($timeVariable) fill(null)",
-        "rawQuery": false,
-        "refId": "A",
-        "resultFormat": "time_series",
-        "select": [
-          [
-            {
-              "params": [
-                "value"
-              ],
-              "type": "field"
-            },
-            {
-              "params": [],
-              "type": "mean"
-            }
-          ]
-        ],
-        "tags": [
-          {
-            "key": "host",
-            "operator": "=~",
-            "value": "/^$hostIs$/"
-          }
-        ]
-      },
-      {
-        "alias": "System - s1",
-        "datasource": {
-          "type": "influxdb",
-          "uid": "06O86T24z"
-        },
-        "groupBy": [
-          {
-            "params": [
-              "$timeVariable"
-            ],
-            "type": "time"
-          },
-          {
-            "params": [
-              "none"
-            ],
-            "type": "fill"
-          }
-        ],
-        "measurement": "netdata.system.cpu.system",
-        "orderByTime": "ASC",
-        "policy": "default",
-        "refId": "B",
-        "resultFormat": "time_series",
-        "select": [
-          [
-            {
-              "params": [
-                "value"
-              ],
-              "type": "field"
-            },
-            {
-              "params": [],
-              "type": "mean"
-            }
-          ]
-        ],
-        "tags": [
-          {
-            "key": "host",
-            "operator": "=~",
-            "value": "/^$hostIs$/"
-          }
-        ]
-      },
-      {
-        "alias": "Iowait - s1",
-        "datasource": {
-          "type": "influxdb",
-          "uid": "06O86T24z"
-        },
-        "groupBy": [
-          {
-            "params": [
-              "$timeVariable"
-            ],
-            "type": "time"
-          },
-          {
-            "params": [
-              "none"
-            ],
-            "type": "fill"
-          }
-        ],
-        "measurement": "netdata.system.cpu.iowait",
-        "orderByTime": "ASC",
-        "policy": "default",
-        "refId": "C",
-        "resultFormat": "time_series",
-        "select": [
-          [
-            {
-              "params": [
-                "value"
-              ],
-              "type": "field"
-            },
-            {
-              "params": [],
-              "type": "mean"
-            }
-          ]
-        ],
-        "tags": [
-          {
-            "key": "host",
-            "operator": "=~",
-            "value": "/^$hostIs$/"
-          }
-        ]
-      },
-      {
-        "alias": "idle - s1 ",
-        "datasource": {
-          "type": "influxdb",
-          "uid": "06O86T24z"
-        },
-        "groupBy": [
-          {
-            "params": [
-              "$timeVariable"
-            ],
-            "type": "time"
-          },
-          {
-            "params": [
-              "none"
-            ],
-            "type": "fill"
-          }
-        ],
-        "hide": true,
-        "measurement": "netdata.system.cpu.idle",
-        "orderByTime": "ASC",
-        "policy": "default",
-        "refId": "D",
-        "resultFormat": "time_series",
-        "select": [
-          [
-            {
-              "params": [
-                "value"
-              ],
-              "type": "field"
-            },
-            {
-              "params": [],
-              "type": "mean"
-            }
-          ]
-        ],
-        "tags": [
-          {
-            "key": "host",
-            "operator": "=~",
-            "value": "/^$hostIs$/"
-          }
+    {
+      "id": "calculateField",
+      "options": {
+        "alias": "Mean-Disk-T-Read",
+        "mode": "reduceRow",
+        "reduce": {
+          "include": [
+            "sdb-t-r",
+            "sdc-t-r",
+            "sdd-t-r",
+            "sde-t-r",
+            "sdf-t-r",
+            "sdg-t-r",
+            "sdh-t-r",
+            "sdi-t-r",
+            "sdj-t-r",
+            "sdk-t-r",
+            "sdl-t-r"
+          ],
+          "reducer": "mean"
+        }
+      }
+    },
+    {
+      "id": "calculateField",
+      "options": {
+        "alias": "Mean-Disk-T-Write",
+        "mode": "reduceRow",
+        "reduce": {
+          "include": [
+            "sdb-t-w",
+            "sdc-t-w",
+            "sdd-t-w",
+            "sde-t-w",
+            "sdf-t-w",
+            "sdg-t-w",
+            "sdh-t-w",
+            "sdi-t-w",
+            "sdj-t-w",
+            "sdk-t-w",
+            "sdl-t-w"
+          ],
+          "reducer": "mean"
+        }
+      }
+    },
+    {
+      "id": "calculateField",
+      "options": {
+        "alias": "Mean-Disk-Util",
+        "mode": "reduceRow",
+        "reduce": {
+          "include": [
+            "sdb-u",
+            "sdc-u",
+            "sdd-u",
+            "sde-u",
+            "sdf-u",
+            "sdg-u",
+            "sdh-u",
+            "sdi-u",
+            "sdj-u",
+            "sdk-u",
+            "sdl-u"
+          ],
+          "reducer": "mean"
+        }
+      }
+    },
+    {
+      "id": "calculateField",
+      "options": {
+        "alias": "Mean-Disk-inodes",
+        "mode": "reduceRow",
+        "reduce": {
+          "include": [
+            "sdb-inodes",
+            "sdc-inodes",
+            "sdd-inodes",
+            "sde-inodes",
+            "sdf-inodes",
+            "sdg-inodes",
+            "sdh-inodes",
+            "sdi-inodes",
+            "sdj-inodes",
+            "sdk-inodes",
+            "sdl-inodes"
+          ],
+          "reducer": "mean"
+        }
+      }
+    },
+    {
+      "id": "reduce",
+      "options": {
+        "includeTimeField": false,
+        "mode": "reduceFields",
+        "reducers": [
+          "mean"
         ]
       }
-    ],
-    "timeRegions": [],
-    "tooltip": {
-      "shared": true,
-      "sort": 0,
-      "value_type": "individual"
     },
-    "xaxis": {
-      "buckets": null,
-      "mode": "time",
-      "name": null,
-      "show": true,
-      "values": []
-    },
-    "yaxes": [
-      {
-        "$$hashKey": "object:46",
-        "format": "short",
-        "label": null,
-        "logBase": 1,
-        "max": null,
-        "min": null,
-        "show": true
-      },
-      {
-        "$$hashKey": "object:47",
-        "format": "short",
-        "label": null,
-        "logBase": 1,
-        "max": null,
-        "min": null,
-        "show": true
+    {
+      "id": "filterFieldsByName",
+      "options": {
+        "include": {
+          "names": [
+            "put account",
+            "put container",
+            "put object",
+            "head account",
+            "head container",
+            "get object",
+            "delete container",
+            "delete object",
+            "User",
+            "System",
+            "Iowait",
+            "idle",
+            "recieved",
+            "sent",
+            "Used",
+            "Cached",
+            "Buffers",
+            "Free",
+            "Mean-Disk-BW-Read",
+            "Mean-Disk-BW-Write",
+            "Mean-Disk-T-Read",
+            "Mean-Disk-T-Write",
+            "Mean-Disk-Util",
+            "Mean-Disk-inodes"
+          ]
+        }
       }
-    ],
-    "yaxis": {
-      "align": false,
-      "alignLevel": null
+    }
+  ],
+  "pluginVersion": "8.0.0",
+  "links": [],
+  "cacheTimeout": null,
+  "fieldConfig": {
+    "defaults": {
+      "custom": {
+        "align": "auto",
+        "displayMode": "auto"
+      },
+      "thresholds": {
+        "mode": "absolute",
+        "steps": [
+          {
+            "color": "green",
+            "value": null
+          },
+          {
+            "color": "red",
+            "value": 80
+          }
+        ]
+      },
+      "mappings": [],
+      "color": {
+        "mode": "thresholds"
+      },
+      "links": []
     },
-    "bars": false,
-    "dashes": false,
-    "fillGradient": 0,
-    "hiddenSeries": false,
-    "percentage": false,
-    "points": false,
-    "stack": false,
-    "steppedLine": false,
-    "timeFrom": null,
-    "timeShift": null,
-    "datasource": null
-  }
+    "overrides": []
+  },
+  "options": {
+    "showHeader": true
+  },
+  "targets": [
+    {
+      "alias": "sdb-w",
+      "groupBy": [
+        {
+          "params": [
+            "$timeVariable"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "null"
+          ],
+          "type": "fill"
+        }
+      ],
+      "measurement": "netdata.disk.sdb.writes",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "A",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "mean"
+          },
+          {
+            "params": [
+              "*-1"
+            ],
+            "type": "math"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "host",
+          "operator": "=~",
+          "value": "/^$hostIs$/"
+        }
+      ]
+    },
+    {
+      "alias": "sdc-w",
+      "groupBy": [
+        {
+          "params": [
+            "$timeVariable"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "null"
+          ],
+          "type": "fill"
+        }
+      ],
+      "measurement": "netdata.disk.sdc.writes",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "B",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "mean"
+          },
+          {
+            "params": [
+              "*-1"
+            ],
+            "type": "math"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "host",
+          "operator": "=~",
+          "value": "/^$hostIs$/"
+        }
+      ]
+    },
+    {
+      "alias": "sdd-w",
+      "groupBy": [
+        {
+          "params": [
+            "$timeVariable"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "null"
+          ],
+          "type": "fill"
+        }
+      ],
+      "measurement": "netdata.disk.sdd.writes",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "C",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "mean"
+          },
+          {
+            "params": [
+              "*-1"
+            ],
+            "type": "math"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "host",
+          "operator": "=~",
+          "value": "/^$hostIs$/"
+        }
+      ]
+    },
+    {
+      "alias": "sde-w",
+      "groupBy": [
+        {
+          "params": [
+            "$timeVariable"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "null"
+          ],
+          "type": "fill"
+        }
+      ],
+      "measurement": "netdata.disk.sde.writes",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "D",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "mean"
+          },
+          {
+            "params": [
+              "*-1"
+            ],
+            "type": "math"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "host",
+          "operator": "=~",
+          "value": "/^$hostIs$/"
+        }
+      ]
+    },
+    {
+      "alias": "sdf-w",
+      "groupBy": [
+        {
+          "params": [
+            "$timeVariable"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "null"
+          ],
+          "type": "fill"
+        }
+      ],
+      "measurement": "netdata.disk.sdf.writes",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "E",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "mean"
+          },
+          {
+            "params": [
+              "*-1"
+            ],
+            "type": "math"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "host",
+          "operator": "=~",
+          "value": "/^$hostIs$/"
+        }
+      ]
+    },
+    {
+      "alias": "sdb-r",
+      "groupBy": [
+        {
+          "params": [
+            "$timeVariable"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "null"
+          ],
+          "type": "fill"
+        }
+      ],
+      "measurement": "netdata.disk.sdb.reads",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "F",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "mean"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "host",
+          "operator": "=~",
+          "value": "/^$hostIs$/"
+        }
+      ]
+    },
+    {
+      "alias": "sdc-r",
+      "groupBy": [
+        {
+          "params": [
+            "$timeVariable"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "null"
+          ],
+          "type": "fill"
+        }
+      ],
+      "measurement": "netdata.disk.sdc.reads",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "G",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "mean"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "host",
+          "operator": "=~",
+          "value": "/^$hostIs$/"
+        }
+      ]
+    },
+    {
+      "alias": "sdd-r",
+      "groupBy": [
+        {
+          "params": [
+            "$timeVariable"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "null"
+          ],
+          "type": "fill"
+        }
+      ],
+      "measurement": "netdata.disk.sdd.reads",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "H",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "mean"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "host",
+          "operator": "=~",
+          "value": "/^$hostIs$/"
+        }
+      ]
+    },
+    {
+      "alias": "sde-r",
+      "groupBy": [
+        {
+          "params": [
+            "$timeVariable"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "null"
+          ],
+          "type": "fill"
+        }
+      ],
+      "measurement": "netdata.disk.sde.reads",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "I",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "mean"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "host",
+          "operator": "=~",
+          "value": "/^$hostIs$/"
+        }
+      ]
+    },
+    {
+      "alias": "sdf-r",
+      "groupBy": [
+        {
+          "params": [
+            "$timeVariable"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "null"
+          ],
+          "type": "fill"
+        }
+      ],
+      "measurement": "netdata.disk.sdf.reads",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "K",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "mean"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "host",
+          "operator": "=~",
+          "value": "/^$hostIs$/"
+        }
+      ]
+    },
+    {
+      "alias": "sdg-w",
+      "groupBy": [
+        {
+          "params": [
+            "$timeVariable"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "null"
+          ],
+          "type": "fill"
+        }
+      ],
+      "hide": false,
+      "measurement": "netdata.disk.sdg.writes",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "J",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "mean"
+          },
+          {
+            "params": [
+              "*-1"
+            ],
+            "type": "math"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "host",
+          "operator": "=~",
+          "value": "/^$hostIs$/"
+        }
+      ]
+    },
+    {
+      "alias": "sdh-w",
+      "groupBy": [
+        {
+          "params": [
+            "$timeVariable"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "null"
+          ],
+          "type": "fill"
+        }
+      ],
+      "hide": false,
+      "measurement": "netdata.disk.sdh.writes",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "L",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "mean"
+          },
+          {
+            "params": [
+              "*-1"
+            ],
+            "type": "math"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "host",
+          "operator": "=~",
+          "value": "/^$hostIs$/"
+        }
+      ]
+    },
+    {
+      "alias": "sdi-w",
+      "groupBy": [
+        {
+          "params": [
+            "$timeVariable"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "null"
+          ],
+          "type": "fill"
+        }
+      ],
+      "hide": false,
+      "measurement": "netdata.disk.sdi.writes",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "M",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "mean"
+          },
+          {
+            "params": [
+              "*-1"
+            ],
+            "type": "math"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "host",
+          "operator": "=~",
+          "value": "/^$hostIs$/"
+        }
+      ]
+    },
+    {
+      "alias": "sdj-w",
+      "groupBy": [
+        {
+          "params": [
+            "$timeVariable"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "null"
+          ],
+          "type": "fill"
+        }
+      ],
+      "hide": false,
+      "measurement": "netdata.disk.sdj.writes",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "N",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "mean"
+          },
+          {
+            "params": [
+              "*-1"
+            ],
+            "type": "math"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "host",
+          "operator": "=~",
+          "value": "/^$hostIs$/"
+        }
+      ]
+    },
+    {
+      "alias": "sdk-w",
+      "groupBy": [
+        {
+          "params": [
+            "$timeVariable"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "null"
+          ],
+          "type": "fill"
+        }
+      ],
+      "hide": false,
+      "measurement": "netdata.disk.sdk.writes",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "O",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "mean"
+          },
+          {
+            "params": [
+              "*-1"
+            ],
+            "type": "math"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "host",
+          "operator": "=~",
+          "value": "/^$hostIs$/"
+        }
+      ]
+    },
+    {
+      "alias": "sdl-w",
+      "groupBy": [
+        {
+          "params": [
+            "$timeVariable"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "null"
+          ],
+          "type": "fill"
+        }
+      ],
+      "hide": false,
+      "measurement": "netdata.disk.sdl.writes",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "P",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "mean"
+          },
+          {
+            "params": [
+              "*-1"
+            ],
+            "type": "math"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "host",
+          "operator": "=~",
+          "value": "/^$hostIs$/"
+        }
+      ]
+    },
+    {
+      "alias": "sdg-r",
+      "groupBy": [
+        {
+          "params": [
+            "$timeVariable"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "null"
+          ],
+          "type": "fill"
+        }
+      ],
+      "hide": false,
+      "measurement": "netdata.disk.sdg.reads",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "Q",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "mean"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "host",
+          "operator": "=~",
+          "value": "/^$hostIs$/"
+        }
+      ]
+    },
+    {
+      "alias": "sdh-r",
+      "groupBy": [
+        {
+          "params": [
+            "$timeVariable"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "null"
+          ],
+          "type": "fill"
+        }
+      ],
+      "hide": false,
+      "measurement": "netdata.disk.sdh.reads",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "R",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "mean"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "host",
+          "operator": "=~",
+          "value": "/^$hostIs$/"
+        }
+      ]
+    },
+    {
+      "alias": "sdi-r",
+      "groupBy": [
+        {
+          "params": [
+            "$timeVariable"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "null"
+          ],
+          "type": "fill"
+        }
+      ],
+      "hide": false,
+      "measurement": "netdata.disk.sdi.reads",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "S",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "mean"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "host",
+          "operator": "=~",
+          "value": "/^$hostIs$/"
+        }
+      ]
+    },
+    {
+      "alias": "sdj-r",
+      "groupBy": [
+        {
+          "params": [
+            "$timeVariable"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "null"
+          ],
+          "type": "fill"
+        }
+      ],
+      "hide": false,
+      "measurement": "netdata.disk.sdj.reads",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "T",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "mean"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "host",
+          "operator": "=~",
+          "value": "/^$hostIs$/"
+        }
+      ]
+    },
+    {
+      "alias": "sdk-r",
+      "groupBy": [
+        {
+          "params": [
+            "$timeVariable"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "null"
+          ],
+          "type": "fill"
+        }
+      ],
+      "hide": false,
+      "measurement": "netdata.disk.sdk.reads",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "U",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "mean"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "host",
+          "operator": "=~",
+          "value": "/^$hostIs$/"
+        }
+      ]
+    },
+    {
+      "alias": "sdl-r",
+      "groupBy": [
+        {
+          "params": [
+            "$timeVariable"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "null"
+          ],
+          "type": "fill"
+        }
+      ],
+      "hide": false,
+      "measurement": "netdata.disk.sdl.reads",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "V",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "mean"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "host",
+          "operator": "=~",
+          "value": "/^$hostIs$/"
+        }
+      ]
+    },
+    {
+      "alias": "sda-u",
+      "groupBy": [
+        {
+          "params": [
+            "$timeVariable"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "null"
+          ],
+          "type": "fill"
+        }
+      ],
+      "measurement": "netdata.disk_util.sda.utilization",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "query": "SELECT sum(\"value\") FROM \"netdata.disk_util.sda.utilization\" WHERE (\"host\" = 'controller-cloud1') AND $timeFilter GROUP BY time($__interval) fill(null)",
+      "rawQuery": false,
+      "refId": "F",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "mean"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "host",
+          "operator": "=~",
+          "value": "/^$hostIs$/"
+        }
+      ]
+    },
+    {
+      "alias": "sdb-u",
+      "groupBy": [
+        {
+          "params": [
+            "$timeVariable"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "null"
+          ],
+          "type": "fill"
+        }
+      ],
+      "measurement": "netdata.disk_util.sdb.utilization",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "A",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "mean"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "host",
+          "operator": "=~",
+          "value": "/^$hostIs$/"
+        }
+      ]
+    },
+    {
+      "alias": "sdc-u",
+      "groupBy": [
+        {
+          "params": [
+            "$timeVariable"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "null"
+          ],
+          "type": "fill"
+        }
+      ],
+      "measurement": "netdata.disk_util.sdc.utilization",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "B",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "mean"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "host",
+          "operator": "=~",
+          "value": "/^$hostIs$/"
+        }
+      ]
+    },
+    {
+      "alias": "sdd-u",
+      "groupBy": [
+        {
+          "params": [
+            "$timeVariable"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "null"
+          ],
+          "type": "fill"
+        }
+      ],
+      "measurement": "netdata.disk_util.sdd.utilization",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "C",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "mean"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "host",
+          "operator": "=~",
+          "value": "/^$hostIs$/"
+        }
+      ]
+    },
+    {
+      "alias": "sde-u",
+      "groupBy": [
+        {
+          "params": [
+            "$timeVariable"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "null"
+          ],
+          "type": "fill"
+        }
+      ],
+      "measurement": "netdata.disk_util.sde.utilization",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "D",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "mean"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "host",
+          "operator": "=~",
+          "value": "/^$hostIs$/"
+        }
+      ]
+    },
+    {
+      "alias": "sdf-u",
+      "groupBy": [
+        {
+          "params": [
+            "$timeVariable"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "null"
+          ],
+          "type": "fill"
+        }
+      ],
+      "measurement": "netdata.disk_util.sdf.utilization",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "E",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "mean"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "host",
+          "operator": "=~",
+          "value": "/^$hostIs$/"
+        }
+      ]
+    },
+    {
+      "alias": "sdg-u",
+      "groupBy": [
+        {
+          "params": [
+            "$timeVariable"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "null"
+          ],
+          "type": "fill"
+        }
+      ],
+      "hide": false,
+      "measurement": "netdata.disk_util.sdg.utilization",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "G",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "mean"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "host",
+          "operator": "=~",
+          "value": "/^$hostIs$/"
+        }
+      ]
+    },
+    {
+      "alias": "sdh-u",
+      "groupBy": [
+        {
+          "params": [
+            "$timeVariable"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "null"
+          ],
+          "type": "fill"
+        }
+      ],
+      "hide": false,
+      "measurement": "netdata.disk_util.sdh.utilization",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "H",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "mean"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "host",
+          "operator": "=~",
+          "value": "/^$hostIs$/"
+        }
+      ]
+    },
+    {
+      "alias": "sdi-u",
+      "groupBy": [
+        {
+          "params": [
+            "$timeVariable"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "null"
+          ],
+          "type": "fill"
+        }
+      ],
+      "hide": false,
+      "measurement": "netdata.disk_util.sdi.utilization",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "I",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "mean"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "host",
+          "operator": "=~",
+          "value": "/^$hostIs$/"
+        }
+      ]
+    },
+    {
+      "alias": "sdj-u",
+      "groupBy": [
+        {
+          "params": [
+            "$timeVariable"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "null"
+          ],
+          "type": "fill"
+        }
+      ],
+      "hide": false,
+      "measurement": "netdata.disk_util.sdj.utilization",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "J",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "mean"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "host",
+          "operator": "=~",
+          "value": "/^$hostIs$/"
+        }
+      ]
+    },
+    {
+      "alias": "sdk-u",
+      "groupBy": [
+        {
+          "params": [
+            "$timeVariable"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "null"
+          ],
+          "type": "fill"
+        }
+      ],
+      "hide": false,
+      "measurement": "netdata.disk_util.sdk.utilization",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "K",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "mean"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "host",
+          "operator": "=~",
+          "value": "/^$hostIs$/"
+        }
+      ]
+    },
+    {
+      "alias": "sdl-u",
+      "groupBy": [
+        {
+          "params": [
+            "$timeVariable"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "null"
+          ],
+          "type": "fill"
+        }
+      ],
+      "hide": false,
+      "measurement": "netdata.disk_util.sdl.utilization",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "L",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "mean"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "host",
+          "operator": "=~",
+          "value": "/^$hostIs$/"
+        }
+      ]
+    },
+    {
+      "alias": "sdb-t-w",
+      "groupBy": [
+        {
+          "params": [
+            "$timeVariable"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "null"
+          ],
+          "type": "fill"
+        }
+      ],
+      "measurement": "netdata.disk_ops.sdb.writes",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "B",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "mean"
+          },
+          {
+            "params": [
+              "*(-1)"
+            ],
+            "type": "math"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "host",
+          "operator": "=~",
+          "value": "/^$hostIs$/"
+        }
+      ]
+    },
+    {
+      "alias": "sdc-t-w",
+      "groupBy": [
+        {
+          "params": [
+            "$timeVariable"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "null"
+          ],
+          "type": "fill"
+        }
+      ],
+      "measurement": "netdata.disk_ops.sdc.writes",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "C",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "mean"
+          },
+          {
+            "params": [
+              "*(-1)"
+            ],
+            "type": "math"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "host",
+          "operator": "=~",
+          "value": "/^$hostIs$/"
+        }
+      ]
+    },
+    {
+      "alias": "sdd-t-w",
+      "groupBy": [
+        {
+          "params": [
+            "$timeVariable"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "null"
+          ],
+          "type": "fill"
+        }
+      ],
+      "measurement": "netdata.disk_ops.sdd.writes",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "D",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "mean"
+          },
+          {
+            "params": [
+              "*(-1)"
+            ],
+            "type": "math"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "host",
+          "operator": "=~",
+          "value": "/^$hostIs$/"
+        }
+      ]
+    },
+    {
+      "alias": "sde-t-w",
+      "groupBy": [
+        {
+          "params": [
+            "$timeVariable"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "null"
+          ],
+          "type": "fill"
+        }
+      ],
+      "measurement": "netdata.disk_ops.sde.writes",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "E",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "mean"
+          },
+          {
+            "params": [
+              "*(-1)"
+            ],
+            "type": "math"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "host",
+          "operator": "=~",
+          "value": "/^$hostIs$/"
+        }
+      ]
+    },
+    {
+      "alias": "sdf-t-w",
+      "groupBy": [
+        {
+          "params": [
+            "$timeVariable"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "null"
+          ],
+          "type": "fill"
+        }
+      ],
+      "measurement": "netdata.disk_ops.sdf.writes",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "F",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "mean"
+          },
+          {
+            "params": [
+              "*(-1)"
+            ],
+            "type": "math"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "host",
+          "operator": "=~",
+          "value": "/^$hostIs$/"
+        }
+      ]
+    },
+    {
+      "alias": "sdg-t-w",
+      "groupBy": [
+        {
+          "params": [
+            "$timeVariable"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "null"
+          ],
+          "type": "fill"
+        }
+      ],
+      "hide": false,
+      "measurement": "netdata.disk_ops.sdg.writes",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "G",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "mean"
+          },
+          {
+            "params": [
+              "*(-1)"
+            ],
+            "type": "math"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "host",
+          "operator": "=~",
+          "value": "/^$hostIs$/"
+        }
+      ]
+    },
+    {
+      "alias": "sdb-t-r",
+      "groupBy": [
+        {
+          "params": [
+            "$timeVariable"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "null"
+          ],
+          "type": "fill"
+        }
+      ],
+      "measurement": "netdata.disk_ops.sdb.reads",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "H",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "mean"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "host",
+          "operator": "=~",
+          "value": "/^$hostIs$/"
+        }
+      ]
+    },
+    {
+      "alias": "sdc-t-r",
+      "groupBy": [
+        {
+          "params": [
+            "$timeVariable"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "null"
+          ],
+          "type": "fill"
+        }
+      ],
+      "measurement": "netdata.disk_ops.sdc.reads",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "I",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "mean"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "host",
+          "operator": "=~",
+          "value": "/^$hostIs$/"
+        }
+      ]
+    },
+    {
+      "alias": "sdd-t-r",
+      "groupBy": [
+        {
+          "params": [
+            "$timeVariable"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "null"
+          ],
+          "type": "fill"
+        }
+      ],
+      "measurement": "netdata.disk_ops.sdd.reads",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "J",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "mean"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "host",
+          "operator": "=~",
+          "value": "/^$hostIs$/"
+        }
+      ]
+    },
+    {
+      "alias": "sde-t-r",
+      "groupBy": [
+        {
+          "params": [
+            "$timeVariable"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "null"
+          ],
+          "type": "fill"
+        }
+      ],
+      "measurement": "netdata.disk_ops.sde.reads",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "K",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "mean"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "host",
+          "operator": "=~",
+          "value": "/^$hostIs$/"
+        }
+      ]
+    },
+    {
+      "alias": "sdf-t-r",
+      "groupBy": [
+        {
+          "params": [
+            "$timeVariable"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "null"
+          ],
+          "type": "fill"
+        }
+      ],
+      "measurement": "netdata.disk_ops.sdf.reads",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "L",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "mean"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "host",
+          "operator": "=~",
+          "value": "/^$hostIs$/"
+        }
+      ]
+    },
+    {
+      "alias": "sdg-t-r",
+      "groupBy": [
+        {
+          "params": [
+            "$timeVariable"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "null"
+          ],
+          "type": "fill"
+        }
+      ],
+      "hide": false,
+      "measurement": "netdata.disk_ops.sdg.reads",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "A",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "mean"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "host",
+          "operator": "=~",
+          "value": "/^$hostIs$/"
+        }
+      ]
+    },
+    {
+      "alias": "sdh-t-r",
+      "groupBy": [
+        {
+          "params": [
+            "$timeVariable"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "null"
+          ],
+          "type": "fill"
+        }
+      ],
+      "hide": false,
+      "measurement": "netdata.disk_ops.sdh.reads",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "M",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "mean"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "host",
+          "operator": "=~",
+          "value": "/^$hostIs$/"
+        }
+      ]
+    },
+    {
+      "alias": "sdi-t-r",
+      "groupBy": [
+        {
+          "params": [
+            "$timeVariable"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "null"
+          ],
+          "type": "fill"
+        }
+      ],
+      "hide": false,
+      "measurement": "netdata.disk_ops.sdi.reads",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "N",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "mean"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "host",
+          "operator": "=~",
+          "value": "/^$hostIs$/"
+        }
+      ]
+    },
+    {
+      "alias": "sdj-t-r",
+      "groupBy": [
+        {
+          "params": [
+            "$timeVariable"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "null"
+          ],
+          "type": "fill"
+        }
+      ],
+      "hide": false,
+      "measurement": "netdata.disk_ops.sdj.reads",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "O",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "mean"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "host",
+          "operator": "=~",
+          "value": "/^$hostIs$/"
+        }
+      ]
+    },
+    {
+      "alias": "sdk-t-r",
+      "groupBy": [
+        {
+          "params": [
+            "$timeVariable"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "null"
+          ],
+          "type": "fill"
+        }
+      ],
+      "hide": false,
+      "measurement": "netdata.disk_ops.sdk.reads",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "P",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "mean"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "host",
+          "operator": "=~",
+          "value": "/^$hostIs$/"
+        }
+      ]
+    },
+    {
+      "alias": "sdl-t-r",
+      "groupBy": [
+        {
+          "params": [
+            "$timeVariable"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "null"
+          ],
+          "type": "fill"
+        }
+      ],
+      "hide": false,
+      "measurement": "netdata.disk_ops.sdl.reads",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "Q",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "mean"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "host",
+          "operator": "=~",
+          "value": "/^$hostIs$/"
+        }
+      ]
+    },
+    {
+      "alias": "sdh-t-w",
+      "groupBy": [
+        {
+          "params": [
+            "$timeVariable"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "null"
+          ],
+          "type": "fill"
+        }
+      ],
+      "hide": false,
+      "measurement": "netdata.disk_ops.sdh.writes",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "R",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "mean"
+          },
+          {
+            "params": [
+              "*(-1)"
+            ],
+            "type": "math"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "host",
+          "operator": "=~",
+          "value": "/^$hostIs$/"
+        }
+      ]
+    },
+    {
+      "alias": "sdi-t-w",
+      "groupBy": [
+        {
+          "params": [
+            "$timeVariable"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "null"
+          ],
+          "type": "fill"
+        }
+      ],
+      "hide": false,
+      "measurement": "netdata.disk_ops.sdi.writes",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "S",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "mean"
+          },
+          {
+            "params": [
+              "*(-1)"
+            ],
+            "type": "math"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "host",
+          "operator": "=~",
+          "value": "/^$hostIs$/"
+        }
+      ]
+    },
+    {
+      "alias": "sdj-t-w",
+      "groupBy": [
+        {
+          "params": [
+            "$timeVariable"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "null"
+          ],
+          "type": "fill"
+        }
+      ],
+      "hide": false,
+      "measurement": "netdata.disk_ops.sdj.writes",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "T",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "mean"
+          },
+          {
+            "params": [
+              "*(-1)"
+            ],
+            "type": "math"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "host",
+          "operator": "=~",
+          "value": "/^$hostIs$/"
+        }
+      ]
+    },
+    {
+      "alias": "sdk-t-w",
+      "groupBy": [
+        {
+          "params": [
+            "$timeVariable"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "null"
+          ],
+          "type": "fill"
+        }
+      ],
+      "hide": false,
+      "measurement": "netdata.disk_ops.sdk.writes",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "U",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "mean"
+          },
+          {
+            "params": [
+              "*(-1)"
+            ],
+            "type": "math"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "host",
+          "operator": "=~",
+          "value": "/^$hostIs$/"
+        }
+      ]
+    },
+    {
+      "alias": "sdl-t-w",
+      "groupBy": [
+        {
+          "params": [
+            "$timeVariable"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "null"
+          ],
+          "type": "fill"
+        }
+      ],
+      "hide": false,
+      "measurement": "netdata.disk_ops.sdl.writes",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "V",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "mean"
+          },
+          {
+            "params": [
+              "*(-1)"
+            ],
+            "type": "math"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "host",
+          "operator": "=~",
+          "value": "/^$hostIs$/"
+        }
+      ]
+    },
+    {
+      "alias": "put container",
+      "groupBy": [
+        {
+          "params": [
+            "$timeVariable"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "null"
+          ],
+          "type": "fill"
+        }
+      ],
+      "measurement": "netdata.statsd_timer_swift.container_server.put.timing.events",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "A",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "mean"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "host",
+          "operator": "=~",
+          "value": "/^$hostIs$/"
+        }
+      ]
+    },
+    {
+      "alias": "put account",
+      "groupBy": [
+        {
+          "params": [
+            "$timeVariable"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "null"
+          ],
+          "type": "fill"
+        }
+      ],
+      "measurement": "netdata.statsd_timer_swift.account_server.put.timing.events",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "B",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "mean"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "host",
+          "operator": "=~",
+          "value": "/^$hostIs$/"
+        }
+      ]
+    },
+    {
+      "alias": "put object",
+      "groupBy": [
+        {
+          "params": [
+            "$timeVariable"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "null"
+          ],
+          "type": "fill"
+        }
+      ],
+      "measurement": "netdata.statsd_timer_swift.object_server.put.timing.events",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "C",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "mean"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "host",
+          "operator": "=~",
+          "value": "/^$hostIs$/"
+        }
+      ]
+    },
+    {
+      "alias": "head account",
+      "groupBy": [
+        {
+          "params": [
+            "$timeVariable"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "null"
+          ],
+          "type": "fill"
+        }
+      ],
+      "measurement": "netdata.statsd_timer_swift.account_server.head.timing.events",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "A",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "mean"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "host",
+          "operator": "=~",
+          "value": "/^$hostIs$/"
+        }
+      ]
+    },
+    {
+      "alias": "head container",
+      "groupBy": [
+        {
+          "params": [
+            "$timeVariable"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "null"
+          ],
+          "type": "fill"
+        }
+      ],
+      "measurement": "netdata.statsd_timer_swift.container_server.head.timing.events",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "D",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "mean"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "host",
+          "operator": "=~",
+          "value": "/^$hostIs$/"
+        }
+      ]
+    },
+    {
+      "alias": "get object",
+      "groupBy": [
+        {
+          "params": [
+            "$timeVariable"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "null"
+          ],
+          "type": "fill"
+        }
+      ],
+      "measurement": "netdata.statsd_timer_swift.object_server.get.timing.events",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "G",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "mean"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "host",
+          "operator": "=~",
+          "value": "/^$hostIs$/"
+        }
+      ]
+    },
+    {
+      "alias": "delete object",
+      "groupBy": [
+        {
+          "params": [
+            "$timeVariable"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "null"
+          ],
+          "type": "fill"
+        }
+      ],
+      "measurement": "netdata.statsd_timer_swift.object_server.delete.timing.events",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "A",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "mean"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "host",
+          "operator": "=~",
+          "value": "/^$hostIs$/"
+        }
+      ]
+    },
+    {
+      "alias": "delete container",
+      "groupBy": [
+        {
+          "params": [
+            "$timeVariable"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "null"
+          ],
+          "type": "fill"
+        }
+      ],
+      "measurement": "netdata.statsd_timer_swift.container_server.delete.timing.events",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "D",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "mean"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "host",
+          "operator": "=~",
+          "value": "/^$hostIs$/"
+        }
+      ]
+    },
+    {
+      "alias": "User",
+      "groupBy": [
+        {
+          "params": [
+            "$timeVariable"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "null"
+          ],
+          "type": "fill"
+        }
+      ],
+      "measurement": "netdata.system.cpu.user",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "query": "SELECT mean(\"value\") FROM \"netdata.system.cpu.user\" WHERE (\"host\" =~ /^$hostIs$/) AND $timeFilter GROUP BY time($timeVariable) fill(null)",
+      "rawQuery": false,
+      "refId": "A",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "mean"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "host",
+          "operator": "=~",
+          "value": "/^$hostIs$/"
+        }
+      ]
+    },
+    {
+      "alias": "System",
+      "groupBy": [
+        {
+          "params": [
+            "$timeVariable"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "null"
+          ],
+          "type": "fill"
+        }
+      ],
+      "measurement": "netdata.system.cpu.system",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "B",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "mean"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "host",
+          "operator": "=~",
+          "value": "/^$hostIs$/"
+        }
+      ]
+    },
+    {
+      "alias": "Iowait",
+      "groupBy": [
+        {
+          "params": [
+            "$timeVariable"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "null"
+          ],
+          "type": "fill"
+        }
+      ],
+      "measurement": "netdata.system.cpu.iowait",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "C",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "mean"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "host",
+          "operator": "=~",
+          "value": "/^$hostIs$/"
+        }
+      ]
+    },
+    {
+      "alias": "idle",
+      "groupBy": [
+        {
+          "params": [
+            "$timeVariable"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "null"
+          ],
+          "type": "fill"
+        }
+      ],
+      "measurement": "netdata.system.cpu.idle",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "D",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "mean"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "host",
+          "operator": "=~",
+          "value": "/^$hostIs$/"
+        }
+      ]
+    },
+    {
+      "alias": "recieved",
+      "groupBy": [
+        {
+          "params": [
+            "$timeVariable"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "null"
+          ],
+          "type": "fill"
+        }
+      ],
+      "measurement": "netdata.system.net.received",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "A",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "mean"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "host",
+          "operator": "=~",
+          "value": "/^$hostIs$/"
+        }
+      ]
+    },
+    {
+      "alias": "sent",
+      "groupBy": [
+        {
+          "params": [
+            "$timeVariable"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "null"
+          ],
+          "type": "fill"
+        }
+      ],
+      "measurement": "netdata.system.net.sent",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "B",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "mean"
+          },
+          {
+            "params": [
+              "*-1"
+            ],
+            "type": "math"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "host",
+          "operator": "=~",
+          "value": "/^$hostIs$/"
+        }
+      ]
+    },
+    {
+      "alias": "Used",
+      "groupBy": [
+        {
+          "params": [
+            "$timeVariable"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "null"
+          ],
+          "type": "fill"
+        }
+      ],
+      "measurement": "netdata.system.ram.used",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "A",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "mean"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "host",
+          "operator": "=~",
+          "value": "/^$hostIs$/"
+        }
+      ]
+    },
+    {
+      "alias": "Cached",
+      "groupBy": [
+        {
+          "params": [
+            "$timeVariable"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "null"
+          ],
+          "type": "fill"
+        }
+      ],
+      "measurement": "netdata.system.ram.cached",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "B",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "mean"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "host",
+          "operator": "=~",
+          "value": "/^$hostIs$/"
+        }
+      ]
+    },
+    {
+      "alias": "Buffers",
+      "groupBy": [
+        {
+          "params": [
+            "$timeVariable"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "null"
+          ],
+          "type": "fill"
+        }
+      ],
+      "measurement": "netdata.system.ram.buffers",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "C",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "mean"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "host",
+          "operator": "=~",
+          "value": "/^$hostIs$/"
+        }
+      ]
+    },
+    {
+      "alias": "Free",
+      "groupBy": [
+        {
+          "params": [
+            "$timeVariable"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "null"
+          ],
+          "type": "fill"
+        }
+      ],
+      "measurement": "netdata.system.ram.free",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "D",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "mean"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "host",
+          "operator": "=~",
+          "value": "/^$hostIs$/"
+        }
+      ]
+    },
+    {
+      "alias": "sdb-inodes",
+      "groupBy": [
+        {
+          "params": [
+            "$timeVariable"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "null"
+          ],
+          "type": "fill"
+        }
+      ],
+      "measurement": "netdata.disk_inodes._srv_node_sdb.used",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "A",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "mean"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "host",
+          "operator": "=~",
+          "value": "/^$hostIs$/"
+        }
+      ]
+    },
+    {
+      "alias": "sdc-inodes",
+      "groupBy": [
+        {
+          "params": [
+            "$timeVariable"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "null"
+          ],
+          "type": "fill"
+        }
+      ],
+      "measurement": "netdata.disk_inodes._srv_node_sdc.used",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "B",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "mean"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "host",
+          "operator": "=~",
+          "value": "/^$hostIs$/"
+        }
+      ]
+    },
+    {
+      "alias": "sdd-inodes",
+      "groupBy": [
+        {
+          "params": [
+            "$timeVariable"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "null"
+          ],
+          "type": "fill"
+        }
+      ],
+      "measurement": "netdata.disk_inodes._srv_node_sdd.used",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "D",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "mean"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "host",
+          "operator": "=~",
+          "value": "/^$hostIs$/"
+        }
+      ]
+    },
+    {
+      "alias": "sde-inodes",
+      "groupBy": [
+        {
+          "params": [
+            "$timeVariable"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "null"
+          ],
+          "type": "fill"
+        }
+      ],
+      "measurement": "netdata.disk_inodes._srv_node_sde.used",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "E",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "mean"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "host",
+          "operator": "=~",
+          "value": "/^$hostIs$/"
+        }
+      ]
+    },
+    {
+      "alias": "sdf-inodes",
+      "groupBy": [
+        {
+          "params": [
+            "$timeVariable"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "null"
+          ],
+          "type": "fill"
+        }
+      ],
+      "hide": false,
+      "measurement": "netdata.disk_inodes._srv_node_sdf.used",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "C",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "mean"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "host",
+          "operator": "=~",
+          "value": "/^$hostIs$/"
+        }
+      ]
+    },
+    {
+      "alias": "sdg-inodes",
+      "groupBy": [
+        {
+          "params": [
+            "$timeVariable"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "null"
+          ],
+          "type": "fill"
+        }
+      ],
+      "hide": false,
+      "measurement": "netdata.disk_inodes._srv_node_sdg.used",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "F",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "mean"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "host",
+          "operator": "=~",
+          "value": "/^$hostIs$/"
+        }
+      ]
+    },
+    {
+      "alias": "sdh-inodes",
+      "groupBy": [
+        {
+          "params": [
+            "$timeVariable"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "null"
+          ],
+          "type": "fill"
+        }
+      ],
+      "hide": false,
+      "measurement": "netdata.disk_inodes._srv_node_sdh.used",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "G",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "mean"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "host",
+          "operator": "=~",
+          "value": "/^$hostIs$/"
+        }
+      ]
+    },
+    {
+      "alias": "sdi-inodes",
+      "groupBy": [
+        {
+          "params": [
+            "$timeVariable"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "null"
+          ],
+          "type": "fill"
+        }
+      ],
+      "hide": false,
+      "measurement": "netdata.disk_inodes._srv_node_sdi.used",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "H",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "mean"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "host",
+          "operator": "=~",
+          "value": "/^$hostIs$/"
+        }
+      ]
+    },
+    {
+      "alias": "sdj-inodes",
+      "groupBy": [
+        {
+          "params": [
+            "$timeVariable"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "null"
+          ],
+          "type": "fill"
+        }
+      ],
+      "hide": false,
+      "measurement": "netdata.disk_inodes._srv_node_sdj.used",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "I",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "mean"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "host",
+          "operator": "=~",
+          "value": "/^$hostIs$/"
+        }
+      ]
+    },
+    {
+      "alias": "sdk-inodes",
+      "groupBy": [
+        {
+          "params": [
+            "$timeVariable"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "null"
+          ],
+          "type": "fill"
+        }
+      ],
+      "hide": false,
+      "measurement": "netdata.disk_inodes._srv_node_sdk.used",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "J",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "mean"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "host",
+          "operator": "=~",
+          "value": "/^$hostIs$/"
+        }
+      ]
+    },
+    {
+      "alias": "sdl-inodes",
+      "groupBy": [
+        {
+          "params": [
+            "$timeVariable"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "null"
+          ],
+          "type": "fill"
+        }
+      ],
+      "hide": false,
+      "measurement": "netdata.disk_inodes._srv_node_sdl.used",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "K",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "mean"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "host",
+          "operator": "=~",
+          "value": "/^$hostIs$/"
+        }
+      ]
+    }
+  ],
+  "timeFrom": null,
+  "timeShift": null,
+  "datasource": null
+}
