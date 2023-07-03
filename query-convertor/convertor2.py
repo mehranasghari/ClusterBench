@@ -1,6 +1,9 @@
 import json
 import influxdb
 
+panel_file_path = "./data.json"
+output_file_path = "./queries.txt"
+
 def convert_panel_json_to_influxdb_query(panel_json):
     # Load the JSON from file
     json_data = json.loads(panel_json)
@@ -35,10 +38,17 @@ def convert_panel_json_to_influxdb_query(panel_json):
     return influxdb_queries
 
 # Read panel JSON from file
-panel_file_path = "./data.json"
 with open(panel_file_path, "r") as panel_file:
     panel_json = panel_file.read()
 
 influxdb_queries = convert_panel_json_to_influxdb_query(panel_json)
-for query in influxdb_queries:
-    print(query)
+
+# Specify the file path to write the queries
+
+
+# Open the file in write mode and write the queries
+with open(output_file_path, "w") as output_file:
+    for query in influxdb_queries:
+        output_file.write(query + "\n")
+
+print(f"Queries written to {output_file_path}")
