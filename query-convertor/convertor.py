@@ -1,5 +1,5 @@
 import json
-
+import influxdb
 def convert_panel_json_to_influxdb_query(panel_json):
     # Load the JSON from file
     json_data = json.loads(panel_json)
@@ -28,7 +28,7 @@ def convert_panel_json_to_influxdb_query(panel_json):
         tags_query = " AND ".join(tag_queries)
 
         # Construct the complete InfluxDB query
-        influxdb_query = f'SELECT mean("value") FROM {measurement_query} WHERE {tags_query}'
+        influxdb_query = f'SELECT mean("value") FROM {measurement_query} WHERE {tags_query} AND time >= {start_time_query}ms and time <= {end_time_query}ms GROUP BY {group_by} fill(null);' # Should be modified tommorow
 
         influxdb_queries.append(influxdb_query)
 
