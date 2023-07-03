@@ -22,14 +22,13 @@ def convert_panel_json_to_influxdb_query(panel_json):
             tag_name = tag.get("key")
             tag_value = tag.get("value")
             tag_operator = tag.get("operator", "=")
-            tag_query = f'"{tag_name}" {tag_operator} \'{tag_value}\''
+            tag_query = f'("{tag_name}" {tag_operator} {tag_value})'
             tag_queries.append(tag_query)
 
         tags_query = " AND ".join(tag_queries)
 
         # Construct the complete InfluxDB query
-        influxdb_query = f'SELECT mean("value") FROM {measurement_query} WHERE {tags_query} AND time >= {start_time_query}ms and time <= {end_time_query}ms GROUP BY {group_by} fill(null);' # Should be modified tommorow
-
+        influxdb_query = f'SELECT mean("value") FROM {measurement_query} WHERE {tags_query}'+"AND time >= {start_time_query}ms and time <= {end_time_query}ms GROUP BY {group_by} fill(null);"
         influxdb_queries.append(influxdb_query)
 
     return influxdb_queries
