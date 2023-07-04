@@ -1,5 +1,5 @@
+from influxdb import InfluxDBClient
 import json
-import influxdb
 import os
 import datetime
 import subprocess
@@ -15,7 +15,7 @@ query_file_path = "./data.json"
 output_file_path = "./queries.txt" # Specify the file path to write the queries
 
 
-# Load the JSON data from the file and define adresses as a variable 
+# Load the JSON data from the file and define adresses as a variable
 with open(address_file_path, 'r') as file:
     json_data = json.load(file)
 Secondry_influxdb_in_container_address = json_data['Secondry_influxdb_in_container_address']
@@ -30,7 +30,7 @@ args = argParser.parse_args()
 directorypath = args.directorypath
 backup_dir_list = os.listdir(directorypath)
 
-# Convert json to influx query 
+# Convert json to influx query
 def convert_panel_json_to_influxdb_query(panel_json):
     # Load the JSON from file
     json_data = json.loads(panel_json)
@@ -61,22 +61,25 @@ def convert_panel_json_to_influxdb_query(panel_json):
         # Construct the complete InfluxDB query
         influxdb_query = f'SELECT mean("value") FROM {measurement_query} WHERE {tags_query}'+" AND time >= {start_time_query}ms and time <= {end_time_query}ms GROUP BY {group_by} fill(null);"
         influxdb_queries.append(influxdb_query)
-
+#	print (influxdb_queries)
     return influxdb_queries
-
+    #query += influxdb_queries
+    #print (query)
 # Read panel JSON from file
 with open(query_file_path, "r") as panel_file:
     panel_json = panel_file.read()
 
 influxdb_queries = convert_panel_json_to_influxdb_query(panel_json)
-
+influxdb_queries = str(influxdb_queries)
+influxdb_queries = influxdb_queries.strip("[]")
+print (influxdb_queries)
 # Open the file in write mode and write the queries
-with open(output_file_path, "w") as output_file:
-    for query in influxdb_queries:
-        output_file.write(query + "\n")
+#with open(output_file_path, "w") as output_file:
+ #   for query in influxdb_queries:
+  #      output_file.write(query)
 
 for dir_backup in backup_dir_list:
-    
+
     # Drop DB
     drop_command = f"docker exec -it {Secondary_influxdb_container_name} influx -execute 'drop database {Secondary_influxdb_DB_name}'"
     drop_process = subprocess.run(drop_command, shell=True)
@@ -110,10 +113,10 @@ for dir_backup in backup_dir_list:
      print()
     else:
      print("\033[91mRestore failed.\033[0m")
-     print()  
+     print()
      break
 
-    # Create csv dir 
+    # Create csv dir
     os.makedirs(f"mkdir {directorypath}/{dir_backup}/csv", exist_ok=True)
 
     # Read time of backup from each directory
@@ -124,7 +127,7 @@ for dir_backup in backup_dir_list:
         start_time, end_time = time_values[0], time_values[1]
         start_time_query = calendar.timegm(datetime.strptime(start_time, "%Y-%m-%d %H:%M:%S").astimezone(datetime.now().astimezone().tzinfo).timetuple()) * 1000
         end_time_query = calendar.timegm(datetime.strptime(end_time, "%Y-%m-%d %H:%M:%S").astimezone(datetime.now().astimezone().tzinfo).timetuple()) * 1000
-        
+
         # Set up the InfluxDB connection
         group_by = 'time(10s)'
         host = 'localhost'
@@ -136,16 +139,14 @@ for dir_backup in backup_dir_list:
         with open(hosts_file_path, "r") as file:
             hosts = file.readlines()     # Read the hosts from the file
             hosts = [host.strip() for host in hosts] # Remove any whitespace characters from the end of each line
-                    
+
             # Iterate over each host and execute code
             for host in hosts:
-               with open(query_file_path, "r") as file:
-                  query = file.readlines()
-                  
+                  query = influxdb_queries
                   # Run the query by variables
                   query = query.format(group_by=group_by,host=host,start_time_query=start_time_query,end_time_query=end_time_query)
                   result = client.query(query)
-                  
+
                   # Save the query result to a file and clear the query result.tx with echonig "" to it.
                   output_file = f'{directorypath}/{dir_backup}/csv/{host}_first_output.csv'
 
