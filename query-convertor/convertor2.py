@@ -1,12 +1,13 @@
 from influxdb import InfluxDBClient
-import json
 import os
 import datetime
 import subprocess
 import argparse
 import calendar
+import json
 import pytz
 from datetime import datetime
+
 
 # Specify address to config files
 address_file_path = "./../conf/address.json"
