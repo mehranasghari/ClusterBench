@@ -144,9 +144,13 @@ for dir_backup in backup_dir_list:
         query = influxdb_queries
 
         # Run the query by variables
-        query = query.format(group_by=group_by, host=host, start_time_query=start_time_query,end_time_query=end_time_query)
-        print(query)
-        result = client.query(influxdb_query)
+        formatted_query = []
+        for item in query:
+            formatted_item = item.format(group_by=group_by, host=host, start_time_query=start_time_query, end_time_query=end_time_query)
+            formatted_query.append(formatted_item)
+
+        result = client.query(formatted_query)
+
 
         # Save the query result to a file and clear the query result.tx with echoing "" to it.
         output_file = f'{directorypath}/{dir_backup}/csv/{host}_first_output.csv'
