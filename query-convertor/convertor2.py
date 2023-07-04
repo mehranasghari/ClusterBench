@@ -11,7 +11,7 @@ from datetime import datetime
 # Specify address to config files
 address_file_path = "./../conf/address.json"
 hosts_file_path = "./../Hosts/hosts-test.txt"
-panel_file_path = "./data.json"
+query_file_path = "./data.json"
 output_file_path = "./queries.txt" # Specify the file path to write the queries
 
 
@@ -65,7 +65,7 @@ def convert_panel_json_to_influxdb_query(panel_json):
     return influxdb_queries
 
 # Read panel JSON from file
-with open(panel_file_path, "r") as panel_file:
+with open(query_file_path, "r") as panel_file:
     panel_json = panel_file.read()
 
 influxdb_queries = convert_panel_json_to_influxdb_query(panel_json)
@@ -136,3 +136,22 @@ for dir_backup in backup_dir_list:
         with open(hosts_file_path, "r") as file:
             hosts = file.readlines()     # Read the hosts from the file
             hosts = [host.strip() for host in hosts] # Remove any whitespace characters from the end of each line
+                    
+            # Iterate over each host and execute code
+            for host in hosts:
+               with open(query_file_path, "r") as file:
+                  query = file.readlines()
+                  
+                  # Run the query by variables
+                  query = query.format(group_by=group_by,host=host,start_time_query=start_time_query,end_time_query=end_time_query)
+                  result = client.query(query)
+                  
+                  # Save the query result to a file and clear the query result.tx with echonig "" to it.
+                  output_file = f'{directorypath}/{dir_backup}/csv/{host}_first_output.csv'
+
+                  with open(output_file, 'w') as file:
+                    for series in result:
+                        for point in series:
+                            file.write(str(point) + '\n')
+
+                    print(f"CSV for {host} saved to {output_file}")
