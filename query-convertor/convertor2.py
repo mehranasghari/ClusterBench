@@ -82,7 +82,7 @@ for dir_backup in backup_dir_list:
     drop_process = subprocess.run(drop_command, shell=True)
     exit_code = drop_process.returncode
     if exit_code == 0:
-      print(f"\033[92mDatabase {Secondary_influxdb_DB_name} successfully.\033[0m")
+      print(f"\033[92mDatabase {Secondary_influxdb_DB_name} Droped successfully.\033[0m")
       print()
     else:
       print(f"\033[91mDropping {Secondary_influxdb_DB_name} failed.\033[0m")
