@@ -153,12 +153,12 @@ for dir_backup in backup_dir_list:
 
 
         # Save the query result to a file and clear the query result.tx with echoing "" to it.
-        output_file = f'{directorypath}/{dir_backup}/csv/{host}_first_output.csv'
+        csv_address = f'{directorypath}/{dir_backup}/csv/{host}_first_output.csv'
 
-        with open(output_file, 'w') as file:
+        with open(csv_address, 'w') as file:
             for series in result:
                 for point in series:
                     file.write(str(point) + '\n')
 
-            print(f"CSV for {host} saved to {output_file}")
+            print(f"CSV for {host} saved to {csv_address}")
 
