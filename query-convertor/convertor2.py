@@ -74,7 +74,7 @@ influxdb_queries = convert_panel_json_to_influxdb_query(panel_json)
 # Open the file in write mode and write the queries
 with open(output_file_path, "w") as output_file:
     for query in influxdb_queries:
-        output_file.write(query + "\n")
+        output_file.write(query)
 
 for dir_backup in backup_dir_list:
     
