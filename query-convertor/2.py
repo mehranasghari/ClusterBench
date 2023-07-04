@@ -148,8 +148,9 @@ for dir_backup in backup_dir_list:
         for item in query:
             formatted_item = item.format(group_by=group_by, host=host, start_time_query=start_time_query, end_time_query=end_time_query)
             formatted_query.append(formatted_item)
+            query_string = ' '.join(formatted_query)
 
-        result = client.query(formatted_query)
+        result = client.query(query_string)
 
 
         # Save the query result to a file and clear the query result.tx with echoing "" to it.
