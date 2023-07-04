@@ -1,5 +1,5 @@
+from influxdb import InfluxDBClient
 import json
-import influxdb
 import os
 import datetime
 import subprocess
