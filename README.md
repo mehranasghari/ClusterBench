@@ -21,8 +21,7 @@ To Install ClusterBench, follow these steps:
        mkdir cosBench
        wget https://github.com/intel-cloud/cosbench/releases/download/v0.4.2.c4/0.4.2.c4.zip
        unzip 0.4.2.c4.zip
-       mv 0.4.2.c4/* cosBench
-       rm -r 0.4.2.c4
+       mv 0.4.2.c4 cosBench
        rm 0.4.2.c4.zip
        cd cosBench
        git clone https://github.com/mehranasghari/ClusterBench.git
