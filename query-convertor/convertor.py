@@ -1,5 +1,6 @@
-import json
 from influxdb import InfluxDBClient
+from datetime import datetime
+import json
 import os
 import datetime
 import subprocess
@@ -7,7 +8,6 @@ import argparse
 import calendar
 import json
 import pytz
-from datetime import datetime
 
 
 # Specify address to config files
@@ -34,6 +34,7 @@ backup_dir_list = os.listdir(directorypath)
 
 # Convert JSON to InfluxDB query
 def convert_panel_json_to_influxdb_query(panel_json, host):
+   
     # Load the JSON from file
     json_data = json.loads(panel_json)
 
@@ -138,20 +139,26 @@ for dir_backup in backup_dir_list:
     for host in hosts:
         # Convert JSON to InfluxDB query
         influxdb_queries = convert_panel_json_to_influxdb_query(panel_json, host)
-        influxdb_queries = str(influxdb_queries)
-        influxdb_queries = influxdb_queries.strip("[]")
+        influxdb_query = "\n".join(influxdb_queries)
         query = influxdb_queries
 
         # Run the query by variables
-        query = query.format(group_by=group_by, host=host, start_time_query=start_time_query,end_time_query=end_time_query)
-        result = client.query(query)
+        formatted_query = []
+        for item in query:
+            formatted_item = item.format(group_by=group_by, host=host, start_time_query=start_time_query, end_time_query=end_time_query)
+            formatted_query.append(formatted_item)
+            query_string = ' '.join(formatted_query)
 
-        # Save the query result to a file and clear the query result.txt.
-        output_file = f'{directorypath}/{dir_backup}/csv/{host}_first_output.csv'
+        result = client.query(query_string)
 
-        with open(output_file, 'w') as file:
+
+        # Save the query result to a file and clear the query result.tx with echoing "" to it.
+        csv_address = f'{directorypath}/{dir_backup}/csv/{host}_first_output.csv'
+
+        with open(csv_address, 'w') as file:
             for series in result:
                 for point in series:
                     file.write(str(point) + '\n')
 
-            print(f"CSV for {host} saved to {output_file}")
+            print(f"CSV for {host} saved to {csv_address}")
+
