@@ -15,7 +15,12 @@ To Install ClusterBench, follow these steps:
 
 - If you have not installed COSBench:
 
-  1. Clone the repositories:
+  1. Install openjdk-8-jre
+     ```shell
+     sudo apt install openjdk-8-jre
+     ```
+
+  2. Clone the repositories:
 
        ```shell
        mkdir cosBench
@@ -24,13 +29,16 @@ To Install ClusterBench, follow these steps:
        mv 0.4.2.c4 cosBench
        rm 0.4.2.c4.zip
        cd cosBench
-       git clone https://github.com/mehranasghari/ClusterBench.git
- 
-  2. Run COSBench
+       wget https://github.com/mehranasghari/ClusterBench/archive/refs/heads/main.zip
+      ```
+
+
+  3. Run COSBench
     ```shell
      chmod +x *.sh
-     ./start-all.sh
+     ./start-all.sh &
      ```
+    web interface is available on http://localhost:19088/controller/index.html
  
 - If you have installed COSBench:
      
