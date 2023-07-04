@@ -137,6 +137,7 @@ for dir_backup in backup_dir_list:
     client = InfluxDBClient(host=host, port=port, database=database)
 
     for host in hosts:
+        
         # Convert JSON to InfluxDB query
         influxdb_queries = convert_panel_json_to_influxdb_query(panel_json, host)
         influxdb_query = "\n".join(influxdb_queries)
