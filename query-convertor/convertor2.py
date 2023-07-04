@@ -1,9 +1,36 @@
 import json
 import influxdb
+import os
+import datetime
+import subprocess
+import argparse
+import calendar
+import pytz
+from datetime import datetime
 
-panel_file_path = "./data.json"
-output_file_path = "./queries.txt"
+# Specify address to config files
+address_file_path = "./../conf/address.json"
+hosts_file_path = "./../Hosts/hosts-test.txt"
+query_file_path = "./data.json"
+output_file_path = "./queries.txt" # Specify the file path to write the queries
 
+
+# Load the JSON data from the file and define adresses as a variable 
+with open(address_file_path, 'r') as file:
+    json_data = json.load(file)
+Secondry_influxdb_in_container_address = json_data['Secondry_influxdb_in_container_address']
+Secondary_influxdb_container_name = json_data['Secondary_influxdb_container_name']
+Secondary_influxdb_DB_name = json_data['Secondary_influxdb_DB_name']
+Secondary_influxdb_address_in_host = json_data['Secondary_influxdb_address_in_host']
+
+# Process given directory name as an arqument
+argParser = argparse.ArgumentParser()
+argParser.add_argument("-d", "--directorypath", help="Directory path (Directory which contain backup directories)")
+args = argParser.parse_args()
+directorypath = args.directorypath
+backup_dir_list = os.listdir(directorypath)
+
+# Convert json to influx query 
 def convert_panel_json_to_influxdb_query(panel_json):
     # Load the JSON from file
     json_data = json.loads(panel_json)
@@ -38,17 +65,93 @@ def convert_panel_json_to_influxdb_query(panel_json):
     return influxdb_queries
 
 # Read panel JSON from file
-with open(panel_file_path, "r") as panel_file:
+with open(query_file_path, "r") as panel_file:
     panel_json = panel_file.read()
 
 influxdb_queries = convert_panel_json_to_influxdb_query(panel_json)
-
-# Specify the file path to write the queries
-
 
 # Open the file in write mode and write the queries
 with open(output_file_path, "w") as output_file:
     for query in influxdb_queries:
         output_file.write(query + "\n")
 
-print(f"Queries written to {output_file_path}")
+for dir_backup in backup_dir_list:
+    
+    # Drop DB
+    drop_command = f"docker exec -it {Secondary_influxdb_container_name} influx -execute 'drop database {Secondary_influxdb_DB_name}'"
+    drop_process = subprocess.run(drop_command, shell=True)
+    exit_code = drop_process.returncode
+    if exit_code == 0:
+      print(f"\033[92mDatabase {Secondary_influxdb_DB_name} successfully.\033[0m")
+      print()
+    else:
+      print(f"\033[91mDropping {Secondary_influxdb_DB_name} failed.\033[0m")
+      print()
+      break
+
+    # Extract the backup.tar.gz
+    extract_command = f"tar -xf {directorypath}/{dir_backup}/*.tar.gz -C {directorypath}/{dir_backup}/backup/"
+    extract_process = subprocess.run(extract_command, shell=True)
+    exit_code = extract_process.returncode
+    if exit_code == 0:
+      print("\033[92mBackup extracted successfully.\033[0m")
+      print()
+    else:
+      print("\033[91mExtraction failed.\033[0m")
+      print()
+      break
+
+    # Restore on influxdb
+    restore_command = f"docker exec -it {Secondary_influxdb_container_name} influxd restore -portable {Secondry_influxdb_in_container_address}/{dir_backup}/backup/ >/dev/null"
+    restore_process = subprocess.run(restore_command, shell=True)
+    exit_code = restore_process.returncode
+    if exit_code == 0:
+     print("\033[92mFiles restored successfully.\033[0m")
+     print()
+    else:
+     print("\033[91mRestore failed.\033[0m")
+     print()  
+     break
+
+    # Create csv dir 
+    os.makedirs(f"mkdir {directorypath}/{dir_backup}/csv", exist_ok=True)
+
+    # Read time of backup from each directory
+    time_file_path = f"{Secondary_influxdb_address_in_host}/{dir_backup}/info/time"
+    with open(time_file_path, "r") as file:
+        time_str = file.read().strip()
+        time_values = time_str.split(",")
+        start_time, end_time = time_values[0], time_values[1]
+        start_time_query = calendar.timegm(datetime.strptime(start_time, "%Y-%m-%d %H:%M:%S").astimezone(datetime.now().astimezone().tzinfo).timetuple()) * 1000
+        end_time_query = calendar.timegm(datetime.strptime(end_time, "%Y-%m-%d %H:%M:%S").astimezone(datetime.now().astimezone().tzinfo).timetuple()) * 1000
+        
+        # Set up the InfluxDB connection
+        group_by = 'time(10s)'
+        host = 'localhost'
+        port = 8086
+        database = f'{Secondary_influxdb_DB_name}'
+        client = InfluxDBClient(host=host, port=port, database=database)
+
+        # Host defenition
+        with open(hosts_file_path, "r") as file:
+            hosts = file.readlines()     # Read the hosts from the file
+            hosts = [host.strip() for host in hosts] # Remove any whitespace characters from the end of each line
+                    
+            # Iterate over each host and execute code
+            for host in hosts:
+               with open(query_file_path, "r") as file:
+                  query = file.readlines()
+                  
+                  # Run the query by variables
+                  query = query.format(group_by=group_by,host=host,start_time_query=start_time_query,end_time_query=end_time_query)
+                  result = client.query(query)
+                  
+                  # Save the query result to a file and clear the query result.tx with echonig "" to it.
+                  output_file = f'{directorypath}/{dir_backup}/csv/{host}_first_output.csv'
+
+                  with open(output_file, 'w') as file:
+                    for series in result:
+                        for point in series:
+                            file.write(str(point) + '\n')
+
+                    print(f"CSV for {host} saved to {output_file}")
