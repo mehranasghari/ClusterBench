@@ -1,5 +1,5 @@
 import json
-import influxdb
+from influxdb import InfluxDBClient
 import os
 import datetime
 import subprocess
@@ -61,7 +61,7 @@ def convert_panel_json_to_influxdb_query(panel_json):
         tags_query = " AND ".join(tag_queries)
 
         # Construct the complete InfluxDB query
-        influxdb_query = f'SELECT mean("value") FROM {measurement_query} WHERE {tags_query}'+" AND time >= {start_time_query}ms and time <= {end_time_query}ms GROUP BY {group_by} fill(null);"
+        influxdb_query = f'SELECT mean("value") FROM {measurement_query} WHERE ("host" =~ /^{host}$/)'+" AND time >= {start_time_query}ms and time <= {end_time_query}ms GROUP BY {group_by} fill(null);"
         influxdb_queries.append(influxdb_query)
 
     return influxdb_queries
@@ -73,11 +73,6 @@ with open(query_file_path, "r") as panel_file:
 influxdb_queries = convert_panel_json_to_influxdb_query(panel_json)
 influxdb_queries = str(influxdb_queries)
 influxdb_queries = influxdb_queries.strip("[]")
-
-# Open the file in write mode and write the queries
-with open(output_file_path, "w") as output_file:
-    for query in influxdb_queries:
-        output_file.write(query + "\n")
 
 for dir_backup in backup_dir_list:
 
@@ -144,7 +139,7 @@ for dir_backup in backup_dir_list:
             # Iterate over each host and execute code
             for host in hosts:
                   query = influxdb_queries
-                  
+
                   # Run the query by variables
                   query = query.format(group_by=group_by,host=host,start_time_query=start_time_query,end_time_query=end_time_query)
                   result = client.query(query)
