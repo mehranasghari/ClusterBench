@@ -36,7 +36,8 @@ To Install ClusterBench, follow these steps:
   3. Run COSBench
     ```shell
      chmod +x *.sh
-     ./start-all.sh &
+     ./start-driver.sh &
+     ./start-controller.sh &
      ```
     web interface is available on http://localhost:19088/controller/index.html
  
