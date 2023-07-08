@@ -99,7 +99,7 @@ for dir_backup in backup_dir_list:
             result = client.query(query)
             
             # Save the query result to a file and clear the query result.tx with echonig "" to it.
-            output_file = f'{directorypath}/{dir_backup}/csv/{host}_first_output.csv'
+            output_file = f'{directorypath}/{dir_backup}/csv/{host}_first_output.txt'
 
             with open(output_file, 'w') as file:
                 for series in result:
