@@ -78,28 +78,46 @@ def extract_lines_to_csv(input_dir, output_csv_path, num_lines=18):
                 print("mean is :" , mean)
                 writer.writerow([mean])
 
-                # Calculate the mean of lines 30 to 39 # Write the mean value to the CSV file
-                #values = [float(line[0]) for line in reader]  # Read the remaining lines
-                mean = sum(values[11:21]) / len(values[11:21])
-                print("values 30:39 are :" , values[11:21])
-                print(" len values[30:39] is : ", len(values[11:21]))
-                print("mean is :" , mean)
+                # Calculate the mean of lines 30 to 39 Write the mean value to the CSV file
+                mean = sum(values[10:20]) / len(values[10:20])
+                # print("values 30:39 are :" , values[10:20])
+                # print(" len values[30:39] is : ", len(values[10:20]))
+                # print("mean is :" , mean)
                 writer.writerow([mean])
 
                 # Calculate the mean of lines 40 to 49 # Write the mean value to the CSV file
-                #values = [float(line[0]) for line in reader]  # Read the remaining lines
-                mean = sum(values[21:31]) / len(values[21:31])
-                print("values 40:49 are :" , values[21:31])
-                print(" len values[40:49] is : ", len(values[21:31]))
-                print("mean is :" , mean)
+                mean = sum(values[20:30]) / len(values[20:30])
+                # print("values 1 are :" , values[20:30])
+                # print(" len values[40:49] is : ", len(values[20:30]))
+                # print("mean is :" , mean)
                 writer.writerow([mean])
                 
                 # Calculate the mean of lines 30 to 39 # Write the mean value to the CSV file
-                #values = [float(line[0]) for line in reader]  # Read the remaining lines
-                mean = sum(values[31:41]) / len(values[31:41])
-                print("values 40:49 are :" , values[31:41])
-                print(" len values[30:39] is : ", len(values[31:41]))
-                print("mean is :" , mean)
+                mean = sum(values[30:40]) / len(values[30:40])
+                # print("values 2 are :" , values[30:40])
+                # print(" len values[30:39] is : ", len(values[30:40]))
+                # print("mean is :" , mean)
+                writer.writerow([mean])
+                                
+                # Calculate the mean of lines 30 to 39 # Write the mean value to the CSV file
+                mean = sum(values[40:50]) / len(values[40:50])
+                # print("values 3 are :" , values[40:50])
+                # print(" len values[30:39] is : ", len(values[40:50]))
+                # print("mean is :" , mean)
+                writer.writerow([mean])
+
+                # Calculate the mean of lines 30 to 39 # Write the mean value to the CSV file
+                # mean = sum(values[50:60]) / len(values[50:60])
+                # print("values 4 are :" , values[50:60])
+                # print(" len values[30:39] is : ", len(values[50:60]))
+                # print("mean is :" , mean)
+                writer.writerow([mean])
+
+                # Calculate the mean of lines 30 to 39 # Write the mean value to the CSV file
+                mean = sum(values[60:67]) / len(values[60:67])
+                # print("values 5are :" , values[60:67])
+                # print(" len values[30:39] is : ", len(values[60:67]))
+                # print("mean is :" , mean)
                 writer.writerow([mean])
 
 input_dir = "./"

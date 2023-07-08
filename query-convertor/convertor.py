@@ -141,15 +141,17 @@ for dir_backup in backup_dir_list:
         influxdb_queries = convert_panel_json_to_influxdb_query(panel_json, host)
         influxdb_query = "\n".join(influxdb_queries)
         query = influxdb_queries
+        print (influxdb_queries)
 
         # Run the query by variables
         formatted_query = []
         for item in query:
             formatted_item = item.format(group_by=group_by, host=host, start_time_query=start_time_query, end_time_query=end_time_query)
             formatted_query.append(formatted_item)
-            query_string = ' '.join(formatted_query)
+            query_string = ''.join(formatted_query)
+            print(query_string)
 
-        result = client.query(query_string)
+            result = client.query(query_string)
 
 
         # Save the query result to a file and clear the query result.tx with echoing "" to it.
