@@ -1,5 +1,4 @@
 from influxdb import InfluxDBClient
-from datetime import datetime
 import json
 import os
 import datetime
@@ -8,6 +7,7 @@ import argparse
 import calendar
 import json
 import pytz
+from datetime import datetime
 
 
 # Specify address to config files
