@@ -151,7 +151,7 @@ for dir_backup in backup_dir_list:
             query_string = ''.join(formatted_query)
             print(query_string)
 
-            result = client.query(query_string)
+            result = client.query(influxdb_queries)
 
 
         # Save the query result to a file and clear the query result.tx with echoing "" to it.
