@@ -115,9 +115,9 @@ def extract_lines_to_csv(input_dir, output_csv_path, num_lines=18):
 
                 # Calculate the mean of lines 30 to 39 # Write the mean value to the CSV file
                 mean = sum(values[60:67]) / len(values[60:67])
-                # print("values 5are :" , values[60:67])
-                # print(" len values[30:39] is : ", len(values[60:67]))
-                # print("mean is :" , mean)
+                print("values 5are :" , values[60:67])
+                print(" len values[30:39] is : ", len(values[60:67]))
+                print("mean is :" , mean)
                 writer.writerow([mean])
 
 input_dir = "./"
