@@ -119,6 +119,9 @@ for dir_backup in backup_dir_list:
     # Create csv dir
     os.makedirs(f"{directorypath}/{dir_backup}/csv", exist_ok=True)
 
+    # Read time of backup from eachApologies for the incomplete response. Here's the continuation of the code:
+
+#```python
     # Read time of backup from each directory
     time_file_path = f"{Secondary_influxdb_address_in_host}/{dir_backup}/info/time"
     with open(time_file_path, "r") as file:
@@ -141,26 +144,28 @@ for dir_backup in backup_dir_list:
         # Convert JSON to InfluxDB query
         influxdb_queries = convert_panel_json_to_influxdb_query(panel_json, host, start_time_query, end_time_query, group_by)
         query = "\n".join(influxdb_queries)
-        print(query)
+        #print(query)
 
-        # Run the query using InfluxDBClient
-        for influxdb_query in influxdb_queries:
-            result = client.query(influxdb_query)
+        # Run the query by variables
+        formatted_query = []
+        for item in influxdb_queries:
+            formatted_item = item.format(group_by=group_by, host=host, start_time_query=start_time_query, end_time_query=end_time_query)
+            formatted_query.append(formatted_item)
 
-            # Process the query result
-            # ...
+        # Save the query result to a file and clear the query result.txt with echoing "" to it.
+        csv_address = f'{directorypath}/{dir_backup}/csv/{host}_first_output.csv'
 
-            # Save the query result to a file
-            # ...
+        with open(csv_address, 'w') as file:
+            for query in formatted_query:
+                result = client.query(query)
+                points = result.get_points()
 
-            # Print the result or perform further operations
-            print(result)
+                for point in points:
+                    timestamp = point['time']
+                    value = point['mean']
+                    file.write(f"{timestamp},{value}\n")
 
-            # Save the query result to a file
-            with open(output_file_path, 'a') as file:
-                file.write(f"Host: {host}\n")
-                file.write(f"InfluxDB Query: {influxdb_query}\n")
-                file.write(f"Result:\n{result}\n\n")
+            #print(f"CSV for {host} saved to {csv_address}")
 
-print("Script execution completed.")
+#print("Script execution completed.")
 
