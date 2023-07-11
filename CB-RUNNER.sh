@@ -9,7 +9,7 @@ read number
 case $number in
     1)
         echo "Running backup"
-        ./app/send_load.sh
+        $PWD/app/send_load.sh
         ;;
     2)
         echo "Running restore"
