@@ -39,7 +39,7 @@ def convert_panel_json_to_influxdb_query(panel_json, host, start_time_query, end
 
     # Extract query information
     targets = json_data.get("targets", [])
-
+    global influxdb_queries
     influxdb_queries = []
 
     # Process each query target
@@ -61,17 +61,10 @@ def convert_panel_json_to_influxdb_query(panel_json, host, start_time_query, end
         tags_query = " AND ".join(tag_queries)
 
         # Construct the complete InfluxDB query
-        influxdb_query = f'SELECT mean("value") FROM {measurement_query} WHERE ("host" =~ /^{host}$/) ' \
-                         f'AND time >= {start_time_query}ms AND time <= {end_time_query}ms ' \
-                         f'GROUP BY {group_by} fill(null);'
+        influxdb_query = f'SELECT mean("value") FROM {measurement_query} WHERE ("host" =~ /^{host}$/) AND time >= {start_time_query}ms AND time <= {end_time_query}ms GROUP BY {group_by} fill(null);'
         influxdb_queries.append(influxdb_query)
 
     return influxdb_queries
-
-
-# Read panel JSON from file
-with open(query_file_path, "r") as panel_file:
-    panel_json = panel_file.read()
 
 # Host definition
 with open(hosts_file_path, "r") as file:
@@ -80,6 +73,7 @@ with open(hosts_file_path, "r") as file:
 
 # Iterate over each host and execute code
 for dir_backup in backup_dir_list:
+   
     # Drop DB
     drop_command = f"docker exec -it {Secondary_influxdb_container_name} influx -execute 'drop database {Secondary_influxdb_DB_name}'"
     drop_process = subprocess.run(drop_command, shell=True)
@@ -119,9 +113,6 @@ for dir_backup in backup_dir_list:
     # Create csv dir
     os.makedirs(f"{directorypath}/{dir_backup}/csv", exist_ok=True)
 
-    # Read time of backup from eachApologies for the incomplete response. Here's the continuation of the code:
-
-#```python
     # Read time of backup from each directory
     time_file_path = f"{Secondary_influxdb_address_in_host}/{dir_backup}/info/time"
     with open(time_file_path, "r") as file:
@@ -141,22 +132,16 @@ for dir_backup in backup_dir_list:
     client = InfluxDBClient(host=host, port=port, database=database)
 
     for host in hosts:
-        # Convert JSON to InfluxDB query
-        influxdb_queries = convert_panel_json_to_influxdb_query(panel_json, host, start_time_query, end_time_query, group_by)
-        query = "\n".join(influxdb_queries)
-        #print(query)
 
         # Run the query by variables
-        formatted_query = []
-        for item in influxdb_queries:
-            formatted_item = item.format(group_by=group_by, host=host, start_time_query=start_time_query, end_time_query=end_time_query)
-            formatted_query.append(formatted_item)
+        query = str(influxdb_queries)
+        query_final = query.format(group_by=group_by, host=host, start_time_query=start_time_query, end_time_query=end_time_query)
 
         # Save the query result to a file and clear the query result.txt with echoing "" to it.
         csv_address = f'{directorypath}/{dir_backup}/csv/{host}_first_output.csv'
 
         with open(csv_address, 'w') as file:
-            for query in formatted_query:
+            for query in query_final:
                 result = client.query(query)
                 points = result.get_points()
 
