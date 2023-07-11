@@ -30,23 +30,11 @@ def convert_panel_json_to_influxdb_query(query_file_path, output_file_path):
 
         tags_query = " AND ".join(tag_queries)
 
-        influxdb_query = f'SELECT mean("value") FROM {measurement_query} ' + 'WHERE ("host" =~ /^{host}$/)AND time >= {start_time_query}ms AND time <= {end_time_query}ms GROUP BY {group_by} fill(null);'
+        influxdb_query = f'\'SELECT mean("value") FROM {measurement_query}'+'WHERE ("host" =~ /^{host}$/) AND time >= {start_time_query}ms AND time <= {end_time_query}ms GROUP BY {group_by} fill(null)\''
 
         influxdb_queries.append(influxdb_query)
 
     with open(output_file_path, 'w') as file:
         file.write('\n'.join(influxdb_queries))
-    
-    with open(output_file_path) as file:
-        without_spaced_query = file.read().strip().replace('\n','')
-        #print(without_spaced_query)
-    
-    delete_command = f'rm -rf *.txt'
-    delete_process = subprocess.run(delete_command, shell=True)
-
-    with open(query_file_path_without_space, 'w') as file:
-        deleted_extra_char_query = without_spaced_query[:-1]
-        file.write("'"+ deleted_extra_char_query + "'")
-
     
 convert_panel_json_to_influxdb_query(query_file_path, output_file_path_with_space)
