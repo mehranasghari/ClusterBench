@@ -50,9 +50,3 @@ def convert_panel_json_to_influxdb_query(query_file_path, output_file_path):
 
     
 convert_panel_json_to_influxdb_query(query_file_path, output_file_path_with_space)
-        # Construct the complete InfluxDB query
-        influxdb_query = f'SELECT mean("value") FROM {measurement_query} WHERE ("host" =~ /^{host}$/)' + " AND time >= {start_time_query}ms and time <= {end_time_query}ms GROUP BY {group_by} fill(null);"
-        influxdb_queries.append(influxdb_query)
-
-        with open(output_file_path, 'w') as file:
-            file.write(influxdb_queries)
