@@ -1,5 +1,6 @@
 #--------->>>>>> ATTENTION <<<<<<<-------#
-to modify hosts you want to do this process (COSBENCH) on them just add the hostname which use on grafana to ./hosts.tx.
+to modify hosts you want to do this process (COSBENCH) on them just add the hostname which use on grafana to ./hosts.txt
+
 TIPS:
 * do not add any extra thing even commnets
 * order is not important
