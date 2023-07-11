@@ -8,8 +8,9 @@ read number
 
 case $number in
     1)
+        bash $PWD/app/send_load.sh
+        #./send_load.sh
         echo "Running backup"
-        ./app/send_load.sh
         ;;
     2)
         echo "Running restore"
