@@ -87,7 +87,7 @@ with open(hosts_file_path, 'r') as file:
                 break
 
             # delete unttar files
-            delete_command = f'rm -rf {directorypath}/{backup_dir}/backup/*'
+            delete_command = f'rm -rf {directorypath}/{backup_dir}/backup/'
             delete_process = subprocess.run(delete_command, shell=True)
             exit_code = delete_process.returncode            
             if exit_code == 0:
@@ -115,8 +115,19 @@ with open(hosts_file_path, 'r') as file:
             for host in hosts:
                 with open(query_file_path) as file:
                     query= file.read()
-                    print(query)
 
+                # Set up the InfluxDB connection
+                group_by = 'time(10s)'
+                host = 'localhost'
+                port = 8086
+                database = f'{Secondary_influxdb_DB_name}'
+                client = InfluxDBClient(host=host, port=port, database=database)
+
+                # Complete query and run it 
+                query_final = query.format(group_by=group_by, host=host, start_time_query=start_time_query, end_time_query=end_time_query)
+                result = client.query(query_final)
+                print()
+                print(query_final)
 
     print(f"*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* END OF Restore FOR\033[92m {backup_dir} \033[0m*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*")
 
