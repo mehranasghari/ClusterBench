@@ -8,8 +8,8 @@ read number
 
 case $number in
     1)
-        cd $PWD/app/send_load.sh
-        ./send_load.sh
+        bash $PWD/app/send_load.sh
+        #./send_load.sh
         echo "Running backup"
         ;;
     2)
