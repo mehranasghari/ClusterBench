@@ -87,7 +87,7 @@ with open(hosts_file_path, 'r') as file:
                 break
 
             # delete unttar files
-            delete_command = f'rm -rf {directorypath}/{backup_dir}/backup/*'
+            delete_command = f'rm -rf {directorypath}/{backup_dir}/backup/'
             delete_process = subprocess.run(delete_command, shell=True)
             exit_code = delete_process.returncode            
             if exit_code == 0:
