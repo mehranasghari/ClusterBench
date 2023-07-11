@@ -121,7 +121,8 @@ with open(hosts_file_path, 'r') as file:
 
                 for host in hosts:
                     with open(query_file_path) as file:
-                        query= file.read()
+                        query= file.read().strip("\n")
+                        print(query)
 
                 # Run the query by variables
                 query = query.format(group_by=group_by,host=host,start_time_query=start_time_query,end_time_query=end_time_query)
