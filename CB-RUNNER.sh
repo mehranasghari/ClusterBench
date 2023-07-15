@@ -16,7 +16,7 @@ case $number in
     2)
         echo -e ""-*-*-*-*-*-*-*-*-> \033[34mRunning restore\033[0m <-*-*-*-*-*-*-*-*-"
         cd ./query-convertor
-        python3 2.py -d /mnt/sdb/influx-test/influxdb-data/tarred-files
+        python3 main.py -d /mnt/sdb/influx-test/influxdb-data/tarred-files
         ;;
     *)
         echo -e "\033[31m Unknown Process\033[0m"
