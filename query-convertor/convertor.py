@@ -30,7 +30,7 @@ def convert_panel_json_to_influxdb_query(query_file_path, output_file_path):
 
         tags_query = " AND ".join(tag_queries)
 
-        influxdb_query = f'\'SELECT mean("value") FROM {measurement_query}'+'WHERE ("host" =~ /^{host}$/) AND time >= {start_time_query}ms AND time <= {end_time_query}ms GROUP BY {group_by} fill(null)\''
+        influxdb_query = f'\'SELECT mean("value") FROM {measurement_query}'+' WHERE ("host" =~ /^{host}$/) AND time >= {start_time_query}ms AND time <= {end_time_query}ms GROUP BY {group_by} fill(null)\''
 
         influxdb_queries.append(influxdb_query)
 
