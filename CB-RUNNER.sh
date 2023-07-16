@@ -14,9 +14,12 @@ case $number in
         bash send_load.sh 
         ;;
     2)
-        echo -e ""-*-*-*-*-*-*-*-*-> \033[34mRunning restore\033[0m <-*-*-*-*-*-*-*-*-"
-        cd ./query-convertor
-        python3 main.py -d /mnt/sdb/influx-test/influxdb-data/tarred-files
+        clear
+        echo -e "-*-*-*-*-*-*-*-*-> \033[34mRunning restore\033[0m <-*-*-*-*-*-*-*-*-"
+        echo -ne "\033[1mEnter Dir name to Restore\033[0m: "
+        read dir_name
+        cd ./Temporary-restore
+        python3 restore.py -d $dir_name
         ;;
     *)
         echo -e "\033[31m Unknown Process\033[0m"
