@@ -1,0 +1,290 @@
+{
+  "id": 39,
+  "gridPos": {
+    "h": 7,
+    "w": 8,
+    "x": 0,
+    "y": 0
+  },
+  "type": "graph",
+  "title": "CPU - S1",
+  "transformations": [
+    {
+      "id": "calculateField",
+      "options": {
+        "alias": "Mean - all",
+        "mode": "reduceRow",
+        "reduce": {
+          "include": [],
+          "reducer": "sum"
+        },
+        "replaceFields": false
+      }
+    }
+  ],
+  "thresholds": [],
+  "pluginVersion": "8.0.0",
+  "legend": {
+    "avg": false,
+    "current": false,
+    "max": false,
+    "min": false,
+    "show": true,
+    "total": false,
+    "values": false
+  },
+  "aliasColors": {},
+  "bars": false,
+  "dashLength": 10,
+  "dashes": false,
+  "fill": 1,
+  "fillGradient": 0,
+  "hiddenSeries": false,
+  "lines": true,
+  "linewidth": 1,
+  "nullPointMode": "null",
+  "options": {
+    "alertThreshold": true
+  },
+  "percentage": false,
+  "pointradius": 2,
+  "points": false,
+  "renderer": "flot",
+  "seriesOverrides": [],
+  "spaceLength": 10,
+  "stack": false,
+  "steppedLine": false,
+  "targets": [
+    {
+      "alias": "User - s1",
+      "datasource": {
+        "type": "influxdb",
+        "uid": "06O86T24z"
+      },
+      "groupBy": [
+        {
+          "params": [
+            "$timeVariable"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "none"
+          ],
+          "type": "fill"
+        }
+      ],
+      "measurement": "netdata.system.cpu.user",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "query": "SELECT mean(\"value\") FROM \"netdata.system.cpu.user\" WHERE (\"host\" =~ /^$hostIs$/) AND $timeFilter GROUP BY time($timeVariable) fill(null)",
+      "rawQuery": false,
+      "refId": "A",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "mean"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "host",
+          "operator": "=~",
+          "value": "/^$hostIs$/"
+        }
+      ]
+    },
+    {
+      "alias": "System - s1",
+      "datasource": {
+        "type": "influxdb",
+        "uid": "06O86T24z"
+      },
+      "groupBy": [
+        {
+          "params": [
+            "$timeVariable"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "none"
+          ],
+          "type": "fill"
+        }
+      ],
+      "measurement": "netdata.system.cpu.system",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "B",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "mean"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "host",
+          "operator": "=~",
+          "value": "/^$hostIs$/"
+        }
+      ]
+    },
+    {
+      "alias": "Iowait - s1",
+      "datasource": {
+        "type": "influxdb",
+        "uid": "06O86T24z"
+      },
+      "groupBy": [
+        {
+          "params": [
+            "$timeVariable"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "none"
+          ],
+          "type": "fill"
+        }
+      ],
+      "measurement": "netdata.system.cpu.iowait",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "C",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "mean"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "host",
+          "operator": "=~",
+          "value": "/^$hostIs$/"
+        }
+      ]
+    },
+    {
+      "alias": "idle - s1 ",
+      "datasource": {
+        "type": "influxdb",
+        "uid": "06O86T24z"
+      },
+      "groupBy": [
+        {
+          "params": [
+            "$timeVariable"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "none"
+          ],
+          "type": "fill"
+        }
+      ],
+      "hide": true,
+      "measurement": "netdata.system.cpu.idle",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "D",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "mean"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "host",
+          "operator": "=~",
+          "value": "/^$hostIs$/"
+        }
+      ]
+    }
+  ],
+  "timeFrom": null,
+  "timeRegions": [],
+  "timeShift": null,
+  "tooltip": {
+    "shared": true,
+    "sort": 0,
+    "value_type": "individual"
+  },
+  "xaxis": {
+    "buckets": null,
+    "mode": "time",
+    "name": null,
+    "show": true,
+    "values": []
+  },
+  "yaxes": [
+    {
+      "$$hashKey": "object:46",
+      "format": "short",
+      "label": null,
+      "logBase": 1,
+      "max": null,
+      "min": null,
+      "show": true
+    },
+    {
+      "$$hashKey": "object:47",
+      "format": "short",
+      "label": null,
+      "logBase": 1,
+      "max": null,
+      "min": null,
+      "show": true
+    }
+  ],
+  "yaxis": {
+    "align": false,
+    "alignLevel": null
+  },
+  "datasource": null
+}
