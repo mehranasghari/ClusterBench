@@ -16,6 +16,7 @@ Secondary_influxdb_container_name = json_data['Secondary_influxdb_container_name
 Secondary_influxdb_DB_name = json_data['Secondary_influxdb_DB_name']
 Secondary_influxdb_address_in_host = json_data['Secondary_influxdb_address_in_host']
 DB_name = json_data['Primary_influxdb_DB_name']
+
 # Load grafana config
 with open(grafana_config_address,'r') as file:
     json_data = json.load(file)
