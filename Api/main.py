@@ -19,5 +19,10 @@ DB_name = json_data['Primary_influxdb_DB_name']
 with open(measurment_file_path, 'r') as file :
     measurments = file.readlines()
     for measurment in measurments:
-        continue
-        #curl -G 'http://{host}:{port}/query?pretty=true' --data-urlencode "db={DB_name}" --data-urlencode "q=SELECT mean("value") FROM "netdata.system.cpu.user.average" WHERE ("host" =~ /^m-r1z1s1-controller$/) AND time >= now() - 30s AND time <= now() GROUP BY time(10s) fill(none)"
+        curl_command = f'curl -G 'http://{host}:{port}/query?pretty=true' --data-urlencode "db={DB_name}" --data-urlencode "q=SELECT mean("value") FROM "netdata.system.cpu.user.average" WHERE ("host" =~ /^m-r1z1s1-controller$/) AND time >= now() - 30s AND time <= now() GROUP BY time(10s) fill(none)"'
+        curl_process = subprocess.run(curl_command, shell=True)
+        curl_exit_code = curl_process.returncode()
+        if curl_exit_code == 0:
+             print("done")
+        else:
+             print("not done")
