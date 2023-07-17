@@ -2,7 +2,7 @@ import json
 import os
 import subprocess
 
-query_file_path = "./data.json"
+query_file_path = "./Grafana-dasboard.json"
 output_file_path_with_space = "./queries.txt"
 query_file_path_without_space = "./query.txt"
 
@@ -41,7 +41,7 @@ def convert_panel_json_to_influxdb_query(query_file_path, output_file_path):
     
 convert_panel_json_to_influxdb_query(query_file_path, output_file_path_with_space)
 
-# Ckeck output content and print if it is success full or not
+# Ckeck output content and print if it is successfull or not
 def content_checker(output_file_path):
     size = os.path.getsize(output_file_path)
     if size != 0:
