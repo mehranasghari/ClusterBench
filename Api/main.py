@@ -2,12 +2,22 @@ import os
 import json
 import subprocess
 
-# Specify the measurments file path
+# Temporary variable defenitaion
+host = "localhost"
+port = "8086"
+
+# Specify the files path
 measurment_file_path = "./measurments.txt"
+DB_conf_file_path = "./../cobf/address.json"
+
+# Open address.json and read some value from that
+with open(DB_conf_file_path, 'r') as file:
+        json_data = json.load(file)
+DB_name = json_data['Primary_influxdb_DB_name']    
 
 # Open measurments file and read it
 with open(measurment_file_path, 'r') as file :
-    measurments = file.read
+    measurments = file.readlines()
     for measurment in measurments:
-        print(measurment)
-
+        continue
+        #curl -G 'http://{host}:{port}/query?pretty=true' --data-urlencode "db={DB_name}" --data-urlencode "q=SELECT mean("value") FROM "netdata.system.cpu.user.average" WHERE ("host" =~ /^m-r1z1s1-controller$/) AND time >= now() - 30s AND time <= now() GROUP BY time(10s) fill(none)"
