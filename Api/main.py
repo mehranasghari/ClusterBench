@@ -20,7 +20,7 @@ with open(measurment_file_path, 'r') as file :
     measurments = file.readlines()
     for measurment in measurments:
         with open(hosts_file_path,'r') as file:
-             hosts = file.readlines
+             hosts = file.readlines()
              for host in hosts:
                 curl_command = f'curl -G \'http://{host}:{port}/query?pretty=true\' --data-urlencode "db={DB_name}" --data-urlencode "q=SELECT mean("value") FROM "{measurment}" WHERE ("host" =~ /^{host}$/) AND time >= now() - 30s AND time <= now() GROUP BY time(10s) fill(none)"'
                 curl_process = subprocess.run(curl_command, shell=True)
