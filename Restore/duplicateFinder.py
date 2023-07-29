@@ -1,4 +1,4 @@
-file_path = "./output.txt"
+file_path = "./../conf/output.txt"
 seen_lines = set()
 
 with open(file_path, "r") as f:
