@@ -21,6 +21,6 @@ def measurement_generator(input_value):
 
 # Example usage:
 print(''' HINT
-1) ops measurements: read and write ''')
+1) OPS measurements(read and write) ''')
 user_input = input("\n Enter your choice: ")
 measurement_generator(user_input)
