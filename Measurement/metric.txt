@@ -1,0 +1,4 @@
+netdata.disk_ops.sda.reads
+netdata.disk_ops.sda.write
+netdata.disk_ops.sdb.reads
+netdata.disk_ops.sdb.write
