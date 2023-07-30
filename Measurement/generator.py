@@ -1,4 +1,4 @@
-# Define disk file path
+# Define patheses
 disk_file_path = "./disks.txt"
 metrics_file_path = "./metric.txt"
 
