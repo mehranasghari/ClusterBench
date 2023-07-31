@@ -1,42 +1,21 @@
-# Define patheses
-disk_file_path = "./disks.txt"
-metrics_file_path = "./metric.txt"
+import json
+import os
+import subprocess
 
-def measurement_generator(input_value):
-    match input_value:
-        case "1":
-            print("You chose ops.")
-            with open(disk_file_path, "r") as file:
-                disks = file.readlines()
-                for line_num, disk in enumerate(disks, start=1):
-                    with open(metrics_file_path, "a") as metrics_file:
-                        metrics_file.write(f"netdata.disk_ops.{disk.strip()}.reads\n")
-                        metrics_file.write(f"netdata.disk_ops.{disk.strip()}.write\n")
-                    print(f"Line {line_num}: {disk.strip()}")
-            print(f"Total lines: {len(disks)}")
-        case "2":
-            print("You chose option 2.")
-            # Implement functionality for option 2
-        case "3":
-            print("You chose option 3.")
-            # Implement functionality for option 3
-        case "exit":  # Added "exit" as an exit condition
-            print("Exiting the program.")
-        case _:
-            print("Invalid option.")
+# Define addresses file path
+address_file_path = "./../conf/address.json"
+measurements_file_path = "./measurements.txt"
 
-# Example usage with loop:
-while True:
-    print('''
-      Which want to generate ? 
-      
-      1) OPS (read and write)
-      2) Option 2
-      3) Option 3
-      Enter "exit" to exit.''')
-    user_input = input("\n Enter your choice: ").lower()  # Convert input to lowercase for case-insensitivity
+# Load data from address.json file
+with open(address_file_path, 'r') as file:
+    json_data = json.load(file)
+influxdb_container_name = json_data["Primary_influxdb_container_name"]
+db_name = json_data["Primary_influxdb_DB_name"]
+db_port = json_data["Primary_influxdb_container_port"]
+db_host = json_data["Priamry_influxdb_host_in_container"]
 
-    if user_input == "exit":
-        break  # Exit the loop if user enters "exit"
-    
-    measurement_generator(user_input)
+# execute to container and save the input into the measurement.txt file
+exec_command = f"docker exec -it {influxdb_container_name} influx -host {db_host} -port {db_port} -database '{db_name}' -execute 'SHOW MEASUREMENTS' > {measurements_file_path} "
+exec_process = subprocess.run(exec_command, shell= True)
+exec_process_exit_code = exec_process.returncode
+print (exec_process_exit_code)
