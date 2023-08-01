@@ -1,12 +1,12 @@
 import json
 import os
-import subprocess
 
 # Define addresses file path
 address_file_path = "./../conf/address.json"
 exported_measurements_file_path = "./exported-measurements.txt"
 selected_measurements_file_path = "./measurement.txt"
 output_file_path = "./metric.txt"
+match_lines = []
 
 # Load data from address.json file
 with open(address_file_path, 'r') as file:
@@ -18,14 +18,9 @@ db_port = json_data["Primary_influxdb_container_port"]
 db_host = json_data["Priamry_influxdb_host_in_container"]
 
 # execute to container and save the input into the measurement.txt file
-exec_command = f"docker exec -it {influxdb_container_name} influx -host {db_host} -port {db_port} -database '{db_name}' -execute 'SHOW MEASUREMENTS' > {exported_measurements_file_path} "
-exec_process = subprocess.run(exec_command, shell=True)
-exec_process_exit_code = exec_process.returncode
-
-if exec_process_exit_code == 0:
-    print("\033[92mMeasurements executed successfully.\033[0m")
-else:
-    print("\033[91mMeasurements execution failed.\033[0m")
+#exec_command = f"docker exec -it {influxdb_container_name} influx -host {db_host} -port {db_port} -database '{db_name}' -execute 'SHOW MEASUREMENTS' > {exported_measurements_file_path} "
+#os.system(exec_command)
+# Assuming the execution of the command was successful, no need to check the exit code here.
 
 # Metric file generator
 with open(exported_measurements_file_path, "r") as measurements_file:
@@ -34,9 +29,12 @@ with open(exported_measurements_file_path, "r") as measurements_file:
 with open(selected_measurements_file_path, "r") as metric_file:
     selected_measurements_lines = metric_file.readlines()
 
-matching_lines = [line for line in selected_measurements_lines if line in exported_measurements_lines]
+matching_lines = []
 
-with open(output_file_path, "w") as output_file:
+for select_line in selected_measurements_lines:
+    for export_line in exported_measurements_lines:
+        if select_line.strip() in export_line:
+            matching_lines.append(export_line)
+
+with open(output_file_path, "a") as output_file:
     output_file.writelines(matching_lines)
-
-print("done")
