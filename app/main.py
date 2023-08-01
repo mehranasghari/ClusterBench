@@ -12,11 +12,6 @@ input_file_path = sys.argv[1]
 default_file_path = sys.argv[2]
 script_file_path = sys.argv[3]
 
-# TO DO: CREATE RESULT DIRECTORY IF IT HAS NOT CREATED
-
-
-
-
 # Defining paths
 cosbench_command = './../../cli.sh'
 archive_path = './../../archive/'
