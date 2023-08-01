@@ -1,6 +1,3 @@
-name: measurements
-name
-----
 netdata.apps.cpu.X
 netdata.apps.cpu.apps.plugin
 netdata.apps.cpu.backup
