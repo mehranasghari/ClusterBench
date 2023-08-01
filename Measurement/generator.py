@@ -6,7 +6,7 @@ address_file_path = "./../conf/address.json"
 exported_measurements_file_path = "./exported-measurements.txt"
 selected_measurements_file_path = "./measurement.txt"
 output_file_path = "./metric.txt"
-match_lines = []
+matching_lines = []
 
 # Load data from address.json file
 with open(address_file_path, 'r') as file:
@@ -27,8 +27,6 @@ with open(exported_measurements_file_path, "r") as measurements_file:
 
 with open(selected_measurements_file_path, "r") as metric_file:
     selected_measurements_lines = metric_file.readlines()
-
-matching_lines = []
 
 for select_line in selected_measurements_lines:
     for export_line in exported_measurements_lines:
