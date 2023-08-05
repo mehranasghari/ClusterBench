@@ -57,7 +57,7 @@ for workload_number in range(workloads):
     time.sleep(1)
     pre_test_script_failure_num = 0
     for i in range(max_pre_test_script_failure):
-        pre_test_script = subprocess.run([pre_test_script_path, workload_name])
+        pre_test_script = subprocess.run([pre_test_script_path, workload_name], shell=True) # shell=true addede to this part
         if pre_test_script.returncode == 0:
             print("Pre-test script executed successfully!")
             break
