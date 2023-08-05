@@ -4,8 +4,8 @@ import subprocess
 
 # Define addresses file path
 address_file_path = "./../conf/address.json"
-exported_measurements_file_path = "./exported-measurements.txt"
-selected_measurements_file_path = "./measurement.txt"
+exported_measurements_file_path = "./all-measurements.txt"
+selected_measurements_file_path = "./metric-filterer.txt"
 output_file_path = "./metric.txt"
 matching_lines = []
 
