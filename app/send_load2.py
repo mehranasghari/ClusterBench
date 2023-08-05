@@ -6,8 +6,8 @@ def main():
     parser = argparse.ArgumentParser()
     
     # Define the arguments with default values
-    parser.add_argument('-d', '--arg_b', default="./../conf/defaults.json", help="Path to the default file.")
-    parser.add_argument('-b', '--arg_d', default="./../conf/benchmark.cfg", help="Path to the benchmark file.")
+    parser.add_argument('-d', '--arg_d', default="./../conf/defaults.json", help="Path to the default file.")
+    parser.add_argument('-b', '--arg_b', default="./../conf/benchmark.cfg", help="Path to the benchmark file.")
     parser.add_argument('-s', '--arg_s', default="./pre_test_script.sh", help="Path to the script file.")
 
     args = parser.parse_args()
