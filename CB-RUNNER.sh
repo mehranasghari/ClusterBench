@@ -11,7 +11,7 @@ case $number in
         clear
         echo -e "-*-*-*-*-*-*-*-*-> \033[32mRunning backup\033[0m <-*-*-*-*-*-*-*-*-"
         cd ./app
-        bash send_load.sh 
+        python3 send_load.py 
         ;;
     2)
         clear
