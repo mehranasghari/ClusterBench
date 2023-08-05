@@ -46,7 +46,7 @@ def main(argv):
             script_file = arg
 
     # Call the main program 
-    print(f"Calling main program with benchmark_file: {benchmark_file}, default_file: {default_file}, script_file: {script_file}")
+    #print(f"Calling main program with benchmark_file: {benchmark_file}, default_file: {default_file}, script_file: {script_file}")
     run = f"python3 main.py {benchmark_file} {default_file} {script_file}"
     run_process = subprocess.run(run,shell=True)
     
