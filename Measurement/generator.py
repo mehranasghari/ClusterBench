@@ -27,7 +27,7 @@ if delete_exit_code == 0:
 else:
     print("\033[91mDeleting  Failed.\033[0m")
 
-# execute to container and save the input into the measurement.txt file
+# execute to container and save the input into the all-measurement.txt file
 exec_command = f"docker exec -it {influxdb_container_name} influx -host {db_host} -port {db_port} -database '{db_name}' -execute 'SHOW MEASUREMENTS' > {exported_measurements_file_path} "
 exec_process = subprocess.run(exec_command, shell=True)
 exec_exit_code = exec_process.returncode
