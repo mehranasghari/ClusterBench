@@ -33,7 +33,7 @@ global testDirectory2
 testDirectory2 = args.testname
 input_file = "./../result/"+testDirectory+"/time"
 
-# Add a 1-minute delay
+# Add 1-minute delay
 time.sleep(60)
 
 print(f"*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* START OF BACKUP FOR\033[92m {testDirectory} \033[0m*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*")
