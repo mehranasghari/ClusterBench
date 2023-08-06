@@ -8,18 +8,21 @@ import json
 import time
 
 # Specify address to address.json file
-address_file_path = "./../conf/address.json"
-
+influxdb_conf_file_path = "./../conf/InfluxdbConfig.json"
+test_conf_file_path = "./../conf/TestConfig.json"
 # Load the JSON data from the file and define adresses as a variable 
-with open(address_file_path, 'r') as file:
+with open(influxdb_conf_file_path, 'r') as file:
     json_data = json.load(file)
 Primary_influxdb_in_container_address = json_data['Primary_influxdb_in_container_address']
 Primary_influxdb_address_in_host = json_data['Primary_influxdb_address_in_host']
 Secondary_influxdb_address_in_host = json_data['Secondary_influxdb_address_in_host']
 Primary_influxdb_container_name = json_data['Primary_influxdb_container_name']
 Secondary_influxdb_container_name = json_data['Secondary_influxdb_container_name']
-Time_add_to_end_of_test = json_data['Time_add_to_end_of_test']
-Time_reduce_from_first_of_test = json_data['Time_reduce_from_first_of_test']
+
+with open(influxdb_conf_file_path, 'r') as file:
+    time_data = json.load(file)
+Time_add_to_end_of_test = time_data['Time_add_to_end_of_test']
+Time_reduce_from_first_of_test = time_data['Time_reduce_from_first_of_test']
 
 # Process given Test name as an arqument
 argParser = argparse.ArgumentParser()
