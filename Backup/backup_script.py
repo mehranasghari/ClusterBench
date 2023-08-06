@@ -8,16 +8,15 @@ import json
 import time
 
 # Specify address to address.json file
-address_file_path = "./../conf/address.json"
-
+influxdb_conf_file_path = "./../conf/InfluxdbConfig.json"
 # Load the JSON data from the file and define adresses as a variable 
-with open(address_file_path, 'r') as file:
+with open(influxdb_conf_file_path, 'r') as file:
     json_data = json.load(file)
-Primary_influxdb_in_container_address = json_data['Primary_influxdb_in_container_address']
-Primary_influxdb_address_in_host = json_data['Primary_influxdb_address_in_host']
-Secondary_influxdb_address_in_host = json_data['Secondary_influxdb_address_in_host']
-Primary_influxdb_container_name = json_data['Primary_influxdb_container_name']
-Secondary_influxdb_container_name = json_data['Secondary_influxdb_container_name']
+Primary_influxdb_in_container_address = json_data['Main_influxdb_in_container_address']
+Primary_influxdb_address_in_host = json_data['Main_influxdb_address_in_host']
+Secondary_influxdb_address_in_host = json_data['Backup_influxdb_address_in_host']
+Primary_influxdb_container_name = json_data['Main_influxdb_container_name']
+Secondary_influxdb_container_name = json_data['Backup_influxdb_container_name']
 Time_add_to_end_of_test = json_data['Time_add_to_end_of_test']
 Time_reduce_from_first_of_test = json_data['Time_reduce_from_first_of_test']
 
@@ -30,7 +29,7 @@ global testDirectory2
 testDirectory2 = args.testname
 input_file = "./../result/"+testDirectory+"/time"
 
-# Add a 1-minute delay
+# Add 1-minute delay
 time.sleep(60)
 
 print(f"*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* START OF BACKUP FOR\033[92m {testDirectory} \033[0m*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*")
@@ -134,5 +133,6 @@ def process_input_file(file_path_input):
                 print("\033[91mMoving files failed.\033[0m")
                 sys.exit(1)
                 print()
+
 process_input_file(input_file)
 print(f"*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* END OF BACKUP FOR\033[92m {testDirectory} \033[0m*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*")
