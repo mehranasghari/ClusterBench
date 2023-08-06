@@ -1,5 +1,5 @@
 {
-    "Primary_influxdb_DB_name" : "opentsdb", 
+    "Primary_influxdb_DB_name" : "opentsdb",
     "Primary_influxdb_container_name" : "influxdb",
     "Primary_influxdb_address_in_host" : "/root/monster/hayoola-mc/influxdb-data/test-backup",
     "Primary_influxdb_in_container_address" : "/var/lib/influxdb/test-backup",
