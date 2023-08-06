@@ -137,5 +137,6 @@ def process_input_file(file_path_input):
                 print("\033[91mMoving files failed.\033[0m")
                 sys.exit(1)
                 print()
+
 process_input_file(input_file)
 print(f"*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* END OF BACKUP FOR\033[92m {testDirectory} \033[0m*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*")
