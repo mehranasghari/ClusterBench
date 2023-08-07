@@ -12,8 +12,9 @@ print("\n\n\n\n")
 monster_vm_name = input("Please enter your Monster machine name : ") # ssh copy id should be done or handel it anyway
 monster_container_name = input("Please enter your Monster conatiner name in machine : ")
 influxdb_container_name = input("Please enter your InfluxDB container name : ")
-rp_name = input("\nPlease enter your active retention policy name : ")
 db_name = input ("\nPlease enter your database name : ")
+rp_name = input("\nPlease enter your active retention policy name : ")
+
 
 # Install pip and it dependencies
 # Install pip
