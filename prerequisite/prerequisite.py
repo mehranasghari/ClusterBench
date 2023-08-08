@@ -53,7 +53,7 @@ pytz_installer_process = subprocess.run(pytz_installer_command, shell=True)
 pytz_installer_process_exit_code = pytz_installer_process.returncode
 
 if pip_installer_exit_code & pip_updater_process_exit_code & influxdb_client_installer_process_exit_code & pytz_installer_process_exit_code == 1:
-    print("all dependecies installed successfully")
+    print("\033[92all dependecies installed successfully\033[0m")
 
 # Change rp part
 policy_changer_command = f"docker exec -it {influxdb_container_name} influx -execute 'alter retention policy {rp_name} on {db_name} shard duration 1h default'"
