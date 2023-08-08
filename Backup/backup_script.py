@@ -8,7 +8,8 @@ import json
 import time
 
 # Specify address to address.json file
-influxdb_conf_file_path = "./../conf/InfluxdbConfig.json"
+influxdb_conf_file_path = "./../conf/Software/InfluxdbConfig.json"
+
 # Load the JSON data from the file and define adresses as a variable 
 with open(influxdb_conf_file_path, 'r') as file:
     json_data = json.load(file)
