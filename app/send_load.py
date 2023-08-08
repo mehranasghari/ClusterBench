@@ -26,8 +26,8 @@ Example usage:
 
 def main(argv):
     # Default input and default files
-    default_file = "./../conf/defaults.json"
-    benchmark_file = "./../conf/benchmark.cfg"
+    default_file = "./../conf/Workload/defaults.json"
+    benchmark_file = "./../conf/Workload/benchmark.cfg"
     script_file = "./pre_test_script.sh"
 
     # Parse command line arguments
