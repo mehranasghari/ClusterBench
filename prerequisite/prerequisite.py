@@ -8,7 +8,7 @@ with open (InfluxdbConfig_file_path, 'r') as file:
 
 default_influxdb_container_name = file_data["Main_influxdb_container_name"]
 default_db_name = file_data["Main_influxdb_DB_name"]
-
+default_rp_name = file_data["Main_influxdb_database_rp_name"]
 
 # Print some info 
 print("\n\n\n\n")
@@ -20,10 +20,16 @@ print("\n\n\n\n")
 # Give some neccessary argumants from input
 monster_vm_name = input("Please enter your Monster machine name : ") # ssh copy id should be done or handel it anyway
 monster_container_name = input("Please enter your Monster conatiner name in machine : ")
-influxdb_container_name = input("Please enter your InfluxDB container name : ")
-db_name = input ("\nPlease enter your database name : ")
-rp_name = input("\nPlease enter your active retention policy name : ")
+influxdb_container_name = input(f"Please enter your InfluxDB container name (Default : {default_influxdb_container_name}): ")
+if influxdb_container_name == "":
+    influxdb_container_name = default_influxdb_container_name
 
+db_name = input ("\nPlease enter your database name (Default : {default_db_name}): ")
+if db_name == "" :
+    db_name = default_db_name
+rp_name = input("\nPlease enter your active retention policy name (Default : {default_rp_name}): ")
+if rp_name == "" :
+    rp_name = default_rp_name
 
 # Install pip and it dependencies
 # Install pip
