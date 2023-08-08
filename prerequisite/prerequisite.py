@@ -2,7 +2,7 @@ import os
 import subprocess
 import json
 
-InfluxdbConfig_file_path = "./../conf/InfluxdbConfig.json"
+InfluxdbConfig_file_path = "./../conf/Software/InfluxdbConfig.json"
 with open (InfluxdbConfig_file_path, 'r') as file:
     file_data = json.load(file)
 
