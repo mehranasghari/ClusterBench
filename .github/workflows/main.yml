@@ -12,6 +12,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:          
       - name: automerge
-              uses: ahmadnassri/action-automerge@v1
-              with:
-                github-token: "${{ secrets.MY_GITHUB_TOKEN }}"
+        uses: ahmadnassri/action-automerge@v1
+        with:
+          github-token: "${{ secrets.MY_GITHUB_TOKEN }}"
