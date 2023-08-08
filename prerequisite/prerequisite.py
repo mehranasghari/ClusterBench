@@ -32,27 +32,27 @@ if rp_name == "" :
 
 # Install pip and it dependencies
 # Install pip
-pip_installer_command = "apt install python3-pip 1>&2 /dev/null"
+pip_installer_command = "apt install python3-pip > /dev/null  2>&1"
 pip_installer_process = subprocess.run(pip_installer_command, shell=True)
 pip_installer_exit_code = pip_installer_process.returncode
 
 # Upgrade pip
-pip_updater_command = "pip3 install --upgrade pip 1>&2 /dev/null" 
+pip_updater_command = "pip3 install --upgrade pip > /dev/null  2>&1" 
 pip_updater_process = pip_installer_process = subprocess.run(pip_updater_command, shell=True)
 pip_updater_process_exit_code = pip_updater_process.returncode
 
 # Install InfluxDB client
-influxdb_client_installer_command = "pip install influxdb 1>72 /dev/null"
+influxdb_client_installer_command = "pip install influxdb > /dev/null 2>&1"
 influxdb_client_installer_process = pip_installer_process = subprocess.run(influxdb_client_installer_command, shell=True)
 influxdb_client_installer_process_exit_code = influxdb_client_installer_process.returncode
 
 # Install pytz
-pytz_installer_command = "pip install pytz 1>&2 /dev/null"
+pytz_installer_command = "pip install pytz > /dev/null  2>&1"
 pytz_installer_process = subprocess.run(pytz_installer_command, shell=True)
 pytz_installer_process_exit_code = pytz_installer_process.returncode
 
 if pip_installer_exit_code & pip_updater_process_exit_code & influxdb_client_installer_process_exit_code & pytz_installer_process_exit_code == 0:
-    print("\033[92all dependecies installed successfully\033[0m")
+   print("\033[92mAll dependencies installed successfully\033[0m")
 
 # Change rp part
 policy_changer_command = f"docker exec -it {influxdb_container_name} influx -execute 'alter retention policy {rp_name} on {db_name} shard duration 1h default'"
