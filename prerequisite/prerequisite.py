@@ -18,22 +18,22 @@ rp_name = input("\nPlease enter your active retention policy name : ")
 
 # Install pip and it dependencies
 # Install pip
-pip_installer_command = "apt install python3-pip"
+pip_installer_command = "apt install python3-pip > /dev/null"
 pip_installer_process = subprocess.run(pip_installer_command, shell=True)
 pip_installer_exit_code = pip_installer_process.returncode
 
 # Upgrade pip
-pip_updater_command = "pip3 install --upgrade pip" 
+pip_updater_command = "pip3 install --upgrade pip > /dev/null" 
 pip_updater_process = pip_installer_process = subprocess.run(pip_updater_command, shell=True)
 pip_updater_process_exit_code = pip_updater_process.returncode
 
 # Install InfluxDB client
-influxdb_client_installer_command = "pip install influxdb"
+influxdb_client_installer_command = "pip install influxdb > /dev/null"
 influxdb_client_installer_process = pip_installer_process = subprocess.run(influxdb_client_installer_command, shell=True)
 influxdb_client_installer_process_exit_code = influxdb_client_installer_process.returncode
 
 # Install pytz
-pytz_installer_command = "pip install pytz"
+pytz_installer_command = "pip install pytz > /dev/null"
 pytz_installer_process = subprocess.run(pytz_installer_command, shell=True)
 pytz_installer_process_exit_code = pytz_installer_process.returncode
 
