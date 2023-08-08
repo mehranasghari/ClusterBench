@@ -1,5 +1,14 @@
 import os
 import subprocess
+import json
+
+InfluxdbConfig_file_path = "./../conf/InfluxdbConfig.json"
+with open (InfluxdbConfig_file_path, 'r') as file:
+    file_data = json.load(file)
+
+default_influxdb_container_name = file_data["Main_influxdb_container_name"]
+default_db_name = file_data["Main_influxdb_DB_name"]
+
 
 # Print some info 
 print("\n\n\n\n")
