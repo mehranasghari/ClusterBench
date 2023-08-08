@@ -23,36 +23,35 @@ monster_container_name = input("Please enter your Monster conatiner name in mach
 influxdb_container_name = input(f"Please enter your InfluxDB container name (Default : {default_influxdb_container_name}): ")
 if influxdb_container_name == "":
     influxdb_container_name = default_influxdb_container_name
-
-db_name = input ("\nPlease enter your database name (Default : {default_db_name}): ")
+db_name = input (f"Please enter your database name (Default : {default_db_name}): ")
 if db_name == "" :
     db_name = default_db_name
-rp_name = input("\nPlease enter your active retention policy name (Default : {default_rp_name}): ")
+rp_name = input(f"Please enter your active retention policy name (Default : {default_rp_name}): ")
 if rp_name == "" :
     rp_name = default_rp_name
 
 # Install pip and it dependencies
 # Install pip
-pip_installer_command = "apt install python3-pip > /dev/null"
+pip_installer_command = "apt install python3-pip 1>&2 /dev/null"
 pip_installer_process = subprocess.run(pip_installer_command, shell=True)
 pip_installer_exit_code = pip_installer_process.returncode
 
 # Upgrade pip
-pip_updater_command = "pip3 install --upgrade pip > /dev/null" 
+pip_updater_command = "pip3 install --upgrade pip 1>&2 /dev/null" 
 pip_updater_process = pip_installer_process = subprocess.run(pip_updater_command, shell=True)
 pip_updater_process_exit_code = pip_updater_process.returncode
 
 # Install InfluxDB client
-influxdb_client_installer_command = "pip install influxdb > /dev/null"
+influxdb_client_installer_command = "pip install influxdb 1>72 /dev/null"
 influxdb_client_installer_process = pip_installer_process = subprocess.run(influxdb_client_installer_command, shell=True)
 influxdb_client_installer_process_exit_code = influxdb_client_installer_process.returncode
 
 # Install pytz
-pytz_installer_command = "pip install pytz > /dev/null"
+pytz_installer_command = "pip install pytz 1>&2 /dev/null"
 pytz_installer_process = subprocess.run(pytz_installer_command, shell=True)
 pytz_installer_process_exit_code = pytz_installer_process.returncode
 
-if pip_installer_exit_code & pip_updater_process_exit_code & influxdb_client_installer_process_exit_code & pytz_installer_process_exit_code == 1:
+if pip_installer_exit_code & pip_updater_process_exit_code & influxdb_client_installer_process_exit_code & pytz_installer_process_exit_code == 0:
     print("\033[92all dependecies installed successfully\033[0m")
 
 # Change rp part
