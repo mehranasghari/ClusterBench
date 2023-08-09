@@ -1,1 +1,1 @@
-docker inspect -f '{{range .Mounts}}{{if eq .Mode "rw"}}{{.Source}} {{.Destination}}{{end}}{{end}}' <container_name_or_id> # for mount address
+docker inspect -f '{{range .Mounts}}{{if eq .Mode "rw"}}{{.Source}} {{.Destination}}{{end}}{{end}}' <container_name_or_id>

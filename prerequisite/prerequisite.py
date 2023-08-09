@@ -47,22 +47,22 @@ print_attention_message()
 # Install pip
 pip_installer_command = "apt install python3-pip > /dev/null  2>&1"
 pip_installer_process = subprocess.run(pip_installer_command, shell=True)
-pip_installer_exit_code = pip_installer_process.returncode
+pip_installer_exit_code = pip_installer_process.returncode()
 
 # Upgrade pip
 pip_updater_command = "pip3 install --upgrade pip > /dev/null  2>&1" 
 pip_updater_process = pip_installer_process = subprocess.run(pip_updater_command, shell=True)
-pip_updater_process_exit_code = pip_updater_process.returncode
+pip_updater_process_exit_code = pip_updater_process.returncode()
 
 # Install InfluxDB client
 influxdb_client_installer_command = "pip install influxdb > /dev/null 2>&1"
 influxdb_client_installer_process = pip_installer_process = subprocess.run(influxdb_client_installer_command, shell=True)
-influxdb_client_installer_process_exit_code = influxdb_client_installer_process.returncode
+influxdb_client_installer_process_exit_code = influxdb_client_installer_process.returncode()
 
 # Install pytz
 pytz_installer_command = "pip install pytz > /dev/null  2>&1"
 pytz_installer_process = subprocess.run(pytz_installer_command, shell=True)
-pytz_installer_process_exit_code = pytz_installer_process.returncode
+pytz_installer_process_exit_code = pytz_installer_process.returncode()
 
 
 if pip_installer_exit_code & pip_updater_process_exit_code & influxdb_client_installer_process_exit_code & pytz_installer_process_exit_code == 0:
@@ -71,7 +71,7 @@ if pip_installer_exit_code & pip_updater_process_exit_code & influxdb_client_ins
 # Change rp part
 policy_changer_command = f"docker exec -it {influxdb_container_name} influx -execute 'alter retention policy {rp_name} on {db_name} shard duration 1h default'"
 policy_changer_process = subprocess.run(policy_changer_command, shell=True)
-policy_changer_exit_code = policy_changer_process.returncode
+policy_changer_exit_code = policy_changer_process.returncode()
 
 # connect to the monster container and run exporter command
 exoprt_command = f"ssh {monster_vm_name} docker exec -it {monster_container_name} docker exec -it {monster_container_name}  > /dev/null 2>&1"
