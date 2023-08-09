@@ -74,7 +74,7 @@ policy_changer_process = subprocess.run(policy_changer_command, shell=True)
 policy_changer_exit_code = policy_changer_process.returncode
 
 # connect to the monster container and run exporter command
-exoprt_command = "ssh {monster_name} docker exec -it {monster_container_name} > /dev/null 2>&1"
+exoprt_command = f"ssh {monster_vm_name} docker exec -it {monster_container_name} docker exec -it {monster_container_name}  > /dev/null 2>&1"
 export_process = subprocess.run(exoprt_command, shell=True)
 exoprt_process_exit_code = export_process.returncode
 if exoprt_process_exit_code == 0:
