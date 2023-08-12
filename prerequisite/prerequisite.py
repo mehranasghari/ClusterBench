@@ -80,9 +80,17 @@ pytz_installer_command = "pip install pytz > /dev/null  2>&1"
 pytz_installer_process = subprocess.run(pytz_installer_command, shell=True)
 pytz_installer_process_exit_code = pytz_installer_process.returncode
 
-
+# Check all exit codes and print output
 if pip_installer_exit_code & pip_updater_process_exit_code & influxdb_client_installer_process_exit_code & pytz_installer_process_exit_code == 0:
    print("\033[92mAll dependencies installed successfully\033[0m")
+elif pip_installer_exit_code == 1:
+    print("failed in installing pip")
+elif pip_updater_process_exit_code == 1:
+    print("pip updateing failed")
+elif influxdb_client_installer_process_exit_code == 1:
+    print("installing influxdb clinet failed")
+elif pytz_installer_process_exit_code == 1:
+    print("pytz installing failed")
 
 # Change rp part
 policy_changer_command = f"docker exec -it {influxdb_container_name} influx -execute 'alter retention policy {rp_name} on {db_name} shard duration 1h default'"
