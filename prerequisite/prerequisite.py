@@ -41,6 +41,9 @@ if rp_name == "" :
 clear_command = "clear"
 os.system(clear_command)
 
+# Call the function to print the attention message
+print_attention_message()
+
 # Generate and complete ring-file-excuter.sh
 with open(ring_file_excueter_file_path , 'a') as file:
     file.write(f"docker exec {monster_container_name} bash -c \"swift-ring-builder /rings/account.builder\" > ./account.txt")
@@ -55,9 +58,6 @@ if content.strip():
     print("\033[92mRing File Excuter Generated Successfully\033[0m")
 else:
     print("\033[91mRing File Excuter Generating Failed.\033[0m")
-
-# Call the function to print the attention message
-#print_attention_message()
 
 # Install pip and it dependencies
 # Install pip
