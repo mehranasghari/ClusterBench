@@ -47,6 +47,7 @@ with open(ring_file_excueter_file_path , 'a') as file:
     file.write(f"\ndocker exec {monster_container_name} bash -c \"swift-ring-builder /rings/object.builder\" > ./object.txt")
     file.write(f"\ndocker exec {monster_container_name} bash -c \"swift-ring-builder /rings/container.builder\" > ./container.txt")
 
+# Check if file generated successfully or not
 with open(ring_file_excueter_file_path, 'r') as file:
     content = file.read()
 
@@ -93,7 +94,6 @@ exoprt_command = f"ssh {monster_vm_name} docker exec -it {monster_container_name
 export_process = subprocess.run(exoprt_command, shell=True)
 exoprt_process_exit_code = export_process.returncode
 if exoprt_process_exit_code == 0:
-   print("\033[92mRing files exported Successfully\033[0m")
+   print("\033[92mRing Files Exported Successfully\033[0m")
 else:
-    print("\033[91mExporting ring files failed.\033[0m")
-
+    print("\033[91mExporting Ring Files Failed.\033[0m")
