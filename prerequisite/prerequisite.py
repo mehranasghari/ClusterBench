@@ -145,7 +145,7 @@ if cp_container_file_exit_code == 1:
     print("error in cp")
 
 # scp to mc
-scp_command = f"ssh {monster_vm_name} scp /*.txt mc:/ "
+scp_command = f"ssh mc scp /*.txt mc:/ "
 scp_process = subprocess.run(scp_command, shell=True)
 scp_exit_code = scp_process.returncode
 if scp_exit_code == 1 :
