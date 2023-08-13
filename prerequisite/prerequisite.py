@@ -44,11 +44,16 @@ os.system(clear_command)
 # Call the function to print the attention message
 print_attention_message()
 
+# delete file if exists
+del_command = "rm -rf ./ring_file_excuter.py"
+del_process = subprocess.run(del_command, shell=True)
+del_exit_code = del_process.returncode
+
 # Generate and complete ring-file-excuter.sh
 with open(ring_file_excueter_file_path , 'a') as file:
-    file.write(f"docker exec {monster_container_name} bash -c \"swift-ring-builder /rings/account.builder\" > ./account.txt")
-    file.write(f"\ndocker exec {monster_container_name} bash -c \"swift-ring-builder /rings/object.builder\" > ./object.txt")
-    file.write(f"\ndocker exec {monster_container_name} bash -c \"swift-ring-builder /rings/container.builder\" > ./container.txt")
+    file.write("swift-ring-builder /rings/account.builder")
+    file.write(f"\nswift-ring-builder /rings/object.builder > ./object.txt")
+    file.write(f"\nswift-ring-builder /rings/container.builder > ./container.txt")
 
 # Check if file generated successfully or not
 with open(ring_file_excueter_file_path, 'r') as file:
