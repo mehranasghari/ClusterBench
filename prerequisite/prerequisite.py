@@ -45,7 +45,7 @@ os.system(clear_command)
 print_attention_message()
 
 # delete file if exists
-del_command = "rm -rf ./ring_file_excuter.py"
+del_command = "rm -rf ./ring_file_excuter.sh"
 del_process = subprocess.run(del_command, shell=True)
 del_exit_code = del_process.returncode
 
