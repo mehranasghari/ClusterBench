@@ -52,9 +52,9 @@ del_exit_code = del_process.returncode
 #handeling mover.sh
 # Generate and complete ring-file-excuter.sh
 with open(ring_file_excueter_file_path , 'a') as file:
-    file.write("swift-ring-builder /rings/account.builder > ./account.txt")
-    file.write(f"\nswift-ring-builder /rings/object.builder > ./object.txt")
-    file.write(f"\nswift-ring-builder /rings/container.builder > ./container.txt")
+    file.write("swift-ring-builder /rings/account.builder > /account.txt")
+    file.write(f"\nswift-ring-builder /rings/object.builder > /object.txt")
+    file.write(f"\nswift-ring-builder /rings/container.builder > /container.txt")
 
 # Check if file generated successfully or not
 with open(ring_file_excueter_file_path, 'r') as file:
