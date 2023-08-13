@@ -41,6 +41,9 @@ if rp_name == "" :
 clear_command = "clear"
 os.system(clear_command)
 
+# Call the function to print the attention message
+print_attention_message()
+
 # Generate and complete ring-file-excuter.sh
 with open(ring_file_excueter_file_path , 'a') as file:
     file.write(f"docker exec {monster_container_name} bash -c \"swift-ring-builder /rings/account.builder\" > ./account.txt")
@@ -55,9 +58,6 @@ if content.strip():
     print("\033[92mRing File Excuter Generated Successfully\033[0m")
 else:
     print("\033[91mRing File Excuter Generating Failed.\033[0m")
-
-# Call the function to print the attention message
-#print_attention_message()
 
 # Install pip and it dependencies
 # Install pip
@@ -84,24 +84,59 @@ pytz_installer_process_exit_code = pytz_installer_process.returncode
 if pip_installer_exit_code & pip_updater_process_exit_code & influxdb_client_installer_process_exit_code & pytz_installer_process_exit_code == 0:
    print("\033[92mAll dependencies installed successfully\033[0m")
 elif pip_installer_exit_code == 1:
-    print("failed in installing pip")
+    print("\033[91mfailed in installing pip\033[0m")
 elif pip_updater_process_exit_code == 1:
-    print("pip updateing failed")
+    print("\033[91mpip updateing failed\033[0m")
 elif influxdb_client_installer_process_exit_code == 1:
-    print("installing influxdb clinet failed")
+    print("\033[91minstalling influxdb clinet failed\033[0m")
 elif pytz_installer_process_exit_code == 1:
-    print("pytz installing failed")
+    print("\033[91mpytz installing failed\033[0m")
 
 # Change rp part
 policy_changer_command = f"docker exec -it {influxdb_container_name} influx -execute 'alter retention policy {rp_name} on {db_name} shard duration 1h default'"
 policy_changer_process = subprocess.run(policy_changer_command, shell=True)
 policy_changer_exit_code = policy_changer_process.returncode
 
-# connect to the monster container and run exporter command
-exoprt_command = f"ssh {monster_vm_name} docker exec -it {monster_container_name} docker exec -it {monster_container_name}  > /dev/null 2>&1"
-export_process = subprocess.run(exoprt_command, shell=True)
-exoprt_process_exit_code = export_process.returncode
-if exoprt_process_exit_code == 0:
-   print("\033[92mRing Files Exported Successfully\033[0m")
-else:
-    print("\033[91mExporting Ring Files Failed.\033[0m")
+# trasfer file to the monster vm
+trasnfer_command = f"scp ./ring_file_excuter.sh {monster_vm_name}:/"
+trasnfer_process = subprocess.run(trasnfer_command, shell=True)
+trasnfer_exit_code = trasnfer_process.returncode
+
+# cp file to monster container
+docker_cp_command = f"ssh {monster_vm_name} docker cp /ring_file_excuter.sh {monster_container_name}:/ > /dev/null 2>&1"
+docker_cp_process = subprocess.run(docker_cp_command, shell=True)
+docker_cp_exit_code = docker_cp_process.returncode
+
+# excute the script
+execute_command = f"ssh {monster_vm_name} docker exec -it storage bash -c \"/ring_file_excuter.sh\"  > /dev/null 2>&1"
+execute_process = subprocess.run(execute_command, shell=True)
+execute_exit_code = execute_process.returncode
+
+# Cp object.txt
+cp_object_file_command = f"ssh {monster_vm_name} docker cp {monster_vm_name}:/object.txt ./object.txt"
+cp_object_file_process = subprocess.run(cp_object_file_command, shell=True)
+cp_object_file_exit_code = cp_object_file_process.returncode
+
+# Cp account.txt 
+cp_account_file_command = f"ssh {monster_vm_name} docker cp {monster_vm_name}:/account.txt ./account.txt"
+cp_account_file_process = subprocess.run(cp_account_file_command, shell=True)
+cp_account_file_exit_code = cp_account_file_process.returncode
+
+# Cp container.txt
+cp_container_file_command = f"ssh {monster_vm_name} docker cp {monster_vm_name}:/container.txt ./container.txt"
+cp_container_file_process = subprocess.run(cp_container_file_command, shell=True)
+cp_container_file_exit_code = cp_container_file_process.returncode
+
+# scp to mc
+scp_command = f"ssh {monster_vm_name} scp ./*.txt mc:/"
+scp_process = subprocess.run(scp_command, shell=True)
+scp_exit_code = scp_process.returncode
+
+# Mv to config file 
+mv_command = f"mv /*.txt ./../conf"
+mv_process = subprocess.run(mv_command, shell=True)
+mv_exit_code = mv_process.returncode
+
+# check the exit codes and print out put
+if trasnfer_exit_code & docker_cp_exit_code & execute_exit_code & cp_object_file_exit_code & cp_account_file_exit_code & cp_container_file_exit_code & cp_container_file_exit_code & scp_exit_code & mv_exit_code == 1:
+    print("\033[92mRing Files excuted and moved to conf dir\033[0m")
