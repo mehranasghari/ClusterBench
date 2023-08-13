@@ -118,30 +118,32 @@ execute_process = subprocess.run(execute_command, shell=True)
 execute_exit_code = execute_process.returncode
 
 # Cp object.txt
-cp_object_file_command = f"ssh {monster_vm_name} docker cp {monster_vm_name}:/object.txt ./object.txt > /dev/null 2>&1"
+cp_object_file_command = f"ssh {monster_vm_name} docker cp {monster_vm_name}:/object.txt ./object.txt "
 cp_object_file_process = subprocess.run(cp_object_file_command, shell=True)
 cp_object_file_exit_code = cp_object_file_process.returncode
 
 # Cp account.txt 
-cp_account_file_command = f"ssh {monster_vm_name} docker cp {monster_vm_name}:/account.txt ./account.txt > /dev/null 2>&1"
+cp_account_file_command = f"ssh {monster_vm_name} docker cp {monster_vm_name}:/account.txt ./account.txt "
 cp_account_file_process = subprocess.run(cp_account_file_command, shell=True)
 cp_account_file_exit_code = cp_account_file_process.returncode
 
 # Cp container.txt
-cp_container_file_command = f"ssh {monster_vm_name} docker cp {monster_vm_name}:/container.txt ./container.txt > /dev/null 2>&1"
+cp_container_file_command = f"ssh {monster_vm_name} docker cp {monster_vm_name}:/container.txt ./container.txt"
 cp_container_file_process = subprocess.run(cp_container_file_command, shell=True)
 cp_container_file_exit_code = cp_container_file_process.returncode
 
 # scp to mc
-scp_command = f"ssh {monster_vm_name} scp ./*.txt mc:/ > /dev/null 2>&1"
+scp_command = f"ssh {monster_vm_name} scp /*.txt mc:/ "
 scp_process = subprocess.run(scp_command, shell=True)
 scp_exit_code = scp_process.returncode
 
 # Mv to config file 
-mv_command = f"mv /*.txt ./../conf > /dev/null 2>&1"
+mv_command = f"mv /*.txt ./../conf "
 mv_process = subprocess.run(mv_command, shell=True)
 mv_exit_code = mv_process.returncode
 
 # check the exit codes and print out put
 if trasnfer_exit_code & docker_cp_exit_code & execute_exit_code & cp_object_file_exit_code & cp_account_file_exit_code & cp_container_file_exit_code & cp_container_file_exit_code & scp_exit_code & mv_exit_code == 1:
     print("\033[92mRing Files excuted and moved to conf dir\033[0m")
+else :
+    print("failed")
