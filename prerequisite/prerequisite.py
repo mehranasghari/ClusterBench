@@ -49,6 +49,7 @@ del_command = "rm -rf ./ring_file_excuter.sh"
 del_process = subprocess.run(del_command, shell=True)
 del_exit_code = del_process.returncode
 
+#handeling mover.sh
 # Generate and complete ring-file-excuter.sh
 with open(ring_file_excueter_file_path , 'a') as file:
     file.write("swift-ring-builder /rings/account.builder > ./account.txt")
@@ -102,11 +103,18 @@ policy_changer_command = f"docker exec -it {influxdb_container_name} influx -exe
 policy_changer_process = subprocess.run(policy_changer_command, shell=True)
 policy_changer_exit_code = policy_changer_process.returncode
 
-# trasfer file to the monster vm
+# trasfer ring_file_excuter.sh to the monster vm
 trasnfer_command = f"scp ./ring_file_excuter.sh {monster_vm_name}:/ > /dev/null 2>&1"
 trasnfer_process = subprocess.run(trasnfer_command, shell=True)
 trasnfer_exit_code = trasnfer_process.returncode
 if trasnfer_exit_code == 1 :
+    print("unsucessfull transfer")
+
+# Transfer mover.sh to monster container
+trasnfer2_command = f"scp ./mover.sh {monster_vm_name}:/ > /dev/null 2>&1"
+trasnfer2_process = subprocess.run(trasnfer2_command, shell=True)
+trasnfer2_exit_code = trasnfer2_process.returncode
+if trasnfer2_exit_code == 1 :
     print("unsucessfull transfer")
 
 # cp file to monster container
@@ -123,26 +131,12 @@ execute_exit_code = execute_process.returncode
 if execute_exit_code == 1:
     print("failure in exec")
 
-# Cp object.txt
-cp_object_file_command = f"ssh {monster_vm_name} docker cp {monster_vm_name}:/object.txt ./object.txt "
-cp_object_file_process = subprocess.run(cp_object_file_command, shell=True)
-cp_object_file_exit_code = cp_object_file_process.returncode
-if cp_object_file_exit_code == 1:
-    print("error in object cp")
-
-# Cp account.txt 
-cp_account_file_command = f"ssh {monster_vm_name} docker cp {monster_vm_name}:/account.txt ./account.txt "
-cp_account_file_process = subprocess.run(cp_account_file_command, shell=True)
-cp_account_file_exit_code = cp_account_file_process.returncode
-if cp_account_file_exit_code == 1:
-    print("error in cp account")
-
-# Cp container.txt
-cp_container_file_command = f"ssh {monster_vm_name} docker cp {monster_vm_name}:/container.txt ./container.txt"
-cp_container_file_process = subprocess.run(cp_container_file_command, shell=True)
-cp_container_file_exit_code = cp_container_file_process.returncode
-if cp_container_file_exit_code == 1:
-    print("error in cp")
+# Run mover.sh
+execute2_command = f"ssh {monster_vm_name} \"bash /mover.sh\""
+execute2_process = subprocess.run(execute_command, shell=True)
+execute2_exit_code = execute2_process.returncode
+if execute2_exit_code == 1:
+    print("failure in exec")
 
 # scp to mc
 scp_command = f"ssh mc scp /*.txt mc:/"
@@ -159,7 +153,7 @@ if mv_exit_code == 1 :
     print("mv error")
 
 # check the exit codes and print out put
-if trasnfer_exit_code & docker_cp_exit_code & execute_exit_code & cp_object_file_exit_code & cp_account_file_exit_code & cp_container_file_exit_code & cp_container_file_exit_code & scp_exit_code & mv_exit_code == 1:
+if trasnfer_exit_code & docker_cp_exit_code & execute_exit_code & scp_exit_code & mv_exit_code == 1:
     print("\033[92mRing Files excuted and moved to conf dir\033[0m")
 else :
     print("failed")
