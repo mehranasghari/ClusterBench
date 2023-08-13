@@ -139,14 +139,6 @@ execute2_exit_code = execute2_process.returncode
 if execute2_exit_code == 1:
     print("\033[92mmover runned Successfully\033[0m")
 
-# scp to mc
-#scp_command = f"ssh {monster_vm_name} \"scp /account.txt /object.txt /container.txt mc:/\""
-#scp_process = subprocess.run(scp_command, shell=True)
-#scp_exit_code = scp_process.returncode
-#if scp_exit_code == 0 :
-#    print("\033[92mfiles moved to mc Successfully\033[0m")
-
-
 # Mv to config file 
 mv_command = f"mv /*.txt ./../conf/Deployment"
 mv_process = subprocess.run(mv_command, shell=True)
