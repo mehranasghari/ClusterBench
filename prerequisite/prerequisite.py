@@ -140,11 +140,11 @@ if execute2_exit_code == 1:
     print("\033[92mmover runned Successfully\033[0m")
 
 # scp to mc
-scp_command = f"ssh {monster_vm_name} \"scp /account.txt /object.txt /container.txt mc:/\""
-scp_process = subprocess.run(scp_command, shell=True)
-scp_exit_code = scp_process.returncode
-if scp_exit_code == 0 :
-    print("\033[92mfiles moved to mc Successfully\033[0m")
+#scp_command = f"ssh {monster_vm_name} \"scp /account.txt /object.txt /container.txt mc:/\""
+#scp_process = subprocess.run(scp_command, shell=True)
+#scp_exit_code = scp_process.returncode
+#if scp_exit_code == 0 :
+#    print("\033[92mfiles moved to mc Successfully\033[0m")
 
 
 # Mv to config file 
@@ -155,7 +155,7 @@ if mv_exit_code == 1 :
     print("mv error")
 
 # check the exit codes and print out put
-if trasnfer_exit_code & docker_cp_exit_code & execute_exit_code & scp_exit_code & mv_exit_code == 1:
+if trasnfer_exit_code & docker_cp_exit_code & execute_exit_code & mv_exit_code == 1:
     print("\033[92mRing Files excuted and moved to conf dir\033[0m")
 else :
     print("failed")
