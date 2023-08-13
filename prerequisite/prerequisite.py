@@ -113,7 +113,7 @@ docker_cp_process = subprocess.run(docker_cp_command, shell=True)
 docker_cp_exit_code = docker_cp_process.returncode
 
 # excute the script
-execute_command = f"ssh {monster_vm_name} docker exec -it storage bash -c \"/ring_file_excuter.sh\"  > /dev/null 2>&1"
+execute_command = f"ssh {monster_vm_name} docker exec -it storage bash -c \"/ring_file_excuter.sh\""
 execute_process = subprocess.run(execute_command, shell=True)
 execute_exit_code = execute_process.returncode
 
