@@ -107,43 +107,45 @@ policy_changer_exit_code = policy_changer_process.returncode
 trasnfer_command = f"scp ./ring_file_excuter.sh {monster_vm_name}:/ > /dev/null 2>&1"
 trasnfer_process = subprocess.run(trasnfer_command, shell=True)
 trasnfer_exit_code = trasnfer_process.returncode
-if trasnfer_exit_code == 1 :
-    print("unsucessfull transfer")
+if trasnfer_exit_code == 0 :
+        print("\033[92mring-file-excuter moved Successfully\033[0m")
 
 # Transfer mover.sh to monster container
 trasnfer2_command = f"scp ./mover.sh {monster_vm_name}:/ > /dev/null 2>&1"
 trasnfer2_process = subprocess.run(trasnfer2_command, shell=True)
 trasnfer2_exit_code = trasnfer2_process.returncode
-if trasnfer2_exit_code == 1 :
-    print("unsucessfull transfer")
+if trasnfer2_exit_code == 0 :
+            print("\033[92mmover moved Successfully\033[0m")
 
 # cp file to monster container
 docker_cp_command = f"ssh {monster_vm_name} docker cp /ring_file_excuter.sh {monster_container_name}:/ > /dev/null 2>&1"
 docker_cp_process = subprocess.run(docker_cp_command, shell=True)
 docker_cp_exit_code = docker_cp_process.returncode
-if docker_cp_exit_code == 1:
-    print("failure in docker cp")
+if docker_cp_exit_code == 0:
+    print("\033[92mring-exuter moved to container successfully\033[0m")
+
 
 # excute the script
 execute_command = f"ssh {monster_vm_name} docker exec -t storage \"bash /ring_file_excuter.sh\""
 execute_process = subprocess.run(execute_command, shell=True)
 execute_exit_code = execute_process.returncode
-if execute_exit_code == 1:
-    print("failure in exec")
+if execute_exit_code == 0:
+    print("\033[92mring-file executed Successfully\033[0m")
 
 # Run mover.sh
 execute2_command = f"ssh {monster_vm_name} \"bash /mover.sh\""
 execute2_process = subprocess.run(execute_command, shell=True)
 execute2_exit_code = execute2_process.returncode
 if execute2_exit_code == 1:
-    print("failure in exec")
+    print("\033[92mmover runned Successfully\033[0m")
 
 # scp to mc
-scp_command = f"ssh mc scp /*.txt mc:/"
+scp_command = f"ssh {monster_vm_name} \"scp /account.txt /object.txt /container.txt mc:/\""
 scp_process = subprocess.run(scp_command, shell=True)
 scp_exit_code = scp_process.returncode
-if scp_exit_code == 1 :
-    print("error in scp")
+if scp_exit_code == 0 :
+    print("\033[92mfiles moved to mc Successfully\033[0m")
+
 
 # Mv to config file 
 mv_command = f"mv /*.txt ./../conf/Deployment"
