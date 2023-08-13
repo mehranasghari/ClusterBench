@@ -145,3 +145,5 @@ mv_exit_code = mv_process.returncode
 # check the exit codes and print out put
 if trasnfer_exit_code & docker_cp_exit_code & execute_exit_code & cp_object_file_exit_code & cp_account_file_exit_code & cp_container_file_exit_code & cp_container_file_exit_code & scp_exit_code & mv_exit_code == 1:
     print("\033[92mRing Files excuted and moved to conf dir\033[0m")
+else :
+    print("failed")
