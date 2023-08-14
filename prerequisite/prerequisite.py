@@ -124,7 +124,6 @@ docker_cp_exit_code = docker_cp_process.returncode
 if docker_cp_exit_code == 0:
     print("\033[92mring-exuter moved to container successfully\033[0m")
 
-
 # excute the script
 execute_command = f"ssh {monster_vm_name} docker exec -t storage \"bash /ring_file_excuter.sh\""
 execute_process = subprocess.run(execute_command, shell=True)
