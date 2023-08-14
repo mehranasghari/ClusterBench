@@ -124,7 +124,6 @@ docker_cp_exit_code = docker_cp_process.returncode
 if docker_cp_exit_code == 0:
     print("\033[92mring-exuter moved to container successfully\033[0m")
 
-
 # excute the script
 execute_command = f"ssh {monster_vm_name} docker exec -t storage \"bash /ring_file_excuter.sh\""
 execute_process = subprocess.run(execute_command, shell=True)
@@ -140,7 +139,7 @@ if execute2_exit_code == 1:
     print("\033[92mmover runned Successfully\033[0m")
 
 # Mv to config file 
-mv_command = f"mv /*.txt ./../conf/Deployment"
+mv_command = f"mv /*.txt ./../conf/Deployments"
 mv_process = subprocess.run(mv_command, shell=True)
 mv_exit_code = mv_process.returncode
 if mv_exit_code == 1 :
