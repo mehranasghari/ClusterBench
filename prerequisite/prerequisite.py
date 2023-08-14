@@ -139,7 +139,7 @@ if execute2_exit_code == 1:
     print("\033[92mmover runned Successfully\033[0m")
 
 # Mv to config file 
-mv_command = f"mv /*.txt ./../conf/Deployment"
+mv_command = f"mv /*.txt ./../conf/Deployments"
 mv_process = subprocess.run(mv_command, shell=True)
 mv_exit_code = mv_process.returncode
 if mv_exit_code == 1 :
