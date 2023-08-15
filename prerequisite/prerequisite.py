@@ -2,19 +2,28 @@ import os
 import subprocess
 import json
 
+# Define Pathes
+Ring_dir_path = "./../conf/Depolyments/Ring"
 InfluxdbConfig_file_path = "./../conf/Software/InfluxdbConfig.json"
 ring_file_excueter_file_path = "./ring_file_excuter.sh"
+exported_measurements_file_path = "./../Measurement/all-measurements.txt"
+
+# Load data from InfluxdbConfig json file
 with open (InfluxdbConfig_file_path, 'r') as file:
     file_data = json.load(file)
 
 default_influxdb_container_name = file_data["Main_influxdb_container_name"]
 default_db_name = file_data["Main_influxdb_DB_name"]
 default_rp_name = file_data["Main_influxdb_database_rp_name"]
+db_port = file_data["Main_influxdb_container_port"]
+db_host = file_data["Main_influxdb_host_in_container"]
 
+# Deifne some functions
 # Clear the Page
 clear_command = "clear"
 os.system(clear_command)
 
+# Define attention message function
 def print_attention_message():
     print("\033[93m\033[1m" + " *-*-*-*-*-*-*-*-*-*-*-*-*-* ATTENTION *-*-*-*-*-*-*-*-*-*-*-*-*-*-*")
     print(" DO NOT USE influxDB after running this script for at least 2 HOURS ")
@@ -38,7 +47,6 @@ if rp_name == "" :
     rp_name = default_rp_name
 
 # Clear the Page
-clear_command = "clear"
 os.system(clear_command)
 
 # Call the function to print the attention message
@@ -49,7 +57,7 @@ del_command = "rm -rf ./ring_file_excuter.sh"
 del_process = subprocess.run(del_command, shell=True)
 del_exit_code = del_process.returncode
 
-#handeling mover.sh
+# handeling mover.sh
 # Generate and complete ring-file-excuter.sh
 with open(ring_file_excueter_file_path , 'a') as file:
     file.write("swift-ring-builder /rings/account.builder > /account.txt")
@@ -99,9 +107,18 @@ elif pytz_installer_process_exit_code == 1:
     print("\033[91mpytz installing failed\033[0m")
 
 # Change rp part
-policy_changer_command = f"docker exec -it {influxdb_container_name} influx -execute 'alter retention policy {rp_name} on {db_name} shard duration 1h default'"
+policy_changer_command = f"docker exec -it {influxdb_container_name} influx -execute 'alter retention policy {default_rp_name} on {default_db_name} shard duration 1h default'"
 policy_changer_process = subprocess.run(policy_changer_command, shell=True)
 policy_changer_exit_code = policy_changer_process.returncode
+
+# Export all-mesurments file
+exec_command = f"docker exec -it {influxdb_container_name} influx -host {db_host} -port {db_port} -database '{default_db_name}' -execute 'SHOW MEASUREMENTS' > {exported_measurements_file_path}"
+exec_process = subprocess.run(exec_command, shell=True)
+exec_exit_code = exec_process.returncode
+if exec_exit_code == 0:
+    print("\033[92mMeasurements Generated Successfully.\033[0m")
+else:
+    print("\033[91mGenerating Measurements Failed.\033[0m")
 
 # trasfer ring_file_excuter.sh to the monster vm
 trasnfer_command = f"scp ./ring_file_excuter.sh {monster_vm_name}:/ > /dev/null 2>&1"
@@ -150,3 +167,5 @@ if trasnfer_exit_code & docker_cp_exit_code & execute_exit_code & mv_exit_code =
     print("\033[92mRing Files excuted and moved to conf dir\033[0m")
 else :
     print("failed")
+
+#test
