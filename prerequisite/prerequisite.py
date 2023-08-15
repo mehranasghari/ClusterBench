@@ -7,6 +7,7 @@ Ring_dir_path = "./../conf/Depolyments/Ring"
 InfluxdbConfig_file_path = "./../conf/Software/InfluxdbConfig.json"
 ring_file_excueter_file_path = "./ring_file_excuter.sh"
 exported_measurements_file_path = "./../Measurement/all-measurements.txt"
+mover_file_path = "./mover.sh"
 
 # Load data from InfluxdbConfig json file
 with open (InfluxdbConfig_file_path, 'r') as file:
@@ -34,6 +35,9 @@ def print_attention_message():
 print_attention_message()
 
 # Give some neccessary argumants from input
+mc_name = input("please enter you mc name : Default : mc")
+if mc_name == "":
+    mc_name = "mc"
 monster_vm_name = input("Please enter your Monster machine name : ") # ssh copy id should be done or handel it anyway
 monster_container_name = input("Please enter your Monster conatiner name in machine : ")
 influxdb_container_name = input(f"Please enter your InfluxDB container name (Default : {default_influxdb_container_name}): ")
@@ -126,6 +130,13 @@ trasnfer_process = subprocess.run(trasnfer_command, shell=True)
 trasnfer_exit_code = trasnfer_process.returncode
 if trasnfer_exit_code == 0 :
         print("\033[92mring-file-excuter moved Successfully\033[0m")
+
+# Generate mover.sh file
+with open(mover_file_path, 'w') as mover:
+    mover.write(f"docker cp {monster_container_name}:/account.txt /account.txt")
+    mover.write(f"docker cp {monster_container_name}:/object.txt /object.txt")
+    mover.write(f"docker cp {monster_container_name}:/container.txt /container.txt")
+    mover.write(f"scp /account.txt /object.txt /container.txt {mc_name}:/")
 
 # Transfer mover.sh to monster container
 trasnfer2_command = f"scp ./mover.sh {monster_vm_name}:/ > /dev/null 2>&1"
