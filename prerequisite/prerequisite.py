@@ -131,6 +131,13 @@ trasnfer_exit_code = trasnfer_process.returncode
 if trasnfer_exit_code == 0 :
         print("\033[92mring-file-excuter moved Successfully\033[0m")
 
+# Delete mover if exists
+mover_rm_command = f"rm -rf {mover_file_path}"
+mover_rm_process = subprocess.run(mover_rm_command, shell=True)
+mover_rm_exit_code = mover_rm_process.returncode
+if mover_rm_exit_code == 0:
+    print("\033[92mmover deleted Successfully\033[0m")
+
 # Generate mover
 with open(mover_file_path, 'w') as file :
     file.write(f"docker cp {monster_container_name}:/account.txt /account.txt")
