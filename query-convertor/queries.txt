@@ -1,4 +1,0 @@
-'SELECT mean("value") FROM "netdata.system.cpu.user" WHERE ("host" =~ /^{host}$/) AND time >= {start_time_query}ms AND time <= {end_time_query}ms GROUP BY {group_by} fill(null)'
-'SELECT mean("value") FROM "netdata.system.cpu.system" WHERE ("host" =~ /^{host}$/) AND time >= {start_time_query}ms AND time <= {end_time_query}ms GROUP BY {group_by} fill(null)'
-'SELECT mean("value") FROM "netdata.system.cpu.iowait" WHERE ("host" =~ /^{host}$/) AND time >= {start_time_query}ms AND time <= {end_time_query}ms GROUP BY {group_by} fill(null)'
-'SELECT mean("value") FROM "netdata.system.cpu.idle" WHERE ("host" =~ /^{host}$/) AND time >= {start_time_query}ms AND time <= {end_time_query}ms GROUP BY {group_by} fill(null)'
