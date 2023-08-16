@@ -8,6 +8,7 @@ InfluxdbConfig_file_path = "./../conf/Software/InfluxdbConfig.json"
 ring_file_excueter_file_path = "./ring_file_excuter.sh"
 exported_measurements_file_path = "./../Measurement/all-measurements.txt"
 mover_file_path = "./mover.sh"
+name_file_path = "./../conf/Name.json"
 
 # Load data from InfluxdbConfig json file
 with open (InfluxdbConfig_file_path, 'r') as file:
@@ -18,6 +19,15 @@ default_db_name = file_data["Main_influxdb_DB_name"]
 default_rp_name = file_data["Main_influxdb_database_rp_name"]
 db_port = file_data["Main_influxdb_container_port"]
 db_host = file_data["Main_influxdb_host_in_container"]
+
+# Load data from name.json file
+
+with open(name_file_path, 'r') as file:
+    file_data = json.load(file)
+
+default_mc_name = file_data["MC_VM_NAME"]
+default_monster_container_name = file_data["Monster_container_name"]
+default_monster_vm_name = file_data["Monster_vm_name"]
 
 # Deifne some functions
 # Clear the Page
@@ -35,11 +45,15 @@ def print_attention_message():
 print_attention_message()
 
 # Give some neccessary argumants from input
-mc_name = input("enter mc name (Default: mv) : ")
-if mc_name == "" :
-    mc_name = "mc"
-monster_vm_name = input("Please enter your Monster machine name : ") # ssh copy id should be done or handel it anyway
-monster_container_name = input("Please enter your Monster conatiner name in machine : ")
+mc_name = input(f"enter mc name (Default: {default_mc_name}) : ")
+if mc_name == "":
+    mc_name = default_mc_name
+monster_vm_name = input("Please enter your Monster machine name (Default : {default_monster_vm_name}): ") # ssh copy id should be done or handel it anyway
+if monster_vm_name == "":
+    monster_vm_name = default_monster_vm_name
+monster_container_name = input(f"Please enter your Monster conatiner name in machine (Default : {default_monster_container_name}): ")
+if monster_container_name == "":
+    monster_container_name = default_monster_container_name
 influxdb_container_name = input(f"Please enter your InfluxDB container name (Default : {default_influxdb_container_name}): ")
 if influxdb_container_name == "":
     influxdb_container_name = default_influxdb_container_name
@@ -144,6 +158,7 @@ with open(mover_file_path, 'w') as file :
     file.write(f"docker cp {monster_container_name}:/object.txt /object.txt")
     file.write(f"docker cp {monster_container_name}:/container.txt /container.txt")
     file.write(f"scp /account.txt /object.txt /container.txt {mc_name}:/")
+
 # Transfer mover.sh to monster container
 trasnfer2_command = f"scp ./mover.sh {monster_vm_name}:/ > /dev/null 2>&1"
 trasnfer2_process = subprocess.run(trasnfer2_command, shell=True)
