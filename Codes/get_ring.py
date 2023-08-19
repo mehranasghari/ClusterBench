@@ -118,7 +118,7 @@ def get_ring(host_file_path, mc_host_file_path):
         print("\033[92mmover runned Successfully\033[0m")
 
     # Mv to config file 
-    mv_command = f"mv /*.txt ./../conf/Deployments/Ring"
+    mv_command = f"mv /*.txt ."
     mv_process = subprocess.run(mv_command, shell=True)
     mv_exit_code = mv_process.returncode
     if mv_exit_code == 1 :
