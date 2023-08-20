@@ -15,6 +15,12 @@ def get_ring(host_file_path):
 
     ring_exec_command = f"ssh {user}@{monster_host_ip} docker exec {monster_container_name} swift-ring-builder /rings/account.builder > ./account-ring.txt"
     ring_exec_process = subprocess.run(ring_exec_command, shell=True)
+    ring_exec_exit_code = ring_exec_process.returncode
+    if ring_exec_exit_code == 0:
+        print("\033[92mAccount file executede\033[0m")
+    else:
+        print("\033[91m failed\033[0m")
+
 
 if __name__ == "__main__":
     # Parse command-line arguments
@@ -25,6 +31,5 @@ if __name__ == "__main__":
     if args.hostfile:
         # Call the function with the provided arguments
         result = get_ring(args.hostfile)
-        print(result)
     else:
         print("Please provide a host file using the -f or --hostfile argument.")
