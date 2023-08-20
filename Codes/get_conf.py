@@ -17,7 +17,7 @@ def get_conf(host_file_path):
             # excute *.conf with cat ?
             container_server_command = f"ssh {user}@{monster_host_ip} docker exec cat /etc/swift/container-server.conf > ./{monster_host_ip}-container-server.conf"
             container_server_process = subprocess.run(container_server_command, shell=True)
-            container_server_exit_code = container_server_process.returncodes
+            container_server_exit_code = container_server_process.returncode
 
 if __name__ == "__main__":
     # Parse command-line arguments
