@@ -3,11 +3,8 @@ import subprocess
 import json
 
 # Define Pathes
-Ring_dir_path = "./../conf/Depolyments/Ring"
 InfluxdbConfig_file_path = "./../conf/Software/InfluxdbConfig.json"
 ring_file_excueter_file_path = "./ring_file_excuter.sh"
-mover_file_path = "./mover.sh"
-name_file_path = "./../conf/Name.json"
 
 # Load data from InfluxdbConfig json file
 with open (InfluxdbConfig_file_path, 'r') as file:
