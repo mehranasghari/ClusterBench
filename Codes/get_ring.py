@@ -13,9 +13,9 @@ def get_ring(host_file_path):
         monster_host_ip = words[1].strip()
         monster_container_name = words[2].strip()
 
-    ring_exec_command = f"ssh {user}@{monster_host_ip} docker exec {monster_container_name} swift-ring-builder /ring/account.builder > ./account-ring.txt"
+    ring_exec_command = f"ssh {user}@{monster_host_ip} docker exec {monster_container_name} swift-ring-builder /rings/account.builder > ./account-ring.txt"
     ring_exec_process = subprocess.run(ring_exec_command, shell=True)
-    
+
 if __name__ == "__main__":
     # Parse command-line arguments
     argParser = argparse.ArgumentParser()
