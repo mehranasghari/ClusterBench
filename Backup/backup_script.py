@@ -92,7 +92,7 @@ def process_input_file(file_path_input):
             end_time_backup = end_date + "T" + final_time_end + "Z"
 
             # Perform backup using influxd backup command
-            backup_command = f"docker exec -it {Primary_influxdb_container_name} influxd backup -portable -start {start_time_backup} -end {end_time_backup} {backup_path2}/backup "
+            backup_command = f"docker exec -it {Primary_influxdb_container_name} influxd backup -portable -start {start_time_backup} -end {end_time_backup} {backup_path2}/backup > /dev/null "
             backup_process = subprocess.run(backup_command, shell=True)
             exit_code = backup_process.returncode
             if exit_code == 0:
