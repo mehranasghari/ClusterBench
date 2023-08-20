@@ -38,7 +38,6 @@ def get_ring(host_file_path):
     elif account_ring_exec_exit_code == 1:
         print("\033[91mFailure in generating account-ring.txt\033[0m")
 
-
 if __name__ == "__main__":
     # Parse command-line arguments
     argParser = argparse.ArgumentParser()
