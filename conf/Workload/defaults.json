@@ -1,7 +1,7 @@
 {
     "cluster_address" : "10.105.10.104",
-    "benchmark_path" : "../conf/benchmark.cfg",
-    "default_path" : "../conf/defaults.json",
+    "benchmark_path" : "../conf/Workload/benchmark.cfg",
+    "default_path" : "../conf/Workload/defaults.json",
     "workers" : "5",
     "start_containers" : "1",
     "end_containers" : "10",

@@ -14,6 +14,7 @@ def get_conf(host_file_path):
             monster_host_ip = words[1].strip()
             monster_container_name = words[2].strip()
 
+            
 
 if __name__ == "__main__":
     # Parse command-line arguments
