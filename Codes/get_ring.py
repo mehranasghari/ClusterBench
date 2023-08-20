@@ -12,14 +12,31 @@ def get_ring(host_file_path):
         user = words[0].strip()
         monster_host_ip = words[1].strip()
         monster_container_name = words[2].strip()
+    
+    # Account ring executaion
+    account_ring_exec_command = f"ssh {user}@{monster_host_ip} docker exec {monster_container_name} swift-ring-builder /rings/account.builder > ./account-ring.txt"
+    account_ring_exec_process = subprocess.run(account_ring_exec_command, shell=True)
+    account_ring_exec_exit_code = account_ring_exec_process.returncode
 
-    ring_exec_command = f"ssh {user}@{monster_host_ip} docker exec {monster_container_name} swift-ring-builder /rings/account.builder > ./account-ring.txt"
-    ring_exec_process = subprocess.run(ring_exec_command, shell=True)
-    ring_exec_exit_code = ring_exec_process.returncode
-    if ring_exec_exit_code == 0:
-        print("\033[92mAccount file executede\033[0m")
-    else:
-        print("\033[91m failed\033[0m")
+    # Object ring executaion
+    object_ring_exec_command = f"ssh {user}@{monster_host_ip} docker exec {monster_container_name} swift-ring-builder /rings/object.builder > ./object-ring.txt"
+    object_ring_exec_process = subprocess.run(object_ring_exec_command, shell=True)
+    object_ring_exec_exit_code = object_ring_exec_process.returncode
+
+    # Container ring executaion
+    container_ring_exec_command = f"ssh {user}@{monster_host_ip} docker exec {monster_container_name} swift-ring-builder /rings/container.builder > ./container-ring.txt"
+    container_ring_exec_process = subprocess.run(container_ring_exec_command, shell=True)
+    container_ring_exec_exit_code = container_ring_exec_process.returncode
+
+    # Check and print output
+    if container_ring_exec_exit_code & object_ring_exec_exit_code & account_ring_exec_exit_code == 0:
+        print(f"\033[92mALL ring files generated successfully\033[0m")
+    elif container_ring_exec_exit_code == 1:
+        print("\033[91mFailure in generating container-ring.txt\033[0m")
+    elif object_ring_exec_exit_code == 1:
+        print("\033[91mFailure in generating object-ring.txt\033[0m")
+    elif account_ring_exec_exit_code == 1:
+        print("\033[91mFailure in generating account-ring.txt\033[0m")
 
 
 if __name__ == "__main__":
