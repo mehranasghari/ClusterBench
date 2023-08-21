@@ -1,1 +1,1 @@
-echo "GHODRAT TARYAAAAAAK"
+echo "test from bash script"

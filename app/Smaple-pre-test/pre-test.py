@@ -1,2 +1,2 @@
 #!/usr/bin/python3
-print("GHODRAAAAAAAAAT SHIIIIIIIIIIIIIISHE")
+print("test from python script")
