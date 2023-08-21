@@ -32,7 +32,7 @@ def convert_input_to_xml(input_file, defaults_file, output_file):
             file.write('<?xml version="1.0" encoding="UTF-8" ?>\n')
             file.write('<workload name="swift-sample" description="sample benchmark for swift">\n')
             file.write('  <storage type="swift" />\n')
-            file.write('  <auth type="swauth" config="username=test:tester;password=testing;auth_url=http://{}:8080/auth/v1.0" />\n'.format(cluster_address))
+            file.write('  <auth type="swauth" config="username=test:tester;password=testing;auth_url=http://{}/auth/v1.0" />\n'.format(cluster_address))
             file.write('  <workflow>\n\n')
 
             for line in lines:
