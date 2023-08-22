@@ -5,7 +5,7 @@ import sys
 import json
 
 # Specify address to address.json file
-address_file_path = "./../conf/Sofware/InfluxdbConfig.json"
+address_file_path = "./../conf/Software/InfluxdbConfig.json"
 
 # Load the JSON data from the file and define adresses as a variable 
 with open(address_file_path, 'r') as file:
