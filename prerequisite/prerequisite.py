@@ -82,3 +82,5 @@ if policy_changer_exit_code == 0:
     print(f"\033[92mSHard group duration in {default_rp_name} changed to 1h successfully\033[0m")
 else :
     print("\033[91mChaing RP failed\033[0m")
+
+# Start controllers 
