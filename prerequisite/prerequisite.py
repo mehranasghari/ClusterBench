@@ -84,7 +84,7 @@ else :
     print("\033[91mChaing RP failed\033[0m")
 
 # Start controllers
-start_command = "cd ../../ && bash start-controller.sh && bash start-driver.sh"
+start_command = "cd ../../ && bash start-controller.sh && bash start-driver.sh > /dev/null"
 start_process = subprocess.run(start_command,shell=True)
 start_exit_code = start_process.returncode
 if start_exit_code == 0:
