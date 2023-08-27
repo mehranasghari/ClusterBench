@@ -83,4 +83,14 @@ if policy_changer_exit_code == 0:
 else :
     print("\033[91mChaing RP failed\033[0m")
 
-# Start controllers 
+# Start controllers
+start_command = "cd ../../ && bash start-controller.sh && bash start-driver.sh"
+start_process = subprocess.run(start_command,shell=True)
+start_exit_code = start_process.returncode
+if start_exit_code == 0:
+    print(f"\033[92mDrivers started successfully\033[0m")
+else:
+    print("\033[91mStarting drivers failed\033[0m")
+
+
+
