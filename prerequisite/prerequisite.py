@@ -4,7 +4,6 @@ import json
 
 # Define Pathes
 InfluxdbConfig_file_path = "./../conf/Software/InfluxdbConfig.json"
-ring_file_excueter_file_path = "./ring_file_excuter.sh"
 
 # Load data from InfluxdbConfig json file
 with open (InfluxdbConfig_file_path, 'r') as file:
