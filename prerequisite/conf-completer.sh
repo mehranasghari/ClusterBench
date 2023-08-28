@@ -16,9 +16,9 @@ existing_json=$(cat ./test.json)
 
 # Create a new JSON object with the new values
 new_json=$(jq --arg sp "$source_path" --arg dp "$destination_path" \
-             '. + {"new_key": {"Main_influxdb_address_in_host": $sp, "Main_influxdb_in_container_address": $dp}}' <<< "$existing_json")
+             '. + {"new_key": {"Main_influxdb_address_in_host": $sp, "Main_influxdb_in_container_address": $dp}}' <<< "$test_json")
 
 # Write the modified JSON back to the file
-echo "$new_json" > existing.json
+echo "$new_json" > test.json
 
 echo "JSON file 'existing.json' updated with new values."
