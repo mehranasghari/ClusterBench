@@ -5,15 +5,16 @@ import sys
 import json
 
 # Specify address to address.json file
-address_file_path = "./../conf/address.json"
+address_file_path = "./../conf/Software/InfluxdbConfig.json"
 
 # Load the JSON data from the file and define adresses as a variable 
 with open(address_file_path, 'r') as file:
     json_data = json.load(file)
-Secondry_influxdb_in_container_address = json_data['Secondry_influxdb_in_container_address']
-Secondary_influxdb_container_name = json_data['Secondary_influxdb_container_name']
-Secondary_influxdb_DB_name = json_data['Secondary_influxdb_DB_name']
-Secondary_influxdb_address_in_host = json_data['Secondary_influxdb_address_in_host']
+Secondry_influxdb_in_container_address = json_data['Backup_influxdb_in_container_address']
+Secondary_influxdb_container_name = json_data['Backup_influxdb_container_name']
+Secondary_influxdb_DB_name = json_data['Backup_influxdb_DB_name']
+Secondary_influxdb_address_in_host = json_data['Backup_influxdb_address_in_host']
+
 # Process given directory name as an arqument
 argParser = argparse.ArgumentParser()
 argParser.add_argument("-d", "--directoryname", help="Directory Name (Directory which contain *.tar,gz)")
