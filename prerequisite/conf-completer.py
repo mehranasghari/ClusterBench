@@ -26,19 +26,18 @@ backup_mount_point = backup_mount_point_process.stdout.strip()
 backup_in_host_address, backup_in_container_address = backup_mount_point.strip().split(" ")
 
 # Find RP name
-rp_finder_command = f"curl -G \"http://localhost:8086/query?db=opentsdb&pretty=true\" --data-urlencode \"q=SHOW RETENTION POLICIES\""
+rp_finder_command = f"curl -G \"http://localhost:8086/query?db=opentsdb&pretty=true\" --data-urlencode \"q=SHOW RETENTION POLICIES\" > /dev/null"
 rp_finder_process = subprocess.run(rp_finder_command,shell=True, stdout=subprocess.PIPE, universal_newlines=True)
 rp_std_out = json.loads(rp_finder_process.stdout)
 final_rp = rp_std_out["results"][0]["series"][0]["values"][0][0]
 
-# Find Db name
+# Find DB name
 db_name_finder_command = f"docker exec influxdb influx -execute 'show databases'"
 db_name_finder_process = subprocess.run(db_name_finder_command,shell=True, stdout=subprocess.PIPE, universal_newlines=True)
 db_names_lines = db_name_finder_process.stdout.split('\n')
 internal_index = db_names_lines.index('_internal')
 lines_after_internal = db_names_lines[internal_index + 1:]
 filtered_output = '\n'.join(lines_after_internal)
-print("filtered_output : ", filtered_output)
 
 # Load existing JSON
 with open("data.json", "r") as json_file:
