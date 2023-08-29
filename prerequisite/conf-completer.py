@@ -28,8 +28,8 @@ backup_in_host_address, backup_in_container_address = backup_mount_point.strip()
 # Find RP name
 rp_finder_command = f"curl -G \"http://localhost:8086/query?db=opentsdb&pretty=true\" --data-urlencode \"q=SHOW RETENTION POLICIES\""
 rp_finder_process = subprocess.run(rp_finder_command,shell=True, stdout=subprocess.PIPE, universal_newlines=True)
-#rp_std_out = rp_finder_process.stdout
-final_rp = rp_finder_process.stdout["results"][0]["series"][0]["values"][0][0]
+rp_std_out = json.loads(rp_finder_process.stdout)
+final_rp = rp_std_out["results"][0]["series"][0]["values"][0][0]
 print("final rp :", final_rp)
 
 # Load existing JSON
