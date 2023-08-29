@@ -30,6 +30,7 @@ rp_finder_command = f"curl -G \"http://localhost:8086/query?db=opentsdb&pretty=t
 rp_finder_process = subprocess.run(rp_finder_command,shell=True, stdout=subprocess.PIPE, universal_newlines=True)
 #rp_std_out = rp_finder_process.stdout
 final_rp = rp_finder_process.stdout["results"][0]["series"][0]["values"][0][0]
+print("final rp :", final_rp)
 
 # Load existing JSON
 with open("data.json", "r") as json_file:
