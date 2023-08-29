@@ -25,6 +25,11 @@ main_in_host_address, main_in_container_address = main_mount_point.strip().split
 backup_mount_point = backup_mount_point_process.stdout.strip()
 backup_in_host_address, backup_in_container_address = backup_mount_point.strip().split(" ")
 
+# Find RP name
+rp_finder_command = f"curl -G \"http://localhost:8086/query?db=opentsdb&pretty=true\" --data-urlencode \"q=SHOW RETENTION POLICIES\""
+rp_finder_process = subprocess.run(rp_finder_command,shell=True, stdout=subprocess.PIPE, universal_newlines=True)
+print(rp_finder_process.stdout)
+
 # Load existing JSON
 with open("data.json", "r") as json_file:
     existing_json = json.load(json_file)
@@ -39,4 +44,4 @@ existing_json["Backup_influxdb_in_container_address"] = backup_in_container_addr
 with open("data.json", "w") as json_file:
     json.dump(existing_json, json_file, indent=4)
 
-print("Addresses added to JSON.")
+print("Addresses added to JSON file.")
