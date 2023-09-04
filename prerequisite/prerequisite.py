@@ -90,6 +90,3 @@ if start_exit_code == 0:
     print(f"\033[92mDrivers started successfully\033[0m")
 else:
     print("\033[91mStarting drivers failed\033[0m")
-
-
-

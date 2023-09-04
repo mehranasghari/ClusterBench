@@ -20,6 +20,7 @@ Primary_influxdb_container_name = json_data['Main_influxdb_container_name']
 Secondary_influxdb_container_name = json_data['Backup_influxdb_container_name']
 Time_add_to_end_of_test = json_data['Time_add_to_end_of_test']
 Time_reduce_from_first_of_test = json_data['Time_reduce_from_first_of_test']
+Main_influxdb_DB_name = json_data['Main_influxdb_DB_name']
 
 # Process given Test name as an arqument
 argParser = argparse.ArgumentParser()
@@ -92,7 +93,7 @@ def process_input_file(file_path_input):
             end_time_backup = end_date + "T" + final_time_end + "Z"
 
             # Perform backup using influxd backup command
-            backup_command = f"docker exec -it {Primary_influxdb_container_name} influxd backup -portable -start {start_time_backup} -end {end_time_backup} {backup_path2}/backup > /dev/null "
+            backup_command = f"docker exec -it {Primary_influxdb_container_name} influxd backup -portable -db {Main_influxdb_DB_name} -start {start_time_backup} -end {end_time_backup} {backup_path2}/backup > /dev/null "
             backup_process = subprocess.run(backup_command, shell=True)
             exit_code = backup_process.returncode
             if exit_code == 0:
