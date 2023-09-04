@@ -160,8 +160,11 @@ for workload_number in range(workloads):
     time_file.close()
 
     # Add get-ring and get-conf to result dir
-    get_conf_file_path = os.path.join(result_file_path, 'Config_cluster')
-    get_ring_file_path = os.path.join(result_file_path, 'Ring_cluster')
+    Ring_address = f"{result_path}/Ring_cluster/"
+    os.makedirs(Ring_address, exist_ok=True)
+
+    conf_address = f"{result_path}/Config_cluster/"
+    os.makedirs(conf_address, exist_ok=True)
 
     get_conf_command = f"python3 ./../Codes/get_conf.py -f {hosts_file_path}"
     get_conf_process = subprocess.run(get_conf_command, shell=True)
@@ -170,9 +173,12 @@ for workload_number in range(workloads):
     get_ring_process = subprocess.run(get_ring_command, shell=True)
 
     # Mv all *.conf from . to result
-    mv_command = f"mv *.conf *.txt {result_path}/{final_workload_name}"
-    mv_process = subprocess.run(mv_command, shell=True)
-    print(final_workload_name)
+    ring_mv_command = f"mv *.conf {Ring_address}"
+    ring_mv_process = subprocess.run(ring_mv_command, shell=True)
+
+    conf_mv_command = f"mv *.txt {conf_address}"
+    conf_mv_process = subprocess.run(conf_mv_command, shell=True)
+
 
     subprocess.call(['python3', backup_script_path, '-t', final_workload_name])
     #print("--------------------------------------")
