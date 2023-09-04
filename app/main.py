@@ -170,7 +170,7 @@ for workload_number in range(workloads):
     get_ring_process = subprocess.run(get_ring_command, shell=True)
 
     # Mv all *.conf from . to result
-    mv_command = f"mv *.conf *.txt final_workload_name"
+    mv_command = f"mv *.conf *.txt {final_workload_name}"
     mv_process = subprocess.run(mv_command, shell=True)
 
     subprocess.call(['python3', backup_script_path, '-t', final_workload_name])
