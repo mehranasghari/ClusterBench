@@ -16,8 +16,9 @@ script_file_path = sys.argv[3]
 cosbench_command = './../../cli.sh'
 archive_path = './../../archive/'
 result_path = './../result/'
-pre_test_script_path = script_file_path # This line modified
+pre_test_script_path = script_file_path 
 backup_script_path = './../Backup/backup_script.py'
+hosts_file_path = "./../conf/Deployments/Host-names/hosts.txt" # this address added
 submit = 'submit'
 max_pre_test_script_failure = 3
 
@@ -158,6 +159,15 @@ for workload_number in range(workloads):
     time_file.write(start_end_time)
     time_file.close()
 
+    # Add get-ring and get-conf to result dir
+    get_conf_file_path = os.path.join(result_file_path, 'Config_cluster')
+    get_ring_file_path = os.path.join(result_file_path, 'Ring_cluster')
+
+    get_conf_command = f"python3 ./../Codes/get_conf.py -f {hosts_file_path}"
+    get_conf_process = subprocess.run(get_conf_command, shell=True)
+
+    get_ring_command = f"python3 ./../Codes/get_ring.py -f {hosts_file_path}"
+    get_ring_process = subprocess.run(get_ring_command, shell=True)
 
     subprocess.call(['python3', backup_script_path, '-t', final_workload_name])
     #print("--------------------------------------")
