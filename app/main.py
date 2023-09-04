@@ -173,10 +173,10 @@ for workload_number in range(workloads):
     get_ring_process = subprocess.run(get_ring_command, shell=True)
 
     # Mv all *.conf from . to result
-    ring_mv_command = f"mv *.conf {Ring_address}"
+    ring_mv_command = f"mv *.conf {conf_address}"
     ring_mv_process = subprocess.run(ring_mv_command, shell=True)
 
-    conf_mv_command = f"mv *.txt {conf_address}"
+    conf_mv_command = f"mv *.txt {Ring_address}"
     conf_mv_process = subprocess.run(conf_mv_command, shell=True)
 
 
