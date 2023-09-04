@@ -172,6 +172,7 @@ for workload_number in range(workloads):
     # Mv all *.conf from . to result
     mv_command = f"mv *.conf *.txt {final_workload_name}"
     mv_process = subprocess.run(mv_command, shell=True)
+    print(final_workload_name)
 
     subprocess.call(['python3', backup_script_path, '-t', final_workload_name])
     #print("--------------------------------------")
