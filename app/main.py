@@ -160,10 +160,10 @@ for workload_number in range(workloads):
     time_file.close()
 
     # Add get-ring and get-conf to result dir
-    Ring_address = f"{result_path}/Ring_cluster/"
+    Ring_address = f"{result_path}/{final_workload_name}/Ring_cluster/"
     os.makedirs(Ring_address, exist_ok=True)
 
-    conf_address = f"{result_path}/Config_cluster/"
+    conf_address = f"{result_path}/{final_workload_name}/Config_cluster/"
     os.makedirs(conf_address, exist_ok=True)
 
     get_conf_command = f"python3 ./../Codes/get_conf.py -f {hosts_file_path}"
