@@ -18,8 +18,8 @@ Primary_influxdb_address_in_host = json_data['Main_influxdb_address_in_host']
 Secondary_influxdb_address_in_host = json_data['Backup_influxdb_address_in_host']
 Primary_influxdb_container_name = json_data['Main_influxdb_container_name']
 Secondary_influxdb_container_name = json_data['Backup_influxdb_container_name']
-Time_add_to_end_of_test = json_data['Time_add_to_end_of_test']
-Time_reduce_from_first_of_test = json_data['Time_reduce_from_first_of_test']
+Time_add_to_end_of_test = int(json_data['Time_add_to_end_of_test'])
+Time_reduce_from_first_of_test = int(json_data['Time_reduce_from_first_of_test'])
 Main_influxdb_DB_name = json_data['Main_influxdb_DB_name']
 
 # Process given Test name as an arqument
