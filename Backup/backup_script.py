@@ -62,9 +62,6 @@ def process_input_file(file_path_input):
             start_datetime = datetime.datetime.strptime(start_datetime_str, "%Y-%m-%d %H:%M:%S")
             end_datetime = datetime.datetime.strptime(end_datetime_str, "%Y-%m-%d %H:%M:%S")
 
-            # Define the number of seconds to add
-            seconds_to_add = 300  # For example, add 1 hour (3600 seconds)
-
             # Add the GMT+03:30 offset to both datetime objects
             start_datetime_utc = start_datetime - datetime.timedelta(seconds=gmt_offset_seconds)
             end_datetime_utc = end_datetime - datetime.timedelta(seconds=gmt_offset_seconds)
@@ -73,8 +70,8 @@ def process_input_file(file_path_input):
             dir_end_datetime_utc = end_datetime - datetime.timedelta(seconds=gmt_offset_seconds)
 
             # Add the specified number of seconds to both datetime objects
-            start_datetime_utc -= datetime.timedelta(seconds=seconds_to_add)
-            end_datetime_utc += datetime.timedelta(seconds=seconds_to_add)
+            start_datetime_utc -= datetime.timedelta(seconds=Time_reduce_from_first_of_test)
+            end_datetime_utc += datetime.timedelta(seconds=Time_add_to_end_of_test)
 
             # Convert the UTC datetime objects back to strings
             start_datetime_utc_str = start_datetime_utc.strftime("%Y-%m-%d %H:%M:%S")

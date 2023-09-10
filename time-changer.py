@@ -1,5 +1,27 @@
 import datetime
+import datetime
+import os
+import subprocess
+import argparse
+import calendar
+import sys
+import json
+import time
 
+# Specify address to address.json file
+influxdb_conf_file_path = "./conf/Software/InfluxdbConfig.json"
+
+# Load the JSON data from the file and define adresses as a variable 
+with open(influxdb_conf_file_path, 'r') as file:
+    json_data = json.load(file)
+Primary_influxdb_in_container_address = json_data['Main_influxdb_in_container_address']
+Primary_influxdb_address_in_host = json_data['Main_influxdb_address_in_host']
+Secondary_influxdb_address_in_host = json_data['Backup_influxdb_address_in_host']
+Primary_influxdb_container_name = json_data['Main_influxdb_container_name']
+Secondary_influxdb_container_name = json_data['Backup_influxdb_container_name']
+Time_add_to_end_of_test = int(json_data['Time_add_to_end_of_test'])
+Time_reduce_from_first_of_test = int(json_data['Time_reduce_from_first_of_test'])
+Main_influxdb_DB_name = json_data['Main_influxdb_DB_name']
 # Define the GMT+03:30 offset in seconds
 gmt_offset_seconds = 3 * 3600 + 30 * 60
 
@@ -24,8 +46,8 @@ dir_start_datetime_utc = start_datetime - datetime.timedelta(seconds=gmt_offset_
 dir_end_datetime_utc = end_datetime - datetime.timedelta(seconds=gmt_offset_seconds)
 
 # Add the specified number of seconds to both datetime objects
-start_datetime_utc -= datetime.timedelta(seconds=seconds_to_add)
-end_datetime_utc += datetime.timedelta(seconds=seconds_to_add)
+start_datetime_utc -= datetime.timedelta(seconds=Time_reduce_from_first_of_test)
+end_datetime_utc += datetime.timedelta(seconds=Time_add_to_end_of_test)
 
 # Convert the UTC datetime objects back to strings
 start_datetime_utc_str = start_datetime_utc.strftime("%Y-%m-%d %H:%M:%S")
@@ -37,9 +59,6 @@ start_time_backup = backup_start_date+"T"+backup_start_time+"Z"
 backup_end_date , backup_end_time = end_datetime_utc_str.split(" ")
 end_time_backup = backup_end_date+"T"+backup_end_time+"Z"
 
-print("start_time_backup : ", start_time_backup)
-print("end_time_backup : ", end_time_backup)
-
 # dir name creation
 dir_start_datetime_utc_str = dir_start_datetime_utc.strftime("%Y-%m-%d %H:%M:%S")
 dir_end_datetime_utc_str = dir_end_datetime_utc.strftime("%Y-%m-%d %H:%M:%S")
@@ -50,11 +69,3 @@ dir_end_date , dir_end_time = dir_end_datetime_utc_str.split(" ")
 dir_end_date = dir_end_date[2:].replace("-","")
 dir_end_time = dir_end_time.replace(":","")
 backup_dir_name = dir_start_date+"T"+dir_start_time+"_"+dir_end_date+"T"+dir_end_time
-print("backup_dir_name : " , backup_dir_name)
-print("dir_start_date :" , dir_start_date)
-print("dir_start_time : ", dir_start_time)
-print("dir_end_date : ", dir_end_date)
-print("dir_end_time : ", dir_end_time)
-# Print the UTC timestamps
-#print("Start Time (UTC):", start_datetime_utc_str)
-#print("End Time (UTC):", end_datetime_utc_str)
