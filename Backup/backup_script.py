@@ -61,36 +61,41 @@ def process_input_file(file_path_input):
             # Convert start and end datetime strings to datetime objects
             start_datetime = datetime.datetime.strptime(start_datetime_str, "%Y-%m-%d %H:%M:%S")
             end_datetime = datetime.datetime.strptime(end_datetime_str, "%Y-%m-%d %H:%M:%S")
-            
-            # Reduce the GMT+03:30 offset to both datetime objects
+
+            # Define the number of seconds to add
+            seconds_to_add = 300  # For example, add 1 hour (3600 seconds)
+
+            # Add the GMT+03:30 offset to both datetime objects
             start_datetime_utc = start_datetime - datetime.timedelta(seconds=gmt_offset_seconds)
             end_datetime_utc = end_datetime - datetime.timedelta(seconds=gmt_offset_seconds)
 
-            # define variables
-            backup_start_datetime = start_datetime
-            backup_end_datetime = end_datetime
+            dir_start_datetime_utc = start_datetime - datetime.timedelta(seconds=gmt_offset_seconds)
+            dir_end_datetime_utc = end_datetime - datetime.timedelta(seconds=gmt_offset_seconds)
 
-            # Add/reduce the specified number of seconds to both datetime objects
-            backup_start_datetime -= datetime.timedelta(seconds=Time_reduce_from_first_of_test)
-            backup_end_datetime += datetime.timedelta(seconds=Time_add_to_end_of_test)
+            # Add the specified number of seconds to both datetime objects
+            start_datetime_utc -= datetime.timedelta(seconds=seconds_to_add)
+            end_datetime_utc += datetime.timedelta(seconds=seconds_to_add)
 
             # Convert the UTC datetime objects back to strings
             start_datetime_utc_str = start_datetime_utc.strftime("%Y-%m-%d %H:%M:%S")
             end_datetime_utc_str = end_datetime_utc.strftime("%Y-%m-%d %H:%M:%S")
 
             # creating backup time format
-            backup_start_time , backup_start_date = backup_start_datetime.split(" ")
+            backup_start_date , backup_start_time = start_datetime_utc_str.split(" ")
             start_time_backup = backup_start_date+"T"+backup_start_time+"Z"
-            print("start_time_backup : ", start_time_backup)
-            backup_end_time , backup_end_date = backup_end_datetime.split(" ")
+            backup_end_date , backup_end_time = end_datetime_utc_str.split(" ")
             end_time_backup = backup_end_date+"T"+backup_end_time+"Z"
-            print("end_time_backup : ", end_time_backup)
 
-
-
-            # Create dir name
-
-
+            # dir name creation
+            dir_start_datetime_utc_str = dir_start_datetime_utc.strftime("%Y-%m-%d %H:%M:%S")
+            dir_end_datetime_utc_str = dir_end_datetime_utc.strftime("%Y-%m-%d %H:%M:%S")
+            dir_start_date , dir_start_time = dir_start_datetime_utc_str.split(" ")
+            dir_start_date = dir_start_date[2:].replace("-","")
+            dir_start_time = dir_start_time.replace(":","")
+            dir_end_date , dir_end_time = dir_end_datetime_utc_str.split(" ")
+            dir_end_date = dir_end_date[2:].replace("-","")
+            dir_end_time = dir_end_time.replace(":","")
+            backup_dir_name = dir_start_date+"T"+dir_start_time+"_"+dir_end_date+"T"+dir_end_time
             # Perform backup using influxd backup command
             backup_command = f"docker exec -it {Primary_influxdb_container_name} influxd backup -portable -db {Main_influxdb_DB_name} -start {start_time_backup} -end {end_time_backup} {Primary_influxdb_in_container_address}/backup > /dev/null "
             backup_process = subprocess.run(backup_command, shell=True)
