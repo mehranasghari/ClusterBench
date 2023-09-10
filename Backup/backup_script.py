@@ -96,6 +96,8 @@ def process_input_file(file_path_input):
             
             # Create backup_path2
             backup_path2 = Primary_influxdb_in_container_address +"/"+ backup_dir_name
+            backup_path = f"{Primary_influxdb_in_container_address}/{backup_dir_name}" 
+            os.makedirs(backup_path, exist_ok=True)
 
             # Perform backup using influxd backup command
             backup_command = f"docker exec -it {Primary_influxdb_container_name} influxd backup -portable -db {Main_influxdb_DB_name} -start {start_time_backup} -end {end_time_backup} {backup_path2}/backup > /dev/null "
