@@ -71,7 +71,7 @@ def process_input_file(file_path_input):
             final_time_end_backup = end_time_standard.replace(":", "")
 
             # Chnage time to UTC and verify the 10m time change
-            final_time_end = (end_datetime + datetime.timedelta(seconds=y)).strftime("%H:%M:%S")
+            final_time_end = (end_datetime - datetime.timedelta(seconds=y)).strftime("%H:%M:%S")
             final_time_start = (start_datetime - datetime.timedelta(seconds=x)).strftime("%H:%M:%S")
 
             # Remove all ":" for directory name
