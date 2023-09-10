@@ -49,6 +49,10 @@ def process_input_file(file_path_input):
     x = 12600 + int(Time_add_to_end_of_test)
     y = 12600 - int(Time_reduce_from_first_of_test)
 
+    # added temp 1
+    print ("x :" , x)
+    print ("\ny : ", y)
+
     with open(file_path_input, "r") as f:
         lines = f.readlines()
         for line in lines:
@@ -66,6 +70,9 @@ def process_input_file(file_path_input):
             start_time_standard = start_datetime.strftime("%Y-%m-%d %H:%M:%S")
             end_time_standard = end_datetime.strftime("%Y-%m-%d %H:%M:%S")
 
+            # Added temp2 
+            print("start_time_standard : " , start_time_standard)
+            print("\n end_time_standard : ", end_time_standard)
 
             # Remove all ":" for backup file name
             final_time_start_backup = start_time_standard.replace(":", "")
@@ -75,6 +82,10 @@ def process_input_file(file_path_input):
             final_time_end = (end_datetime - datetime.timedelta(seconds=y)).strftime("%H:%M:%S")
             final_time_start = (start_datetime - datetime.timedelta(seconds=x)).strftime("%H:%M:%S")
 
+            # added temp3
+            print("final_time_end : ", final_time_end)
+            print ("final_time_start : ", final_time_start)
+            
             # Remove all ":" for directory name
             final_time_start_dir = final_time_start.replace(":", "")
             final_time_end_dir = final_time_end.replace(":", "")
