@@ -66,6 +66,10 @@ def process_input_file(file_path_input):
             start_datetime_utc = start_datetime - datetime.timedelta(seconds=gmt_offset_seconds)
             end_datetime_utc = end_datetime - datetime.timedelta(seconds=gmt_offset_seconds)
 
+            # define variables
+            backup_start_datetime = start_datetime
+            backup_end_datetime = end_datetime
+
             # Add/reduce the specified number of seconds to both datetime objects
             backup_start_datetime -= datetime.timedelta(seconds=Time_reduce_from_first_of_test)
             backup_end_datetime += datetime.timedelta(seconds=Time_add_to_end_of_test)
