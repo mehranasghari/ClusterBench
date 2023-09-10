@@ -31,6 +31,9 @@ global testDirectory2
 testDirectory2 = args.testname
 input_file = "./../result/"+testDirectory+"/time"
 
+#time defenition
+gmt_offset_seconds = 3 * 3600 + 30 * 60
+
 # Add 1-minute delay
 time.sleep(60)
 
@@ -46,69 +49,46 @@ def read_values_from_file(file_path):
 
 def process_input_file(file_path_input):
     # set config time in seconds manually
-    x = 12600 + int(Time_add_to_end_of_test)
-    y = 12600 - int(Time_reduce_from_first_of_test)
-
-    # added temp 1
-    print ("x :" , x)
-    print ("\ny : ", y)
+    variable_offset_seconds = 5 * 60  # 5min
 
     with open(file_path_input, "r") as f:
         lines = f.readlines()
         for line in lines:
+            
+            # Split given time
+            start_datetime_str, end_datetime_str = line.strip().split(",")
+            
+            # Convert start and end datetime strings to datetime objects
+            start_datetime = datetime.datetime.strptime(start_datetime_str, "%Y-%m-%d %H:%M:%S")
+            end_datetime = datetime.datetime.strptime(end_datetime_str, "%Y-%m-%d %H:%M:%S")
+            
+            # Reduce the GMT+03:30 offset to both datetime objects
+            start_datetime_utc = start_datetime - datetime.timedelta(seconds=gmt_offset_seconds)
+            end_datetime_utc = end_datetime - datetime.timedelta(seconds=gmt_offset_seconds)
 
-            # Split and process input time
-            start_datetime, end_datetime = line.strip().split(",")
-            start_date, start_time = start_datetime.split(" ")
-            end_date, end_time = end_datetime.split(" ")
+            # Add/reduce the specified number of seconds to both datetime objects
+            backup_start_datetime -= datetime.timedelta(seconds=Time_reduce_from_first_of_test)
+            backup_end_datetime += datetime.timedelta(seconds=Time_add_to_end_of_test)
 
-            # Convert to datetime objects
-            start_datetime = datetime.datetime.strptime(start_date + " " + start_time, "%Y-%m-%d %H:%M:%S")
-            end_datetime = datetime.datetime.strptime(end_date + " " + end_time, "%Y-%m-%d %H:%M:%S")
+            # Convert the UTC datetime objects back to strings
+            start_datetime_utc_str = start_datetime_utc.strftime("%Y-%m-%d %H:%M:%S")
+            end_datetime_utc_str = end_datetime_utc.strftime("%Y-%m-%d %H:%M:%S")
 
-            # Convert to standard format (date and time)
-            start_time_standard = start_datetime.strftime("%Y-%m-%d %H:%M:%S")
-            end_time_standard = end_datetime.strftime("%Y-%m-%d %H:%M:%S")
-
-            # Added temp2 
-            print("start_time_standard : " , start_time_standard)
-            print("\n end_time_standard : ", end_time_standard)
-
-            # Remove all ":" for backup file name
-            final_time_start_backup = start_time_standard.replace(":", "")
-            final_time_end_backup = end_time_standard.replace(":", "")
-
-            # Chnage time to UTC and verify the 10m time change
-            final_time_end = (end_datetime - datetime.timedelta(seconds=y)).strftime("%H:%M:%S")
-            final_time_start = (start_datetime - datetime.timedelta(seconds=x)).strftime("%H:%M:%S")
-
-            # added temp3
-            print("final_time_end : ", final_time_end)
-            print ("final_time_start : ", final_time_start)
-            # Remove all ":" for directory name
-            final_time_start_dir = final_time_start.replace(":", "")
-            final_time_end_dir = final_time_end.replace(":", "")
-
-            # Remove all "-" for directory name
-            start_date_dir = start_date.replace("-", "")
-            start_date_dir = start_date_dir[2:]
-            end_date_dir = end_date.replace("-", "")
-            end_date_dir = end_date_dir[2:]
-
-            # Create backup directory name structure
-            backup_dir_name = start_date_dir + "T" + final_time_start_backup + "_" + end_date_dir + "T" +final_time_end_backup
-            backup_path2 = Primary_influxdb_in_container_address +"/"+ backup_dir_name
-            backup_path = f"{Primary_influxdb_in_container_address}/{backup_dir_name}" 
-            os.makedirs(backup_path, exist_ok=True)
-            start_time_backup = start_date + "T" + final_time_start + "Z"
-            end_time_backup = end_date + "T" + final_time_end + "Z"
-
-            # added tmp4 
+            # creating backup time format
+            backup_start_time , backup_start_date = backup_start_datetime.strip().split(" ")
+            start_time_backup = backup_start_date+"T"+backup_start_time+"Z"
             print("start_time_backup : ", start_time_backup)
-            print("\nend_time_backup : ", end_time_backup)
+            backup_end_time , backup_end_date = backup_end_datetime.strip().split(" ")
+            end_time_backup = backup_end_date+"T"+backup_end_time+"Z"
+            print("end_time_backup : ", end_time_backup)
+
+
+
+            # Create dir name
+
 
             # Perform backup using influxd backup command
-            backup_command = f"docker exec -it {Primary_influxdb_container_name} influxd backup -portable -db {Main_influxdb_DB_name} -start {start_time_backup} -end {end_time_backup} {backup_path2}/backup > /dev/null "
+            backup_command = f"docker exec -it {Primary_influxdb_container_name} influxd backup -portable -db {Main_influxdb_DB_name} -start {start_time_backup} -end {end_time_backup} {Primary_influxdb_in_container_address}/backup > /dev/null "
             backup_process = subprocess.run(backup_command, shell=True)
             exit_code = backup_process.returncode
             if exit_code == 0:
