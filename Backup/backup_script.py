@@ -79,10 +79,10 @@ def process_input_file(file_path_input):
             end_datetime_utc_str = end_datetime_utc.strftime("%Y-%m-%d %H:%M:%S")
 
             # creating backup time format
-            backup_start_time , backup_start_date = backup_start_datetime.strip().split(" ")
+            backup_start_time , backup_start_date = backup_start_datetime.split(" ")
             start_time_backup = backup_start_date+"T"+backup_start_time+"Z"
             print("start_time_backup : ", start_time_backup)
-            backup_end_time , backup_end_date = backup_end_datetime.strip().split(" ")
+            backup_end_time , backup_end_date = backup_end_datetime.split(" ")
             end_time_backup = backup_end_date+"T"+backup_end_time+"Z"
             print("end_time_backup : ", end_time_backup)
 
