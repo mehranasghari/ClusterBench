@@ -133,7 +133,7 @@ def process_input_file(file_path_input):
 
 	        #MV BACKUP.TAR.GZ TO influxdb2 and delete original file
             os.makedirs(Secondary_influxdb_address_in_host, exist_ok=True)
-            mv_command = f"mv -f {Primary_influxdb_address_in_host}/*  {Secondary_influxdb_address_in_host}/"
+            mv_command = f"mv -fr {Primary_influxdb_address_in_host}/*  {Secondary_influxdb_address_in_host}/"
             mv_process = subprocess.run(mv_command, shell=True)
             exit_code = mv_process.returncode
             if exit_code == 0:
