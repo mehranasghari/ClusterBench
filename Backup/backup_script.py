@@ -85,7 +85,6 @@ def process_input_file(file_path_input):
             # added temp3
             print("final_time_end : ", final_time_end)
             print ("final_time_start : ", final_time_start)
-            
             # Remove all ":" for directory name
             final_time_start_dir = final_time_start.replace(":", "")
             final_time_end_dir = final_time_end.replace(":", "")
@@ -104,8 +103,12 @@ def process_input_file(file_path_input):
             start_time_backup = start_date + "T" + final_time_start + "Z"
             end_time_backup = end_date + "T" + final_time_end + "Z"
 
+            # added tmp4 
+            print("start_time_backup : ", start_time_backup)
+            print("\nend_time_backup : ", end_time_backup)
+
             # Perform backup using influxd backup command
-            backup_command = f"docker exec -it {Primary_influxdb_container_name} influxd backup -portable -db {Main_influxdb_DB_name} -start {start_time_backup} -end {end_time_backup} {backup_path2}/backup  "
+            backup_command = f"docker exec -it {Primary_influxdb_container_name} influxd backup -portable -db {Main_influxdb_DB_name} -start {start_time_backup} -end {end_time_backup} {backup_path2}/backup > /dev/null "
             backup_process = subprocess.run(backup_command, shell=True)
             exit_code = backup_process.returncode
             if exit_code == 0:
