@@ -62,9 +62,10 @@ def process_input_file(file_path_input):
             start_datetime = datetime.datetime.strptime(start_date + " " + start_time, "%Y-%m-%d %H:%M:%S")
             end_datetime = datetime.datetime.strptime(end_date + " " + end_time, "%Y-%m-%d %H:%M:%S")
 
-            # Convert to standard format (time only)
-            start_time_standard = start_datetime.strftime("%H:%M:%S")
-            end_time_standard = end_datetime.strftime("%H:%M:%S")
+            # Convert to standard format (date and time)
+            start_time_standard = start_datetime.strftime("%Y-%m-%d %H:%M:%S")
+            end_time_standard = end_datetime.strftime("%Y-%m-%d %H:%M:%S")
+
 
             # Remove all ":" for backup file name
             final_time_start_backup = start_time_standard.replace(":", "")
