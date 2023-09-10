@@ -96,8 +96,12 @@ def process_input_file(file_path_input):
             dir_end_date = dir_end_date[2:].replace("-","")
             dir_end_time = dir_end_time.replace(":","")
             backup_dir_name = dir_start_date+"T"+dir_start_time+"_"+dir_end_date+"T"+dir_end_time
+            
+            # Create backup_path2
+            backup_path2 = Primary_influxdb_in_container_address +"/"+ backup_dir_name
+
             # Perform backup using influxd backup command
-            backup_command = f"docker exec -it {Primary_influxdb_container_name} influxd backup -portable -db {Main_influxdb_DB_name} -start {start_time_backup} -end {end_time_backup} {Primary_influxdb_in_container_address}/backup > /dev/null "
+            backup_command = f"docker exec -it {Primary_influxdb_container_name} influxd backup -portable -db {Main_influxdb_DB_name} -start {start_time_backup} -end {end_time_backup} {backup_path2}/backup > /dev/null "
             backup_process = subprocess.run(backup_command, shell=True)
             exit_code = backup_process.returncode
             if exit_code == 0:
