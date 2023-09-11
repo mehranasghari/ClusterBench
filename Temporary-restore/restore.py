@@ -47,7 +47,7 @@ else:
    print() 
 
 # Restore on influxdb
-restore_command = f"docker exec -it {Secondary_influxdb_container_name} influxd restore -portable -db {Main_influxdb_DB_name} -newdb {Temporary_datasource_name} {Secondry_influxdb_in_container_address}/{directoryname}/backup/ >/dev/null && docker exec -it {Secondary_influxdb_container_name} influx -execute 'SELECT * INTO \"{Main_influxdb_DB_name}\".autogen.:MEASUREMENT FROM \"{Temporary_datasource_name}\".autogen./.*/ GROUP BY *' && docker exec -it {Secondary_influxdb_container_name} influx -execute 'drop database {Temporary_datasource_name}'"
+restore_command = f"docker exec -it {Secondary_influxdb_container_name} influxd restore -portable -db {Main_influxdb_DB_name} -newdb {Temporary_datasource_name} {Secondry_influxdb_in_container_address}/{directoryname}/backup/ && docker exec -it {Secondary_influxdb_container_name} influx -execute 'SELECT * INTO \"{Main_influxdb_DB_name}\".autogen.:MEASUREMENT FROM \"{Temporary_datasource_name}\".autogen./.*/ GROUP BY *' && docker exec -it {Secondary_influxdb_container_name} influx -execute 'drop database {Temporary_datasource_name}'"
 restore_process = subprocess.run(restore_command, shell=True)
 exit_code = restore_process.returncode
 if exit_code == 0:
