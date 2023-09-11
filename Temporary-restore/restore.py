@@ -47,15 +47,32 @@ else:
    print() 
 
 # Restore on influxdb
-restore_command = f"docker exec -it {Secondary_influxdb_container_name} influxd restore -portable -db {Main_influxdb_DB_name} -newdb {Temporary_datasource_name} {Secondry_influxdb_in_container_address}/{directoryname}/backup/ && docker exec -it {Secondary_influxdb_container_name} influx -execute 'SELECT * INTO \"{Main_influxdb_DB_name}\".autogen.:MEASUREMENT FROM \"{Temporary_datasource_name}\".autogen./.*/ GROUP BY *' && docker exec -it {Secondary_influxdb_container_name} influx -execute 'drop database {Temporary_datasource_name}'"
+restore_command = f"docker exec -it {Secondary_influxdb_container_name} influxd restore -portable -db {Main_influxdb_DB_name} -newdb {Temporary_datasource_name} {Secondry_influxdb_in_container_address}/{directoryname}/backup/ "
 restore_process = subprocess.run(restore_command, shell=True)
-exit_code = restore_process.returncode
-if exit_code == 0:
-   print("\033[92mFiles restored successfully.\033[0m")
-   print()
-else:
+restore_exit_code = restore_process.returncode
+if restore_exit_code == 1:
    print("\033[91mRestore failed.\033[0m")
-   print() 
+   print()
+
+# Merge phase
+merge_command = f"docker exec -it {Secondary_influxdb_container_name} influx -execute 'SELECT * INTO \"{Main_influxdb_DB_name}\".autogen.:MEASUREMENT FROM \"{Temporary_datasource_name}\".autogen./.*/ GROUP BY *'"
+merge_process = subprocess.run(merge_command, shell=True)
+merge_exit_code = merge_process.returncode
+if merge_exit_code == 1:
+   print("\033[91mFailure in merging.\033[0m")
+   print()
+
+# Drop tmp db
+drop_tmp_command = f"docker exec -it {Secondary_influxdb_container_name} influx -execute 'drop database {Temporary_datasource_name}'"
+drop_tmp_process = subprocess.run(drop_tmp_command, shell=True)
+drop_tmp_exit_code = drop_tmp_process.returncode
+if drop_tmp_exit_code == 1:
+   print(f"\033[91mFailure in dropping {Temporary_datasource_name}.\033[0m")
+   print()
+
+if restore_exit_code & merge_exit_code & drop_tmp_exit_code == 1:
+   print("\033[92mBackup restored successfully.\033[0m")
+   print()
 print(f"*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* END OF RESTORE FOR\033[92m {directoryname} \033[0m*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*")
 
 
