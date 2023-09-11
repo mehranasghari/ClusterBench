@@ -6,7 +6,7 @@
     "Main_influxdb_container_port" : "8086",
     "Main_influxdb_host_in_container" : "localhost",
     "Main_influxdb_database_rp_name" : "autogen",
-    "Backup_influxdb_DB_name" : "opentsdb",
+    "Backup_influxdb_DB_name" : "secondopentsdb",
     "Backup_influxdb_container_name" : "influxdb2",
     "Backup_influxdb_address_in_host" : "/mnt/sdb/influx-test/influxdb-data/MBT_BACKUP",
     "Backup_influxdb_in_container_address" : "/var/lib/influxdb/MBT_BACKUP",
