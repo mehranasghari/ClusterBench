@@ -37,7 +37,6 @@ gmt_offset_seconds = 3 * 3600 + 30 * 60
 # Add 1-minute delay
 #time.sleep(60)
 
-print(f"*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* START OF BACKUP FOR\033[92m {testDirectory} \033[0m*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*")
 
 def read_values_from_file(file_path):
     values = []
