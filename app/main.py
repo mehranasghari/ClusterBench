@@ -159,6 +159,9 @@ for workload_number in range(workloads):
     time_file.write(start_end_time)
     time_file.close()
 
+    # Start backup phase and its process
+    print(f"*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* START OF BACKUP FOR\033[92m {testDirectory} \033[0m*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*")
+
     # Add get-ring and get-conf to result dir
     Ring_address = f"{result_path}/{final_workload_name}/Ring_cluster/"
     os.makedirs(Ring_address, exist_ok=True)
