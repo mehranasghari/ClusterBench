@@ -14,7 +14,8 @@ Secondry_influxdb_in_container_address = json_data['Backup_influxdb_in_container
 Secondary_influxdb_container_name = json_data['Backup_influxdb_container_name']
 Secondary_influxdb_DB_name = json_data['Backup_influxdb_DB_name']
 Secondary_influxdb_address_in_host = json_data['Backup_influxdb_address_in_host']
-
+Temporary_datasource_name = json_data['Temporary_datasource_name']
+Main_influxdb_DB_name = json_data['Main_influxdb_DB_name']
 # Process given directory name as an arqument
 argParser = argparse.ArgumentParser()
 argParser.add_argument("-d", "--directoryname", help="Directory Name (Directory which contain *.tar,gz)")
@@ -46,7 +47,7 @@ else:
    print() 
 
 # Restore on influxdb
-restore_command = f"docker exec -it {Secondary_influxdb_container_name} influxd restore -portable {Secondry_influxdb_in_container_address}/{directoryname}/backup/ >/dev/null"
+restore_command = f"docker exec -it {Secondary_influxdb_container_name} influxd restore -portable -db {Main_influxdb_DB_name} -newdb {Temporary_datasource_name} {Secondry_influxdb_in_container_address}/{directoryname}/backup/ >/dev/null && docker exec -it {Secondary_influxdb_container_name} influx -execute 'SELECT * INTO \"{Main_influxdb_DB_name}\".autogen.:MEASUREMENT FROM \"{Temporary_datasource_name}\".autogen./.*/ GROUP BY *'"
 restore_process = subprocess.run(restore_command, shell=True)
 exit_code = restore_process.returncode
 if exit_code == 0:
@@ -56,4 +57,5 @@ else:
    print("\033[91mRestore failed.\033[0m")
    print() 
 print(f"*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* END OF RESTORE FOR\033[92m {directoryname} \033[0m*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*")
+
 
