@@ -30,7 +30,7 @@ def get_ring(host_file_path):
 
     # Check and print output
     if container_ring_exec_exit_code & object_ring_exec_exit_code & account_ring_exec_exit_code == 0:
-        print(f"\033[92mALL ring files generated successfully\033[0m")
+        print(f"\033[92mALL ring files generated successfully\n\033[0m")
     elif container_ring_exec_exit_code == 1:
         print("\033[91mFailure in generating container-ring.txt\033[0m")
     elif object_ring_exec_exit_code == 1:
