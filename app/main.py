@@ -97,7 +97,7 @@ for workload_number in range(workloads):
 
     # Create result directory of workloads
     result_file_path = os.path.join(result_path, workload_name)
-    os.makedirs(result_file_path, exist_ok=True)
+    #os.makedirs(result_file_path, exist_ok=True) # commented due to creating extra dir
     
     # Check if the directory exists
     if os.path.exists(result_file_path):
