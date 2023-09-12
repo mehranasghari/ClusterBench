@@ -5,46 +5,36 @@ import os
 import time
 import shutil
 import csv
-import signal  # Import the signal module for handling Ctrl+C
 
-def signal_handler(sig, frame):
-    print("Received Ctrl+C. Stopping the application.")
-    sys.exit(1)
+# Getting arguments from main.sh
+# Arguments are: input file, default file and script file
+input_file_path = sys.argv[1]
+default_file_path = sys.argv[2]
+script_file_path = sys.argv[3]
 
-# Install a signal handler for Ctrl+C
-signal.signal(signal.SIGINT, signal_handler)
+# Defining paths
+cosbench_command = './../../cli.sh'
+archive_path = './../../archive/'
+result_path = './../result/'
+pre_test_script_path = script_file_path 
+backup_script_path = './../Backup/backup_script.py'
+hosts_file_path = "./../conf/Deployments/Host-names/hosts.txt" # this address added
+submit = 'submit'
+max_pre_test_script_failure = 3
 
-try:
-    
-    # Getting arguments from main.sh
-    # Arguments are: input file, default file and script file
-    input_file_path = sys.argv[1]
-    default_file_path = sys.argv[2]
-    script_file_path = sys.argv[3]
+# Defining temporary path for generating xml config file
+temp_output_path = './temp_output'
+temp_output_xml_path = './temp_output.xml'
 
-    # Defining paths
-    cosbench_command = './../../cli.sh'
-    archive_path = './../../archive/'
-    result_path = './../result/'
-    pre_test_script_path = script_file_path 
-    backup_script_path = './../Backup/backup_script.py'
-    hosts_file_path = "./../conf/Deployments/Host-names/hosts.txt" # this address added
-    submit = 'submit'
-    max_pre_test_script_failure = 3
+# Splitting input file to workloads 
+input = open(input_file_path, "r")
+lines = input.read().split('}')
+workloads = len(lines)
+workloads -= 1
+workload_name = ""
 
-    # Defining temporary path for generating xml config file
-    temp_output_path = './temp_output'
-    temp_output_xml_path = './temp_output.xml'
-
-    # Splitting input file to workloads 
-    input = open(input_file_path, "r")
-    lines = input.read().split('}')
-    workloads = len(lines)
-    workloads -= 1
-    workload_name = ""
-
-    for workload_number in range(workloads):
-
+for workload_number in range(workloads):
+    try:
         # Create a temporary file and xml for each workload
         temp_output_file_path = temp_output_path + "_" + str(workload_number)
         temp_output_file_xml_path = temp_output_xml_path + "_" + str(workload_number)
@@ -68,7 +58,7 @@ try:
         time.sleep(1)
         pre_test_script_failure_num = 0
         for i in range(max_pre_test_script_failure):
-            pre_test_script = subprocess.run([pre_test_script_path, workload_name], shell=True) # shell=true addede to this part
+            pre_test_script = subprocess.run([pre_test_script_path, workload_name], shell=True)
             if pre_test_script.returncode == 0:
                 print("Pre-test script executed successfully!")
                 break
@@ -78,7 +68,8 @@ try:
             time.sleep(1)
         print()
         if pre_test_script_failure_num == 3:
-            exit()
+            print("Maximum pre-test script failures reached. Skipping this workload.")
+            continue  # Continue with the next workload if pre-test fails
 
         # Start workload
         print(f"Workload {workload_name} is running ...")
@@ -107,9 +98,7 @@ try:
 
         # Create result directory of workloads
         result_file_path = os.path.join(result_path, workload_name)
-        #os.makedirs(result_file_path, exist_ok=True) # commented due to creating extra dir
         
-        # Check if the directory exists
         if os.path.exists(result_file_path):
             result_file_tail = '_' + '1' + '_'
             result_file_path += result_file_tail
@@ -141,7 +130,7 @@ try:
         result_csv_path += ".csv"
 
         # Copy csv file from archive to result directory
-        shutil.copy2(archive_csv_path,result_csv_path)
+        shutil.copy2(archive_csv_path, result_csv_path)
 
         # Remove config.xml file
         os.remove(temp_output_file_path)
@@ -192,11 +181,9 @@ try:
         conf_mv_command = f"mv *.txt {Ring_address}"
         conf_mv_process = subprocess.run(conf_mv_command, shell=True)
 
-
         subprocess.call(['python3', backup_script_path, '-t', final_workload_name])
-        #print("--------------------------------------")
+            #print("--------------------------------------")
 
 
-except Exception as e:
-    print(f"An error occurred: {str(e)}")
-    sys.exit(1)
+    except Exception as e:
+        print(f"An error occurred for workload {workload_name}: {str(e)}")
