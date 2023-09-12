@@ -38,17 +38,7 @@ gmt_offset_seconds = 3 * 3600 + 30 * 60
 #time.sleep(60)
 
 
-def read_values_from_file(file_path):
-    values = []
-    with open(file_path, "r") as f:
-        lines = f.readlines()
-        for line in lines:
-            values.extend(line.strip().split(","))
-    return values
-
 def process_input_file(file_path_input):
-    # set config time in seconds manually
-    variable_offset_seconds = 5 * 60  # 5min
 
     with open(file_path_input, "r") as f:
         lines = f.readlines()
@@ -83,12 +73,10 @@ def process_input_file(file_path_input):
             end_time_backup = backup_end_date+"T"+backup_end_time+"Z"
 
             # dir name creation
-            dir_start_datetime_utc_str = dir_start_datetime_utc.strftime("%Y-%m-%d %H:%M:%S")
-            dir_end_datetime_utc_str = dir_end_datetime_utc.strftime("%Y-%m-%d %H:%M:%S")
-            dir_start_date , dir_start_time = dir_start_datetime_utc_str.split(" ")
+            dir_start_date , dir_start_time = start_datetime_str.split(" ")
             dir_start_date = dir_start_date[2:].replace("-","")
             dir_start_time = dir_start_time.replace(":","")
-            dir_end_date , dir_end_time = dir_end_datetime_utc_str.split(" ")
+            dir_end_date , dir_end_time = end_datetime_str.split(" ")
             dir_end_date = dir_end_date[2:].replace("-","")
             dir_end_time = dir_end_time.replace(":","")
             backup_dir_name = dir_start_date+"T"+dir_start_time+"_"+dir_end_date+"T"+dir_end_time
@@ -132,7 +120,7 @@ def process_input_file(file_path_input):
 
 	        #MV BACKUP.TAR.GZ TO influxdb2 and delete original file
             os.makedirs(Secondary_influxdb_address_in_host, exist_ok=True)
-            mv_command = f"mv -f {Primary_influxdb_address_in_host}/*  {Secondary_influxdb_address_in_host}/"
+            mv_command = f"mv -f {Primary_influxdb_address_in_host}/backup.tar.gz  {Secondary_influxdb_address_in_host}/" # specified to move to influxdb 
             mv_process = subprocess.run(mv_command, shell=True)
             exit_code = mv_process.returncode
             if exit_code == 0:
