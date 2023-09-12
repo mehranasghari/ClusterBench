@@ -68,7 +68,7 @@ for workload_number in range(workloads):
         time.sleep(1)
     print()
     if pre_test_script_failure_num == 3:
-        exit()
+        exit() # all test will be cancelled
 
     # Start workload
     print(f"Workload {workload_name} is running ...")

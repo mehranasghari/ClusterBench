@@ -77,7 +77,8 @@ for workload_number in range(workloads):
         result = subprocess.run(["bash", cosbench_command, submit, workload_file_path], stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
         print()    
         if result.returncode == 0:
-            exit()
+            print("starting workload failed. Skipping this workload.")
+            continue  # Continue with the next workload if workload starting fails
 
         # Extract ID of workload
         output_lines = result.stdout.splitlines()
