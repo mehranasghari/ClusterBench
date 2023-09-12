@@ -75,7 +75,9 @@ for workload_number in range(workloads):
         print(f"Workload {workload_name} is running ...")
         workload_file_path = temp_output_file_xml_path
         result = subprocess.run(["bash", cosbench_command, submit, workload_file_path], stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
-        print()
+        print()    
+        if result.returncode == 0:
+            exit()
 
         # Extract ID of workload
         output_lines = result.stdout.splitlines()
