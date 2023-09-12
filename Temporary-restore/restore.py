@@ -90,7 +90,7 @@ if output is not None and Main_influxdb_DB_name in output:
          print()
 
 elif output is not None and Main_influxdb_DB_name not in output:
-      restore_command = f"docker exec -it {Secondary_influxdb_container_name} influxd restore -portable {Secondry_influxdb_in_container_address}/{directoryname}/backup/ "
+      restore_command = f"docker exec -it {Secondary_influxdb_container_name} influxd restore -portable -db {Main_influxdb_DB_name} {Secondry_influxdb_in_container_address}/{directoryname}/backup/ "
       restore_process = subprocess.run(restore_command, shell=True)
       restore_exit_code = restore_process.returncode
       if restore_exit_code == 1:
