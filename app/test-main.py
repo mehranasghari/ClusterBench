@@ -70,7 +70,7 @@ for workload_number in range(workloads):
         if pre_test_script_failure_num == 3:
             print("Maximum pre-test script failures reached. Skipping this workload.")
             continue  # Continue with the next workload if pre-test fails
-
+        
         # Start workload
         print(f"Workload {workload_name} is running ...")
         workload_file_path = temp_output_file_xml_path
@@ -182,8 +182,7 @@ for workload_number in range(workloads):
         conf_mv_process = subprocess.run(conf_mv_command, shell=True)
 
         subprocess.call(['python3', backup_script_path, '-t', final_workload_name])
-            #print("--------------------------------------")
-
 
     except Exception as e:
         print(f"An error occurred for workload {workload_name}: {str(e)}")
+        continue  # Continue with the next workload if an error occurs
