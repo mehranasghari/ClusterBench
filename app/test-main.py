@@ -51,6 +51,7 @@ for workload_number in range(workloads):
         for l in every_line:
             if '{' in l:
                 workload_name = l.split('{')[0].strip().rstrip()
+                workload_name = "" # test for empty workload
 
         # Execute the script before running the test
         print()
@@ -68,7 +69,7 @@ for workload_number in range(workloads):
             time.sleep(1)
         print()
         if pre_test_script_failure_num == 3:
-            print("\033[91mMaximum pre-test script failures reached. Skipping this workload.\033[0m")
+            print("\033[91mMaximum pre-test script failures reached.Skipping this workload.\033[0m")
             continue  # Continue with the next workload if pre-test fails
         
         # Start workload
