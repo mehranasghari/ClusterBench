@@ -72,7 +72,7 @@ for workload_number in range(workloads):
             continue  # Continue with the next workload if pre-test fails
         
         # Start workload
-        print(f"Workload {workload_name} is running ...")
+        #print(f"Workload {workload_name} is running...")
         workload_file_path = temp_output_file_xml_path
         result = subprocess.run(["bash", cosbench_command, submit, workload_file_path], stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
         #print()    
@@ -93,7 +93,7 @@ for workload_number in range(workloads):
 
         # Generate archive file name of workload
         archive_file_name = workload_id + "-swift-sample"
-        print(f"Workload ID is: {workload_id}")
+        print(f"Workload Info: ID:{workload_id} Name:{workload_name}")
         print()
         if workload_id == "":
             print("\033[91mworkload id is empty ,Skipp this workload\033[0m")
