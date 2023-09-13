@@ -88,15 +88,15 @@ for workload_number in range(workloads):
             else:
                 print("Extracting ID of workload failed")
                 continue # Continue with the next workload if workload starting fails
+
         workload_id = output_line.rsplit(maxsplit=1)[-1]
-        workload_id = ""
 
         # Generate archive file name of workload
         archive_file_name = workload_id + "-swift-sample"
         print(f"Workload ID is: {workload_id}")
         print()
         if workload_id == "":
-            print("\033[91mworkload id is empty , change to wortkload id error\033[0m")
+            print("\033[91mworkload id is empty ,Skipp this workload\033[0m")
             continue
 
         # Check every second if the workload is ended or not
@@ -140,7 +140,6 @@ for workload_number in range(workloads):
                 time.sleep(1)
             else:
                 print(f"\033[91mMaximum retries reached ({max_retries}). File {archive_log_file} copy failed.\033[0m")
-                continue
 
         # Create and copy workload-config.xml
         archive_config_file = os.path.join(archive_file_path, 'workload-config.xml') 
@@ -159,7 +158,6 @@ for workload_number in range(workloads):
                 time.sleep(1)
             else:
                 print(f"\033[91mMaximum retries reached ({max_retries}). File {archive_config_file} copy failed.\033[0m")
-                continue
 
         # Create archive csv file
         archive_csv_path = os.path.join(archive_file_path, archive_file_name)
@@ -184,7 +182,6 @@ for workload_number in range(workloads):
                 time.sleep(1)
             else:
                 print(f"\033[91mMaximum retries reached ({max_retries}). File {archive_csv_path} copy failed.\033[0m")
-                continue
 
         # Remove config.xml file
         def remove_file_with_retry(file_path, max_retries=2):
@@ -215,9 +212,7 @@ for workload_number in range(workloads):
                     if first_main_launching_time is None:
                         first_main_launching_time = row[21]
                         last_main_completed_time = row[24]
-                #else:
-                    #print("\033[91mfailure in reader part.This test will be exit\033[0m")
-                    #break
+
 
         # Write time of workload in time file
         time_file_path = os.path.join(result_file_path, 'time')
