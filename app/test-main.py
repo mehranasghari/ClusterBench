@@ -215,8 +215,8 @@ for workload_number in range(workloads):
                         first_main_launching_time = row[21]
                         last_main_completed_time = row[24]
                     else:
-                        print("\033[91mfailure in reader part. test will be exit\033[0m")
-                        exit()
+                        print("\033[91mfailure in reader part.This test will be exit\033[0m")
+                        continue
 
         # Write time of workload in time file
         time_file_path = os.path.join(result_file_path, 'time')
