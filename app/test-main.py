@@ -76,7 +76,7 @@ for workload_number in range(workloads):
         workload_file_path = temp_output_file_xml_path
         result = subprocess.run(["bash", cosbench_command, submit, workload_file_path], stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
         print()    
-        if result.returncode == 0:
+        if result.returncode == 1:
             print("starting workload failed. Skipping this workload.")
             continue  # Continue with the next workload if workload starting fails
 
