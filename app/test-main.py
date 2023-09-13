@@ -85,12 +85,18 @@ for workload_number in range(workloads):
         for line in output_lines:
             if line.find("ID"):
                 output_line = line
+            else:
+                print("Extracting ID of workload failed")
+                continue # Continue with the next workload if workload starting fails
         workload_id = output_line.rsplit(maxsplit=1)[-1]
 
         # Generate archive file name of workload
         archive_file_name = workload_id + "-swift-sample"
         print(f"Workload ID is: {workload_id}")
         print()
+        if workload_id == "":
+            workload_id = "error" # changing workload id added
+            print("workload id if empty , change to wortkload id error")
 
         # Check every second if the workload is ended or not
         while True:
@@ -114,15 +120,45 @@ for workload_number in range(workloads):
         os.mkdir(result_file_path)
         final_workload_name = result_file_path.split('/')[-1]
 
-        # Create and copy workload.log
+        # Create and copy workload.log 
+        # Added try for copy file up to 2 time
         archive_log_file = os.path.join(archive_file_path, 'workload.log') 
         result_log_file = os.path.join(result_file_path, 'workload.log')
-        shutil.copy2(archive_log_file, result_log_file)
+        max_retries = 2  # Number of retry attempts
+
+        for retry in range(max_retries + 1):  # Add 1 to account for the initial(first) attempt
+            try:
+                shutil.copy2(archive_log_file, result_log_file)
+                break  # Exit the loop if copying is successful
+            
+            except Exception as e:
+                print(f"An error occurred: {e}")
+            
+            if retry < max_retries:
+                # Sleep for a short duration before retrying
+                time.sleep(1)
+            else:
+                print(f"Maximum retries reached ({max_retries}). File {archive_log_file} copy failed.")
+                continue
 
         # Create and copy workload-config.xml
         archive_config_file = os.path.join(archive_file_path, 'workload-config.xml') 
         result_config_file = os.path.join(result_file_path, 'workload-config.xml')
-        shutil.copy2(archive_config_file, result_config_file)
+        max_retries = 2  # Number of retry attempts
+        
+        for retry in range (max_retries + 1):
+            try:
+                shutil.copy2(archive_config_file, result_config_file)
+                break
+            except Exception as e:
+                print(f"An error occurred: {e}")
+            
+            if retry < max_retries:
+                # Sleep for a short duration before retrying
+                time.sleep(1)
+            else:
+                print(f"Maximum retries reached ({max_retries}). File {archive_config_file} copy failed.")
+                continue
 
         # Create archive csv file
         archive_csv_path = os.path.join(archive_file_path, archive_file_name)
@@ -133,11 +169,39 @@ for workload_number in range(workloads):
         result_csv_path += ".csv"
 
         # Copy csv file from archive to result directory
-        shutil.copy2(archive_csv_path, result_csv_path)
+        max_retries = 2  # Number of retry attempts
+
+        for retry in range(max_retries + 1):  # Add 1 to account for the initial attempt
+            try:
+                shutil.copy2(archive_csv_path, result_csv_path)
+                print("File copied successfully")
+                break  # Exit the loop if copying is successful
+            except Exception as e:
+                print(f"An error occurred: {e}")
+            
+            if retry < max_retries:
+                # Sleep for a short duration before retrying
+                time.sleep(1)
+            else:
+                print(f"Maximum retries reached ({max_retries}). File {archive_csv_path} copy failed.")
+                continue
 
         # Remove config.xml file
-        os.remove(temp_output_file_path)
-        os.remove(temp_output_file_xml_path)
+        def remove_file_with_retry(file_path, max_retries=2):
+            for retry in range(max_retries + 1):  
+                try:
+                    result = subprocess.run(['rm', file_path], stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=False)
+                except Exception as e:
+                    print(f"An error occurred when removing '{file_path}': {e}")
+
+                if retry < max_retries:
+                    # Sleep for a short duration before retrying
+                    time.sleep(1)
+                else:
+                    print(f"Maximum retries reached ({max_retries}). File removal failed for '{file_path}'")
+        remove_file_with_retry(temp_output_file_path)
+        remove_file_with_retry(temp_output_file_xml_path)
+
 
         # Find start of first main and end of last main
         with open(result_csv_path, 'r') as csv_file:
@@ -151,6 +215,9 @@ for workload_number in range(workloads):
                     if first_main_launching_time is None:
                         first_main_launching_time = row[21]
                         last_main_completed_time = row[24]
+                    else:
+                        print("failure in reader part. test will be exit")
+                        continue
 
         # Write time of workload in time file
         time_file_path = os.path.join(result_file_path, 'time')
