@@ -197,7 +197,7 @@ for workload_number in range(workloads):
                     # Sleep for a short duration before retrying
                     time.sleep(1)
                 else:
-                    print(f"\033[91mMaximum retries reached ({max_retries}). File removal failed for '{file_path}\033[0m'")
+                    print(f"\033[91mMaximum retries reached ({max_retries}). File removal failed for '{file_path}'\033[0m")
         remove_file_with_retry(temp_output_file_path)
         remove_file_with_retry(temp_output_file_xml_path)
 
