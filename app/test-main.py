@@ -34,7 +34,7 @@ workloads -= 1
 workload_name = ""
 
 for workload_number in range(workloads):
-    try:
+    
         # Create a temporary file and xml for each workload
         temp_output_file_path = temp_output_path + "_" + str(workload_number)
         temp_output_file_xml_path = temp_output_xml_path + "_" + str(workload_number)
@@ -199,21 +199,24 @@ for workload_number in range(workloads):
         remove_file_with_retry(temp_output_file_path)
         remove_file_with_retry(temp_output_file_xml_path)
 
+        try:
+            # Find start of first main and end of last main
+            with open(result_csv_path, 'r') as csv_file:
+                reader = csv.reader(csv_file)
 
-        # Find start of first main and end of last main
-        with open(result_csv_path, 'r') as csv_file:
-            reader = csv.reader(csv_file)
+                first_main_launching_time = None
+                last_main_completed_time = None
 
-            first_main_launching_time = None
-            last_main_completed_time = None
+                for row in reader:
+                    if row[0].endswith('main'):
+                        if first_main_launching_time is None:
+                            first_main_launching_time = row[21]
+                            last_main_completed_time = row[24]
 
-            for row in reader:
-                if row[0].endswith('main'):
-                    if first_main_launching_time is None:
-                        first_main_launching_time = row[21]
-                        last_main_completed_time = row[24]
-
-
+        except Exception as e:
+            print(f"An error occurred for workload {workload_name}: {str(e)}")
+            continue  # Continue with the next workload if an error occurs
+        
         # Write time of workload in time file
         time_file_path = os.path.join(result_file_path, 'time')
         time_file = open(time_file_path, "w")
@@ -246,6 +249,4 @@ for workload_number in range(workloads):
 
         subprocess.call(['python3', backup_script_path, '-t', final_workload_name])
 
-    except Exception as e:
-        print(f"An error occurred for workload {workload_name}: {str(e)}")
-        continue  # Continue with the next workload if an error occurs
+
