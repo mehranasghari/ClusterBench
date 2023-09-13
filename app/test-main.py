@@ -90,6 +90,7 @@ for workload_number in range(workloads):
                 print("Extracting ID of workload failed")
                 continue # Continue with the next workload if workload starting fails
         workload_id = output_line.rsplit(maxsplit=1)[-1]
+        workload_id = ""
 
         # Generate archive file name of workload
         archive_file_name = workload_id + "-swift-sample"
