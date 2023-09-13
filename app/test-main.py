@@ -63,12 +63,12 @@ for workload_number in range(workloads):
                 print("Pre-test script executed successfully!")
                 break
             else:
-                print("Pre-test script executed with failure!")
+                print("\033[91mPre-test script executed with failure!\033[0m")
                 pre_test_script_failure_num += 1
             time.sleep(1)
         print()
         if pre_test_script_failure_num == 3:
-            print("Maximum pre-test script failures reached. Skipping this workload.")
+            print("\033[91mMaximum pre-test script failures reached. Skipping this workload.\033[0m")
             continue  # Continue with the next workload if pre-test fails
         
         # Start workload
@@ -96,7 +96,7 @@ for workload_number in range(workloads):
         print()
         if workload_id == "":
             workload_id = "error" # changing workload id added
-            print("workload id if empty , change to wortkload id error")
+            print("\033[91mworkload id is empty , change to wortkload id error\033[0m")
 
         # Check every second if the workload is ended or not
         while True:
@@ -138,7 +138,7 @@ for workload_number in range(workloads):
                 # Sleep for a short duration before retrying
                 time.sleep(1)
             else:
-                print(f"Maximum retries reached ({max_retries}). File {archive_log_file} copy failed.")
+                print(f"\033[91mMaximum retries reached ({max_retries}). File {archive_log_file} copy failed.\033[0m")
                 continue
 
         # Create and copy workload-config.xml
@@ -157,7 +157,7 @@ for workload_number in range(workloads):
                 # Sleep for a short duration before retrying
                 time.sleep(1)
             else:
-                print(f"Maximum retries reached ({max_retries}). File {archive_config_file} copy failed.")
+                print(f"\033[91mMaximum retries reached ({max_retries}). File {archive_config_file} copy failed.\033[0m")
                 continue
 
         # Create archive csv file
@@ -182,7 +182,7 @@ for workload_number in range(workloads):
                 # Sleep for a short duration before retrying
                 time.sleep(1)
             else:
-                print(f"Maximum retries reached ({max_retries}). File {archive_csv_path} copy failed.")
+                print(f"\033[91mMaximum retries reached ({max_retries}). File {archive_csv_path} copy failed.\033[0m")
                 continue
 
         # Remove config.xml file
@@ -197,7 +197,7 @@ for workload_number in range(workloads):
                     # Sleep for a short duration before retrying
                     time.sleep(1)
                 else:
-                    print(f"Maximum retries reached ({max_retries}). File removal failed for '{file_path}'")
+                    print(f"\033[91mMaximum retries reached ({max_retries}). File removal failed for '{file_path}\033[0m'")
         remove_file_with_retry(temp_output_file_path)
         remove_file_with_retry(temp_output_file_xml_path)
 
@@ -215,8 +215,8 @@ for workload_number in range(workloads):
                         first_main_launching_time = row[21]
                         last_main_completed_time = row[24]
                     else:
-                        print("failure in reader part. test will be exit")
-                        continue
+                        print("\033[91mfailure in reader part. test will be exit\033[0m")
+                        exit()
 
         # Write time of workload in time file
         time_file_path = os.path.join(result_file_path, 'time')
