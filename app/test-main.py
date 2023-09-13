@@ -174,7 +174,6 @@ for workload_number in range(workloads):
         for retry in range(max_retries + 1):  # Add 1 to account for the initial attempt
             try:
                 shutil.copy2(archive_csv_path, result_csv_path)
-                print("File copied successfully")
                 break  # Exit the loop if copying is successful
             except Exception as e:
                 print(f"An error occurred: {e}")
@@ -190,7 +189,7 @@ for workload_number in range(workloads):
         def remove_file_with_retry(file_path, max_retries=2):
             for retry in range(max_retries + 1):  
                 try:
-                    result = subprocess.run(['rm', file_path], stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=False)
+                    result = subprocess.run(['rm -rf', file_path], stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=False)
                 except Exception as e:
                     print(f"An error occurred when removing '{file_path}': {e}")
 
@@ -229,7 +228,7 @@ for workload_number in range(workloads):
         time_file.close()
 
         # Start backup phase and its process
-        print(f"*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* START OF BACKUP FOR\033[92m {final_workload_name} \033[0m*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*")
+        #print(f"*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* START OF BACKUP FOR\033[92m {final_workload_name} \033[0m*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*")
 
         # Add get-ring and get-conf to result dir
         Ring_address = f"{result_path}/{final_workload_name}/Ring_cluster/"
