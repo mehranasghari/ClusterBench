@@ -189,7 +189,7 @@ for workload_number in range(workloads):
         def remove_file_with_retry(file_path, max_retries=2):
             for retry in range(max_retries + 1):  
                 try:
-                    result = subprocess.run(['rm -rf', file_path], stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=False)
+                    result = subprocess.run(['rm','-rf', file_path], stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=False)
                 except Exception as e:
                     print(f"An error occurred when removing '{file_path}': {e}")
 
