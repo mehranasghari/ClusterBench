@@ -42,7 +42,7 @@ gmt_offset_seconds = 3 * 3600 + 30 * 60
 
 
 def process_input_file(file_path_input):
-    with alive_bar(16,title=f'\033[1mProcessing Test\033[0m : \033[92m{testDirectory}\033[0m') as bar:
+    with alive_bar(16,title=f'\033[1mProcessing Test\033[0m:\033[92m{testDirectory}\033[0m') as bar:
         # check if config and ring dir exist
         if os.path.exists(ring_dir_in_result_path):
             bar()

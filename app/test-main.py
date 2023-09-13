@@ -53,20 +53,20 @@ for workload_number in range(workloads):
                 workload_name = l.split('{')[0].strip().rstrip()
 
         # Execute the script before running the test
-        print()
-        print("Executing pre-test script ...")
+        #print()
+        print("033[1mExecuting pre-test script ...\033[0m")
         time.sleep(1)
         pre_test_script_failure_num = 0
         for i in range(max_pre_test_script_failure):
             pre_test_script = subprocess.run([pre_test_script_path, workload_name], shell=True)
             if pre_test_script.returncode == 0:
-                print("Pre-test script executed successfully!")
+                print("\033[92mPre-test script executed successfully!\033[0m")
                 break
             else:
                 print("\033[91mPre-test script executed with failure!\033[0m")
                 pre_test_script_failure_num += 1
             time.sleep(1)
-        print()
+        #print()
         if pre_test_script_failure_num == 3:
             print("\033[91mMaximum pre-test script failures reached.Skipping this workload.\033[0m")
             continue  # Continue with the next workload if pre-test fails
