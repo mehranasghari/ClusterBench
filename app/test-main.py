@@ -18,7 +18,7 @@ archive_path = './../../archive/'
 result_path = './../result/'
 pre_test_script_path = script_file_path 
 backup_script_path = './../Backup/backup_script.py'
-hosts_file_path = "./../conf/Deployments/Host-names/hosts.txt" # this address added
+hosts_file_path = "./../conf/Deployments/Host-names/hosts.txt"
 submit = 'submit'
 max_pre_test_script_failure = 3
 
