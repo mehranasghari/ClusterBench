@@ -51,7 +51,6 @@ for workload_number in range(workloads):
         for l in every_line:
             if '{' in l:
                 workload_name = l.split('{')[0].strip().rstrip()
-                workload_name = "" # test for empty workload
 
         # Execute the script before running the test
         print()
@@ -97,8 +96,8 @@ for workload_number in range(workloads):
         print(f"Workload ID is: {workload_id}")
         print()
         if workload_id == "":
-            workload_id = "error" # changing workload id added
             print("\033[91mworkload id is empty , change to wortkload id error\033[0m")
+            continue
 
         # Check every second if the workload is ended or not
         while True:
