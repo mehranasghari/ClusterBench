@@ -26,7 +26,7 @@ else:
                             with open(time_file_path, "r") as input_file:
                                 lines = input_file.readlines()
                                 for line in lines:
-                                    output_file.write(line)
+                                    output_file.write(line.strip() + "\n")  # Add newline
 
         # Call the function to scrape and save time information
         time_scraper(path)
