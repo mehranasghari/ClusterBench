@@ -7,6 +7,9 @@ argParser.add_argument("-p", "--path", help="path to test dirs")
 args = argParser.parse_args()
 path = args.path
 
+# Pathes
+times_file_path = os.path.join(path, "time.txt")
+
 # Check if the path is provided
 if not path:
     print("Please provide a path using the -p or --path argument.")
@@ -18,7 +21,13 @@ else:
             dirs = os.listdir(path)
             for dir in dirs:
                 time_file_path = os.path.join(path, dir, "time")
-                print(time_file_path)
+                with open(time_file_path, "r") as f:
+                    lines = f.readlines()
+                    for line in lines:
+                        print(line.strip())
+                        with open(times_file_path, "w") as f:
+                            f.write(line)
+                            f.close
 
         # Call the function to list directories
         time_scraper(path)
