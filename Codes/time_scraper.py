@@ -21,6 +21,8 @@ else:
             dirs = os.listdir(path)
             for dir in dirs:
                 time_file_path = os.path.join(path, dir, "time")
+                if not time_file_path:
+                    continue
                 with open(time_file_path, "r") as f:
                     lines = f.readlines()
                     for line in lines:
