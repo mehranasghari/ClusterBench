@@ -7,31 +7,29 @@ argParser.add_argument("-p", "--path", help="path to test dirs")
 args = argParser.parse_args()
 path = args.path
 
-# Pathes
-times_file_path = os.path.join(path, "time.txt")
-
 # Check if the path is provided
 if not path:
     print("Please provide a path using the -p or --path argument.")
 else:
     # Check if the provided path exists
     if os.path.exists(path):
-        # Function to list directories
-        def time_scraper(path):
-            dirs = os.listdir(path)
-            for dir in dirs:
-                time_file_path = os.path.join(path, dir, "time")
-                if not time_file_path:
-                    continue
-                with open(time_file_path, "r") as f:
-                    lines = f.readlines()
-                    for line in lines:
-                        print(line.strip())
-                        with open(times_file_path, "w") as f:
-                            f.write(line)
-                            f.close
+        # Define the path for the output file
+        times_file_path = os.path.join(path, "time.txt")
 
-        # Call the function to list directories
+        # Function to scrape time information
+        def time_scraper(path):
+            with open(times_file_path, "w") as output_file:
+                for dirpath, dirnames, filenames in os.walk(path):
+                    for dirname in dirnames:
+                        time_file_path = os.path.join(dirpath, dirname, "time")
+                        if os.path.exists(time_file_path):
+                            with open(time_file_path, "r") as input_file:
+                                lines = input_file.readlines()
+                                for line in lines:
+                                    output_file.write(line)
+
+        # Call the function to scrape and save time information
         time_scraper(path)
+        print(f"Time information scraped and saved to {times_file_path}")
     else:
         print("The provided path does not exist.")
