@@ -133,7 +133,7 @@ for workload_number in range(workloads):
                 break  # Exit the loop if copying is successful
             
             except Exception as e:
-                print(f"An error occurred: {e}")
+                print(f"\033[91mAn error occurred: {e}\033[0m")
             
             if retry < max_retries:
                 # Sleep for a short duration before retrying
@@ -151,7 +151,7 @@ for workload_number in range(workloads):
                 shutil.copy2(archive_config_file, result_config_file)
                 break
             except Exception as e:
-                print(f"An error occurred: {e}")
+                print(f"\033[91mAn error occurred: {e}\033[0m")
             
             if retry < max_retries:
                 # Sleep for a short duration before retrying
@@ -175,7 +175,7 @@ for workload_number in range(workloads):
                 shutil.copy2(archive_csv_path, result_csv_path)
                 break  # Exit the loop if copying is successful
             except Exception as e:
-                print(f"An error occurred: {e}")
+                print(f"\033[91mAn error occurred: {e}\033[0m")
             
             if retry < max_retries:
                 # Sleep for a short duration before retrying
@@ -189,7 +189,7 @@ for workload_number in range(workloads):
                 try:
                     result = subprocess.run(['rm','-rf', file_path], stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=False)
                 except Exception as e:
-                    print(f"An error occurred when removing '{file_path}': {e}")
+                    print(f"\033[91mAn error occurred when removing '{file_path}': {e}\033[0m")
 
                 if retry < max_retries:
                     # Sleep for a short duration before retrying
@@ -214,7 +214,7 @@ for workload_number in range(workloads):
                             last_main_completed_time = row[24]
 
         except Exception as e:
-            print(f"An error occurred for workload {workload_name}: {str(e)}")
+            print(f"\033[91mAn error occurred for workload {workload_name}: {str(e)}\033[0m")
             continue  # Continue with the next workload if an error occurs
         
         # Write time of workload in time file
@@ -248,5 +248,3 @@ for workload_number in range(workloads):
         conf_mv_process = subprocess.run(conf_mv_command, shell=True)
 
         subprocess.call(['python3', backup_script_path, '-t', final_workload_name])
-
-
