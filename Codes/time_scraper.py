@@ -15,7 +15,7 @@ else:
     if os.path.exists(path):
         # Function to list directories
         def time_scraper(path):
-            for dirnames in os.walk(path):
+            for dirnames in path:
                 for dirname in dirnames:
                     print(dirname)
 
