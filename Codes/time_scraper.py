@@ -17,7 +17,8 @@ else:
         def time_scraper(path):
             dirs = os.listdir(path)
             for dir in dirs:
-                print(dir)
+                time_file_path = os.path.join(path, dir, "time")
+                print(time_file_path)
 
         # Call the function to list directories
         time_scraper(path)
