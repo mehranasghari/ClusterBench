@@ -16,8 +16,9 @@ script_file_path = sys.argv[3]
 cosbench_command = './../../cli.sh'
 archive_path = './../../archive/'
 result_path = './../result/'
-pre_test_script_path = script_file_path # This line modified
+pre_test_script_path = script_file_path 
 backup_script_path = './../Backup/backup_script.py'
+hosts_file_path = "./../conf/Deployments/Host-names/hosts.txt" # this address added
 submit = 'submit'
 max_pre_test_script_failure = 3
 
@@ -67,7 +68,7 @@ for workload_number in range(workloads):
         time.sleep(1)
     print()
     if pre_test_script_failure_num == 3:
-        exit()
+        exit() # all test will be cancelled
 
     # Start workload
     print(f"Workload {workload_name} is running ...")
@@ -96,7 +97,7 @@ for workload_number in range(workloads):
 
     # Create result directory of workloads
     result_file_path = os.path.join(result_path, workload_name)
-    os.makedirs(result_file_path, exist_ok=True)
+    #os.makedirs(result_file_path, exist_ok=True) # commented due to creating extra dir
     
     # Check if the directory exists
     if os.path.exists(result_file_path):
@@ -147,7 +148,7 @@ for workload_number in range(workloads):
             if row[0].endswith('main'):
                 if first_main_launching_time is None:
                     first_main_launching_time = row[21]
-                last_main_completed_time = row[24]
+                    last_main_completed_time = row[24]
 
     # Write time of workload in time file
     time_file_path = os.path.join(result_file_path, 'time')
@@ -157,6 +158,29 @@ for workload_number in range(workloads):
     start_end_time = start_time + ',' + end_time
     time_file.write(start_end_time)
     time_file.close()
+
+    # Start backup phase and its process
+    print(f"*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* START OF BACKUP FOR\033[92m {final_workload_name} \033[0m*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*")
+
+    # Add get-ring and get-conf to result dir
+    Ring_address = f"{result_path}/{final_workload_name}/Ring_cluster/"
+    os.makedirs(Ring_address, exist_ok=True)
+
+    conf_address = f"{result_path}/{final_workload_name}/Config_cluster/"
+    os.makedirs(conf_address, exist_ok=True)
+
+    get_conf_command = f"python3 ./../Codes/get_conf.py -f {hosts_file_path}"
+    get_conf_process = subprocess.run(get_conf_command, shell=True)
+
+    get_ring_command = f"python3 ./../Codes/get_ring.py -f {hosts_file_path}"
+    get_ring_process = subprocess.run(get_ring_command, shell=True)
+
+    # Mv all *.conf from . to result
+    ring_mv_command = f"mv *.conf {conf_address}"
+    ring_mv_process = subprocess.run(ring_mv_command, shell=True)
+
+    conf_mv_command = f"mv *.txt {Ring_address}"
+    conf_mv_process = subprocess.run(conf_mv_command, shell=True)
 
 
     subprocess.call(['python3', backup_script_path, '-t', final_workload_name])

@@ -63,8 +63,13 @@ pytz_installer_command = "pip install pytz > /dev/null  2>&1"
 pytz_installer_process = subprocess.run(pytz_installer_command, shell=True)
 pytz_installer_process_exit_code = pytz_installer_process.returncode
 
+# Intsall alive-progress
+alive_progress_installer_command = "pip install alive-progress > /dev/null  2>&1"
+alive_progress_installer_process = subprocess.run(alive_progress_installer_command, shell=True)
+alive_progress_installer_process_exit_code = alive_progress_installer_process.returncode
+
 # Check all exit codes and print output
-if pip_installer_exit_code & pip_updater_process_exit_code & pytz_installer_process_exit_code == 0:
+if pip_installer_exit_code & pip_updater_process_exit_code & pytz_installer_process_exit_code & alive_progress_installer_process_exit_code == 0:
    print("\033[92mAll dependencies installed successfully\033[0m")
 elif pip_installer_exit_code == 1:
     print("\033[91mfailed in installing pip\033[0m")
@@ -72,6 +77,8 @@ elif pip_updater_process_exit_code == 1:
     print("\033[91mpip updateing failed\033[0m")
 elif pytz_installer_process_exit_code == 1:
     print("\033[91mpytz installing failed\033[0m")
+elif alive_progress_installer_process_exit_code == 1:
+    print("\033[91malive-progress installing failed\033[0m")
 
 # Change rp part
 policy_changer_command = f"docker exec -it {influxdb_container_name} influx -execute 'alter retention policy {default_rp_name} on {default_db_name} shard duration 1h default'"
@@ -90,6 +97,3 @@ if start_exit_code == 0:
     print(f"\033[92mDrivers started successfully\033[0m")
 else:
     print("\033[91mStarting drivers failed\033[0m")
-
-
-

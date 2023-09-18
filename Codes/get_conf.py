@@ -37,7 +37,8 @@ def get_conf(host_file_path):
 
         # Print output
         if container_server_exit_code & account_server_exit_code & object_server_exit_code & proxy_server_exit_code == 0:
-            print(f"\033[92mALL conf files generated successfully\033[0m")
+            #print(f"\033[92mALL conf files generated successfully\n\033[0m")
+            print()
         elif container_server_exit_code == 1:
             print("\033[91mFailure in generating container-server.conf\033[0m")
         elif account_server_exit_code == 1:
