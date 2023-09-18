@@ -38,6 +38,6 @@ else:
 
         # Call the function to scrape and save time information
         time_scraper(path)
-        print(f"\033[92mTTime information scraped, sorted, and saved to {times_file_path}.\033[0m")
+        print(f"\033[92mTime information scraped, sorted, and saved to {times_file_path}.\033[0m")
     else:
         print("\033[91mThe provided path does not exist.\033[0m")
