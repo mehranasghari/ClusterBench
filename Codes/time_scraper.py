@@ -9,7 +9,7 @@ path = args.path
 
 # Check if the path is provided
 if not path:
-    print("Please provide a path using the -p or --path argument.")
+    print("\033[91mPlease provide a path using the -p or --path argument.\033[0m")
 else:
     # Check if the provided path exists
     if os.path.exists(path):
@@ -38,6 +38,6 @@ else:
 
         # Call the function to scrape and save time information
         time_scraper(path)
-        print(f"Time information scraped, sorted, and saved to {times_file_path}")
+        print(f"\033[92mTTime information scraped, sorted, and saved to {times_file_path}.\033[0m")
     else:
-        print("The provided path does not exist.")
+        print("\033[91mThe provided path does not exist.\033[0m")
