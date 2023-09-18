@@ -154,4 +154,3 @@ def process_input_file(file_path_input):
 
 process_input_file(input_file)
 #print(f"*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* END OF BACKUP FOR\033[92m {testDirectory} \033[0m*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*")
-ssssssssssssssssssssssssssssssss
