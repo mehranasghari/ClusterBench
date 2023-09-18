@@ -6,12 +6,6 @@ import time
 import shutil
 import csv
 
-# New argumants which needed to chnage app
-wl_maker_path = "./../app/wl-maker.py"
-wl_address_path = "./../app/wl-address.txt"
-all_xml_path = "./../app/all.xml"
-
-
 # Getting arguments from main.sh
 # Arguments are: input file, default file and script file
 input_file_path = sys.argv[1]
@@ -28,6 +22,10 @@ hosts_file_path = "./../conf/Deployments/Host-names/hosts.txt"
 submit = 'submit'
 max_pre_test_script_failure = 3
 
+# Defining temporary path for generating xml config file
+temp_output_path = './temp_output'
+temp_output_xml_path = './temp_output.xml'
+
 # Splitting input file to workloads 
 input = open(input_file_path, "r")
 lines = input.read().split('}')
@@ -35,10 +33,27 @@ workloads = len(lines)
 workloads -= 1
 workload_name = ""
 
-
 for workload_number in range(workloads):
     
-
+        # Create a temporary file and xml for each workload
+        temp_output_file_path = temp_output_path + "_" + str(workload_number)
+        temp_output_file_xml_path = temp_output_xml_path + "_" + str(workload_number)
+        file = open(temp_output_file_path, "w")
+        file.write(lines[workload_number])
+        file.close()
+        try:
+            # Generate config.xml file
+            generate_xml.convert_input_to_xml(temp_output_file_path, default_file_path, temp_output_file_xml_path)
+        except:
+            print("error in convert_input_to_xml")
+            continue
+            
+        # Find the name of workload
+        file = open(temp_output_file_path, 'r')
+        every_line = file.readlines()
+        for l in every_line:
+            if '{' in l:
+                workload_name = l.split('{')[0].strip().rstrip()
 
         # Execute the script before running the test
         #print()
