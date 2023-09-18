@@ -1,5 +1,6 @@
 import os
 import argparse
+from datetime import datetime
 
 # Create an argument parser
 argParser = argparse.ArgumentParser()
@@ -16,8 +17,9 @@ else:
         # Define the path for the output file
         times_file_path = os.path.join(path, "time.txt")
 
-        # Function to scrape time information
-        def time_scraper(path):
+        # Function to scrape and sort time information
+        def time_scraper_and_sort(path):
+            time_list = []  # Store the lines in a list
             with open(times_file_path, "w") as output_file:
                 for dirpath, dirnames, filenames in os.walk(path):
                     for dirname in dirnames:
@@ -25,11 +27,17 @@ else:
                         if os.path.exists(time_file_path):
                             with open(time_file_path, "r") as input_file:
                                 lines = input_file.readlines()
-                                for line in lines:
-                                    output_file.write(line.strip() + "\n")  # Add newline
+                                time_list.extend(lines)  # Add lines to the list
 
-        # Call the function to scrape and save time information
-        time_scraper(path)
-        print(f"Time information scraped and saved to {times_file_path}")
+            # Sort the list of times by datetime
+            time_list.sort(key=lambda x: datetime.strptime(x.strip(), "%Y-%m-%d %H:%M:%S"))
+
+            # Write the sorted lines back to the file
+            with open(times_file_path, "w") as output_file:
+                output_file.writelines(time_list)
+
+        # Call the function to scrape and sort time information
+        time_scraper_and_sort(path)
+        print(f"Time information scraped, sorted, and saved to {times_file_path}")
     else:
         print("The provided path does not exist.")
