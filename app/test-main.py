@@ -6,6 +6,12 @@ import time
 import shutil
 import csv
 
+# New argumants which needed to chnage app
+wl_maker_path = "./../app/wl-maker.py"
+wl_address_path = "./../app/wl-address.txt"
+all_xml_path = "./../app/all.xml"
+
+
 # Getting arguments from main.sh
 # Arguments are: input file, default file and script file
 input_file_path = sys.argv[1]
