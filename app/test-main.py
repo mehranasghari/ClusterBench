@@ -97,7 +97,7 @@ for workload_number in range(workloads):
         # Generate archive file name of workload
         archive_file_name = workload_id + "-swift-sample"
         print(f"Workload Info: ID:{workload_id} Name:{workload_name}")
-        print()
+        #print()
         if workload_id == "":
             print("\033[91mworkload id is empty ,Skipp this workload\033[0m")
             continue
@@ -202,7 +202,7 @@ for workload_number in range(workloads):
                         print(f"\033[91mMaximum retries reached ({max_retries}). File removal failed for '{file_path}'\033[0m")
                 else:
                     break
-                print("\033[91mFile Already Deleted\033[0m")
+                print("\033[91mFile Not Found.\033[0m")
         remove_file_with_retry(temp_output_file_path)
         remove_file_with_retry(temp_output_file_xml_path)
 
