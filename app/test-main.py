@@ -45,9 +45,9 @@ for workload_number in range(workloads):
             # Generate config.xml file
             generate_xml.convert_input_to_xml(temp_output_file_path, default_file_path, temp_output_file_xml_path)
         except:
-            continue
             print("error in convert_input_to_xml")
-
+            continue
+            
         # Find the name of workload
         file = open(temp_output_file_path, 'r')
         every_line = file.readlines()
