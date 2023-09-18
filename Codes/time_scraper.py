@@ -1,6 +1,5 @@
 import os
 import argparse
-from datetime import datetime
 
 # Create an argument parser
 argParser = argparse.ArgumentParser()
@@ -17,27 +16,28 @@ else:
         # Define the path for the output file
         times_file_path = os.path.join(path, "time.txt")
 
-        # Function to scrape and sort time information
-        def time_scraper_and_sort(path):
-            time_list = []  # Store the lines in a list
+        # Function to scrape time information
+        def time_scraper(path):
+            time_lines = []
+            for dirpath, dirnames, filenames in os.walk(path):
+                for dirname in dirnames:
+                    time_file_path = os.path.join(dirpath, dirname, "time")
+                    if os.path.exists(time_file_path):
+                        with open(time_file_path, "r") as input_file:
+                            lines = input_file.readlines()
+                            for line in lines:
+                                time_lines.append(line.strip())
+
+            # Sort the time lines by timestamp
+            time_lines.sort(key=lambda line: line.split(",")[0])
+
+            # Write the sorted lines to the output file
             with open(times_file_path, "w") as output_file:
-                for dirpath, dirnames, filenames in os.walk(path):
-                    for dirname in dirnames:
-                        time_file_path = os.path.join(dirpath, dirname, "time")
-                        if os.path.exists(time_file_path):
-                            with open(time_file_path, "r") as input_file:
-                                lines = input_file.readlines()
-                                time_list.extend(lines)  # Add lines to the list
+                for line in time_lines:
+                    output_file.write(line + "\n")
 
-            # Sort the list of times by datetime
-            time_list.sort(key=lambda x: datetime.strptime(x.strip(), "%Y-%m-%d %H:%M:%S"))
-
-            # Write the sorted lines back to the file
-            with open(times_file_path, "w") as output_file:
-                output_file.writelines(time_list)
-
-        # Call the function to scrape and sort time information
-        time_scraper_and_sort(path)
+        # Call the function to scrape and save time information
+        time_scraper(path)
         print(f"Time information scraped, sorted, and saved to {times_file_path}")
     else:
         print("The provided path does not exist.")
