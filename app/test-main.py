@@ -41,9 +41,12 @@ for workload_number in range(workloads):
         file = open(temp_output_file_path, "w")
         file.write(lines[workload_number])
         file.close()
-
-        # Generate config.xml file
-        generate_xml.convert_input_to_xml(temp_output_file_path, default_file_path, temp_output_file_xml_path)
+        try:
+            # Generate config.xml file
+            generate_xml.convert_input_to_xml(temp_output_file_path, default_file_path, temp_output_file_xml_path)
+        except:
+            continue
+            print("error in convert_input_to_xml")
 
         # Find the name of workload
         file = open(temp_output_file_path, 'r')
@@ -186,16 +189,20 @@ for workload_number in range(workloads):
         # Remove config.xml file
         def remove_file_with_retry(file_path, max_retries=2):
             for retry in range(max_retries + 1):  
-                try:
-                    result = subprocess.run(['rm','-rf', file_path], stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=False)
-                except Exception as e:
-                    print(f"\033[91mAn error occurred when removing '{file_path}': {e}\033[0m")
+                if os.path.exists(file_path):
+                    try:
+                        result = subprocess.run(['rm','-rf', file_path], stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=False)
+                    except Exception as e:
+                        print(f"\033[91mAn error occurred when removing '{file_path}': {e}\033[0m")
 
-                if retry < max_retries:
-                    # Sleep for a short duration before retrying
-                    time.sleep(1)
+                    if retry < max_retries:
+                        # Sleep for a short duration before retrying
+                        time.sleep(1)
+                    else:
+                        print(f"\033[91mMaximum retries reached ({max_retries}). File removal failed for '{file_path}'\033[0m")
                 else:
-                    print(f"\033[91mMaximum retries reached ({max_retries}). File removal failed for '{file_path}'\033[0m")
+                    break
+                print("\033[91mFile Already Deleted\033[0m")
         remove_file_with_retry(temp_output_file_path)
         remove_file_with_retry(temp_output_file_xml_path)
 
