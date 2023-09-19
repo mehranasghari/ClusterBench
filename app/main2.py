@@ -6,6 +6,10 @@ import time
 import shutil
 import csv
 
+# New Arguments for new main
+all_xml_path = "./../cosbench-xml/workload-gen/all-xml"
+
+"""
 # Getting arguments from main.sh
 # Arguments are: input file, default file and script file
 input_file_path = sys.argv[1]
@@ -21,39 +25,35 @@ backup_script_path = './../Backup/backup_script.py'
 hosts_file_path = "./../conf/Deployments/Host-names/hosts.txt"
 submit = 'submit'
 max_pre_test_script_failure = 3
+"""
 
-# Defining temporary path for generating xml config file
-temp_output_path = './temp_output'
-temp_output_xml_path = './temp_output.xml'
+# New code start here
+def process_on_workloads(all_xml_path):
+    workloads = os.listdir(all_xml_path)
+    for dir in workloads:
+        print(dir)
 
-# Splitting input file to workloads 
-input = open(input_file_path, "r")
-lines = input.read().split('}')
-workloads = len(lines)
-workloads -= 1
-workload_name = ""
+process_on_workloads(all_xml_path)
 
-for workload_number in range(workloads):
-    
-        # Create a temporary file and xml for each workload
-        temp_output_file_path = temp_output_path + "_" + str(workload_number)
-        temp_output_file_xml_path = temp_output_xml_path + "_" + str(workload_number)
-        file = open(temp_output_file_path, "w")
-        file.write(lines[workload_number])
-        file.close()
-        try:
-            # Generate config.xml file
-            generate_xml.convert_input_to_xml(temp_output_file_path, default_file_path, temp_output_file_xml_path)
-        except:
-            print("error in convert_input_to_xml")
-            continue
-            
-        # Find the name of workload
-        file = open(temp_output_file_path, 'r')
-        every_line = file.readlines()
-        for l in every_line:
-            if '{' in l:
-                workload_name = l.split('{')[0].strip().rstrip()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+"""
+# Old code start here
+# for workload_number in range(workloads):
+
+
 
         # Execute the script before running the test
         #print()
@@ -61,7 +61,7 @@ for workload_number in range(workloads):
         time.sleep(1)
         pre_test_script_failure_num = 0
         for i in range(max_pre_test_script_failure):
-            pre_test_script = subprocess.run([pre_test_script_path, workload_name], shell=True)
+            pre_test_script = subprocess.run([pre_test_script_path], shell=True)
             if pre_test_script.returncode == 0:
                 print("\033[92mPre-test script executed successfully!\033[0m")
                 break
@@ -69,13 +69,11 @@ for workload_number in range(workloads):
                 print("\033[91mPre-test script executed with failure!\033[0m")
                 pre_test_script_failure_num += 1
             time.sleep(1)
-        #print()
         if pre_test_script_failure_num == 3:
             print("\033[91mMaximum pre-test script failures reached.Skipping this workload.\033[0m")
             continue  # Continue with the next workload if pre-test fails
         
         # Start workload
-        #print(f"Workload {workload_name} is running...")
         workload_file_path = temp_output_file_xml_path
         result = subprocess.run(["bash", cosbench_command, submit, workload_file_path], stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
         #print()    
@@ -255,3 +253,4 @@ for workload_number in range(workloads):
         conf_mv_process = subprocess.run(conf_mv_command, shell=True)
 
         subprocess.call(['python3', backup_script_path, '-t', final_workload_name])
+###"""
