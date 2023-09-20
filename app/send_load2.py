@@ -47,7 +47,7 @@ def main(argv):
 
     # Call the main program 
     #print(f"Calling main program with benchmark_file: {benchmark_file}, default_file: {default_file}, script_file: {script_file}")
-    run = f"python3 main2.py {benchmark_file} {default_file} {script_file}"
+    run = f"python3 main2.py {benchmark_file} {default_file} {script_file} -p ./../cosbench-xml/workload-gen/all-xml"
     run_process = subprocess.run(run,shell=True)
     
 if __name__ == "__main__":
