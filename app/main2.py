@@ -31,7 +31,7 @@ def process_on_workloads(all_xml_path):
     for workload_name in workloads:
         workload_dir = os.path.join(all_xml_path, workload_name)
         print()
-        print("Processing on " + dir)
+        print("Processing on " + workload_dir)
         for workload_number in range(len(workloads)):
             # Execute the script before running the test
             print("\033[1mExecuting pre-test script...\033[0m")
