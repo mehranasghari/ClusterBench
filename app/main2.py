@@ -51,8 +51,8 @@ def process_on_workloads(all_xml_path):
             # Start workload
             workload_file_path = os.path.join(all_xml_path, workload)
             print (workload_file_path)
-            result = subprocess.run(["bash", cosbench_command, submit, workload_file_path], stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
-            if result.returncode == 1:
+            Cos_bench_command = subprocess.run(["bash", cosbench_command, submit, workload_file_path], stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
+            if Cos_bench_command.returncode == 1:
                 print("\033[91mStarting workload failed. Skipping this workload.\033[0m")
                 continue
 
