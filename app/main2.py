@@ -19,13 +19,13 @@ script_file_path = sys.argv[3]
 cosbench_command = './../../cli.sh'
 archive_path = './../../archive/'
 result_path = './../result/'
-pre_test_script_path = script_file_path 
+pre_test_script_path = script_file_path
 backup_script_path = './../Backup/backup_script.py'
 hosts_file_path = "./../conf/Deployments/Host-names/hosts.txt"
 submit = 'submit'
 max_pre_test_script_failure = 3
 
-# New code start here
+# New code starts here
 def process_on_workloads(all_xml_path):
     workloads = os.listdir(all_xml_path)
     for workload_name in workloads:
@@ -47,9 +47,9 @@ def process_on_workloads(all_xml_path):
                     pre_test_script_failure_num += 1
                 time.sleep(1)
             if pre_test_script_failure_num == 3:
-                print("\033[91mMaximum pre-test script failures reached.Skipping this workload.\033[0m")
+                print("\033[91mMaximum pre-test script failures reached. Skipping this workload.\033[0m")
                 continue  # Continue with the next workload if pre-test fails
-            
+
             # Start workload
             workload_file_path = os.path.join(all_xml_path, workload_dir, "workload.xml")
             result = subprocess.run(["bash", cosbench_command, submit, workload_file_path], stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
@@ -59,6 +59,7 @@ def process_on_workloads(all_xml_path):
 
             # Extract ID of workload
             output_lines = result.stdout.splitlines()
+            workload_id = ""
             for line in output_lines:
                 if "ID" in line:
                     parts = line.split()
@@ -73,19 +74,18 @@ def process_on_workloads(all_xml_path):
             # Generate archive file name of workload
             archive_file_name = workload_id + "-swift-sample"
             print(f"Workload Info: ID:{workload_id} Name:{workload_name}")
-            #print()
             if workload_id == "":
-                print("\033[91mworkload id is empty ,Skipp this workload\033[0m")
+                print("\033[91mWorkload ID is empty. Skipping this workload.\033[0m")
                 continue
 
-            # Check every second if the workload is ended or not
+            # Check every second if the workload has ended or not
             while True:
                 archive_file_path = os.path.join(archive_path, archive_file_name)
                 if os.path.exists(archive_file_path):
                     break
-                time.sleep(3) #  changed to 3 seconds
+                time.sleep(3)  # changed to 3 seconds
 
-            # Create result directory of workloads
+            # Create result directory for workloads
             result_file_path = os.path.join(result_path, workload_name)
             if os.path.exists(result_file_path):
                 result_file_tail = '_' + '1' + '_'
@@ -95,12 +95,12 @@ def process_on_workloads(all_xml_path):
                     repeat_number = int(splitted_result_file[-2]) + 1
                     splitted_result_file[-2] = str(repeat_number)
                     result_file_path = '_'.join(splitted_result_file)
-            
+
             os.mkdir(result_file_path)
             final_workload_name = result_file_path.split('/')[-1]
 
-            # Create and copy workload.log & Added try for copy file up to 2 time
-            archive_log_file = os.path.join(archive_file_path, 'workload.log') 
+            # Create and copy workload.log & Add try for copying file up to 2 times
+            archive_log_file = os.path.join(archive_file_path, 'workload.log')
             result_log_file = os.path.join(result_file_path, 'workload.log')
             max_retries = 2  # Number of retry attempts
 
@@ -108,10 +108,10 @@ def process_on_workloads(all_xml_path):
                 try:
                     shutil.copy2(archive_log_file, result_log_file)
                     break  # Exit the loop if copying is successful
-                
+
                 except Exception as e:
                     print(f"\033[91mAn error occurred: {e}\033[0m")
-                
+
                 if retry < max_retries:
                     # Sleep for a short duration before retrying
                     time.sleep(1)
@@ -119,17 +119,17 @@ def process_on_workloads(all_xml_path):
                     print(f"\033[91mMaximum retries reached ({max_retries}). File {archive_log_file} copy failed.\033[0m")
 
             # Create and copy workload-config.xml
-            archive_config_file = os.path.join(archive_file_path, 'workload-config.xml') 
+            archive_config_file = os.path.join(archive_file_path, 'workload-config.xml')
             result_config_file = os.path.join(result_file_path, 'workload-config.xml')
             max_retries = 2
-            
-            for retry in range (max_retries + 1):
+
+            for retry in range(max_retries + 1):
                 try:
                     shutil.copy2(archive_config_file, result_config_file)
                     break
                 except Exception as e:
                     print(f"\033[91mAn error occurred: {e}\033[0m")
-                
+
                 if retry < max_retries:
                     time.sleep(3)
                 else:
@@ -144,7 +144,7 @@ def process_on_workloads(all_xml_path):
             result_csv_path += ".csv"
 
             # Copy csv file from archive to result directory
-            max_retries = 2  
+            max_retries = 2
 
             for retry in range(max_retries + 1):
                 try:
@@ -152,18 +152,18 @@ def process_on_workloads(all_xml_path):
                     break
                 except Exception as e:
                     print(f"\033[91mAn error occurred: {e}\033[0m")
-                
+
                 if retry < max_retries:
                     time.sleep(3)
                 else:
                     print(f"\033[91mMaximum retries reached ({max_retries}). File {archive_csv_path} copy failed.\033[0m")
-            
+
             # Remove config.xml file
             def remove_file_with_retry(file_path, max_retries=2):
-                for retry in range(max_retries + 1):  
+                for retry in range(max_retries + 1):
                     if os.path.exists(file_path):
                         try:
-                            result = subprocess.run(['rm','-rf', file_path], stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=False)
+                            result = subprocess.run(['rm', '-rf', file_path], stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=False)
                         except Exception as e:
                             print(f"\033[91mAn error occurred when removing '{file_path}': {e}\033[0m")
 
@@ -176,7 +176,6 @@ def process_on_workloads(all_xml_path):
                         break
                     print("\033[91mFile Not Found.\033[0m")
 
-                    # ADDED with out calling becuse of there is no temp file to remove
             try:
                 # Find start of first main and end of last main
                 with open(result_csv_path, 'r') as csv_file:
@@ -186,44 +185,45 @@ def process_on_workloads(all_xml_path):
                     last_main_completed_time = None
 
                     for row in reader:
-                        if row[0].endswith('main'):
+                        if row and row[0].endswith('main'):
                             if first_main_launching_time is None:
                                 first_main_launching_time = row[21]
-                                last_main_completed_time = row[24]
+                            last_main_completed_time = row[24]
+
+                if first_main_launching_time and last_main_completed_time:
+                    # Write time of workload in time file
+                    time_file_path = os.path.join(result_file_path, 'time')
+                    time_file = open(time_file_path, "w")
+                    start_time = first_main_launching_time.split('@')[1].strip()
+                    end_time = last_main_completed_time.split('@')[1].strip()
+                    start_end_time = start_time + ',' + end_time
+                    time_file.write(start_end_time)
+                    time_file.close()
+
+                    # Start backup phase and its process & get-ring and get-conf to result dir
+                    Ring_address = f"{result_path}/{final_workload_name}/Ring_cluster/"
+                    os.makedirs(Ring_address, exist_ok=True)
+
+                    conf_address = f"{result_path}/{final_workload_name}/Config_cluster/"
+                    os.makedirs(conf_address, exist_ok=True)
+
+                    get_conf_command = f"python3 ./../Codes/get_conf.py -f {hosts_file_path}"
+                    get_conf_process = subprocess.run(get_conf_command, shell=True)
+
+                    get_ring_command = f"python3 ./../Codes/get_ring.py -f {hosts_file_path}"
+                    get_ring_process = subprocess.run(get_ring_command, shell=True)
+
+                    # Move all *.conf from . to result
+                    ring_mv_command = f"mv *.conf {conf_address}"
+                    ring_mv_process = subprocess.run(ring_mv_command, shell=True)
+
+                    conf_mv_command = f"mv *.txt {Ring_address}"
+                    conf_mv_process = subprocess.run(conf_mv_command, shell=True)
+
+                    subprocess.call(['python3', backup_script_path, '-t', final_workload_name])
 
             except Exception as e:
                 print(f"\033[91mAn error occurred for workload {workload_name}: {str(e)}\033[0m")
                 continue
 
-            # Write time of workload in time file
-            time_file_path = os.path.join(result_file_path, 'time')
-            time_file = open(time_file_path, "w")
-            start_time = first_main_launching_time.split('@')[1].strip()
-            end_time = last_main_completed_time.split('@')[1].strip()
-            start_end_time = start_time + ',' + end_time
-            time_file.write(start_end_time)
-            time_file.close()
-
-            # Start backup phase and its process & get-ring and get-conf to result dir
-            Ring_address = f"{result_path}/{final_workload_name}/Ring_cluster/"
-            os.makedirs(Ring_address, exist_ok=True)
-
-            conf_address = f"{result_path}/{final_workload_name}/Config_cluster/"
-            os.makedirs(conf_address, exist_ok=True)
-
-            get_conf_command = f"python3 ./../Codes/get_conf.py -f {hosts_file_path}"
-            get_conf_process = subprocess.run(get_conf_command, shell=True)
-
-            get_ring_command = f"python3 ./../Codes/get_ring.py -f {hosts_file_path}"
-            get_ring_process = subprocess.run(get_ring_command, shell=True)
-
-            # Mv all *.conf from . to result
-            ring_mv_command = f"mv *.conf {conf_address}"
-            ring_mv_process = subprocess.run(ring_mv_command, shell=True)
-
-            conf_mv_command = f"mv *.txt {Ring_address}"
-            conf_mv_process = subprocess.run(conf_mv_command, shell=True)
-
-            subprocess.call(['python3', backup_script_path, '-t', final_workload_name])
-                
 process_on_workloads(all_xml_path)
