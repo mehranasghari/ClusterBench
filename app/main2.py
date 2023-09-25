@@ -19,7 +19,7 @@ result_path = './../result/'
 pre_test_script_path = script_file_path
 backup_script_path = './../Backup/backup_script.py'
 hosts_file_path = "./../conf/Deployments/Host-names/hosts.txt"
-workloads_dir_path = "./../workloads"
+workloads_dir_path = "./workloads"
 config_gen_path = "config_gen.py"
 input_txt_path = "input.txt"
 submit = 'submit'
@@ -27,7 +27,7 @@ max_pre_test_script_failure = 3
 
 # New code starts here
 def process_on_workloads(workloads_dir_path):
-
+    '''
     # make dir for workloads and check if it is empty or not
     try :
         if workloads_dir_path:
@@ -48,7 +48,7 @@ def process_on_workloads(workloads_dir_path):
     if trrigger_exit_code == 1:
         print("\033[91mFailure in triggering generator xml!\033[0m")
         exit()
-
+    '''
     all_workloads = os.listdir(workloads_dir_path)
     for workload in all_workloads :
 
