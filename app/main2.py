@@ -58,7 +58,7 @@ def process_on_workloads(all_xml_path):
                 continue  # Continue with the next workload if workload starting fails
 
             # Extract ID of workload
-            workload_id = ""
+            output_lines = result.stdout.splitlines()
             for line in output_lines:
                 if "ID" in line:
                     parts = line.split()
