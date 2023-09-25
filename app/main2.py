@@ -27,10 +27,10 @@ max_pre_test_script_failure = 3
 
 # New code starts here
 def process_on_workloads(all_xml_path):
-    #print("starting funxtion")
+
     all_workloads = os.listdir(all_xml_path)
     for workload in all_workloads :
-        #print(workload)
+
         # Execute the script before running the test
         print("\033[1mExecuting pre-test script...\033[0m")
         time.sleep(1)
@@ -41,13 +41,20 @@ def process_on_workloads(all_xml_path):
                 print("\033[92mPre-test script executed successfully!\033[0m")
                 break
             else:
-                print("\033[91mPre-test script executed with failure!, try for " + str(3-talash) + " time\033[0m")
+                print("\033[91mPre-test script executed with failure!, try for " + str(2-talash) + " more time\033[0m")
                 pre_test_script_failure_num += 1
                 time.sleep(1)
             if pre_test_script_failure_num == 3:
                 print("\033[91mMaximum pre-test script failures reached. Skipping this workload.\033[0m")
-                continue  # Continue with the next workload if pre-test fails
-
+                continue
+            
+            # Start workload
+            workload_file_path = os.path.join(all_xml_path, workload)
+            print (workload_file_path)
+            result = subprocess.run(["bash", cosbench_command, submit, workload_file_path], stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
+            if result.returncode == 1:
+                print("\033[91mStarting workload failed. Skipping this workload.\033[0m")
+                continue
 
 
 '''
