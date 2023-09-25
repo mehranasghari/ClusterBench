@@ -21,7 +21,7 @@ backup_script_path = './../Backup/backup_script.py'
 hosts_file_path = "./../conf/Deployments/Host-names/hosts.txt"
 workloads_dir_path = "./../workloads"
 config_gen_path = "./../Codes/config_gen.py"
-input_txt_path = "./../Codes/input.txt"
+input_txt_path = "input.txt"
 submit = 'submit'
 max_pre_test_script_failure = 3
 
