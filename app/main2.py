@@ -30,6 +30,33 @@ def process_on_workloads(all_xml_path):
     workloads = os.listdir(all_xml_path)
     for workload_name in workloads:
         workload_dir = os.path.join(all_xml_path, workload_name)
+        #print()
+        print("Processing on " + workload_dir)
+        
+        for workload_number in range(len(workloads)):
+            # Execute the script before running the test
+            print("\033[1mExecuting pre-test script...\033[0m")
+            time.sleep(1)
+            pre_test_script_failure_num = 0
+            for i in range(max_pre_test_script_failure):
+                pre_test_script = subprocess.run([pre_test_script_path], shell=True)
+                if pre_test_script.returncode == 0:
+                    print("\033[92mPre-test script executed successfully!\033[0m")
+                    break
+                else:
+                    print("\033[91mPre-test script executed with failure!\033[0m")
+                    pre_test_script_failure_num += 1
+                time.sleep(1)
+            if pre_test_script_failure_num == 3:
+                print("\033[91mMaximum pre-test script failures reached. Skipping this workload.\033[0m")
+                continue  # Continue with the next workload if pre-test fails
+
+'''
+
+def process_on_workloads(all_xml_path):
+    workloads = os.listdir(all_xml_path)
+    for workload_name in workloads:
+        workload_dir = os.path.join(all_xml_path, workload_name)
         print()
         print("Processing on " + workload_dir)
         for workload_number in range(len(workloads)):
@@ -226,5 +253,5 @@ def process_on_workloads(all_xml_path):
             except Exception as e:
                 print(f"\033[91mAn error occurred for workload {workload_name}: {str(e)}\033[0m")
                 continue
-
+'''
 process_on_workloads(all_xml_path)
