@@ -65,9 +65,9 @@ def process_on_workloads(workloads_dir_path):
                 print("\033[91mPre-test script executed with failure!, try for " + str(2-talash) + " more time\033[0m")
                 pre_test_script_failure_num += 1
                 time.sleep(1)
-            if pre_test_script_failure_num == 3:
-                print("\033[91mMaximum pre-test script failures reached. Skipping this workload.\033[0m")
-                continue
+                if pre_test_script_failure_num == 3:
+                    print("\033[91mMaximum pre-test script failures reached. Skipping this workload.\033[0m")
+                    continue
             
             # Start workload
             workload_file_path = os.path.join(workloads_dir_path, workload)
