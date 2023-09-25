@@ -27,37 +27,11 @@ max_pre_test_script_failure = 3
 
 # New code starts here
 def process_on_workloads(all_xml_path):
-    workloads = os.listdir(all_xml_path)
-    for workload_name in workloads:
-        workload_dir = os.path.join(all_xml_path, workload_name)
-        #print()
-        print("Processing on " + workload_dir)
-        
-        for workload_number in range(len(workloads)):
-            # Execute the script before running the test
-            print("\033[1mExecuting pre-test script...\033[0m")
-            time.sleep(1)
-            pre_test_script_failure_num = 0
-            for i in range(max_pre_test_script_failure):
-                pre_test_script = subprocess.run([pre_test_script_path], shell=True)
-                if pre_test_script.returncode == 0:
-                    print("\033[92mPre-test script executed successfully!\033[0m")
-                    break
-                else:
-                    print("\033[91mPre-test script executed with failure!\033[0m")
-                    pre_test_script_failure_num += 1
-                time.sleep(1)
-            if pre_test_script_failure_num == 3:
-                print("\033[91mMaximum pre-test script failures reached. Skipping this workload.\033[0m")
-                continue  # Continue with the next workload if pre-test fails
-            
-            # Start workload
-            workload_file_path = os.path.join(all_xml_path,str(workload_number))
-            print(workload_file_path)
-            result = subprocess.run(["bash", cosbench_command, submit, workload_file_path], stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
-            if result.returncode == 1:
-                print("\033[91mStarting workload failed. Skipping this workload.\033[0m")
-                continue  # Continue with the next workload if workload starting fails
+    print("starting funxtion")
+    all_workloads = os.listdir(all_xml_path)
+    print(all_workloads)
+
+
 
 '''
 
