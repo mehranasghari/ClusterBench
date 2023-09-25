@@ -6,9 +6,6 @@ import time
 import shutil
 import csv
 
-# New Arguments for new main
-all_xml_path = "./../cosbench-xml/workload-gen/all-xml"
-
 # Getting arguments from send-load.py
 # Arguments are: input file, default file and script file
 input_file_path = sys.argv[1]
@@ -22,13 +19,37 @@ result_path = './../result/'
 pre_test_script_path = script_file_path
 backup_script_path = './../Backup/backup_script.py'
 hosts_file_path = "./../conf/Deployments/Host-names/hosts.txt"
+workloads_dir_path = "./../workloads"
+config_gen_path = "./../Codes/config_gen.py"
+input_txt_path = "./../Codes/input.txt"
 submit = 'submit'
 max_pre_test_script_failure = 3
 
 # New code starts here
-def process_on_workloads(all_xml_path):
+def process_on_workloads(workloads_dir_path):
 
-    all_workloads = os.listdir(all_xml_path)
+    # make dir for workloads and check if it is empty or not
+    try :
+        if workloads_dir_path:
+            delete_command = f"rm -rf {workloads_dir_path}/*"
+            delete_process = subprocess.run(delete_command, shell=True)
+            delete_exit_code = delete_process.returncode
+            if delete_exit_code == 1:
+                print("\033[91mFailure in deleting directory!\033[0m")
+        else:
+            os.mkdir(workloads_dir_path)
+    except:
+        print("\033[91mFailure in processing with directory!\033[0m")
+
+    # Trrigger generator xml
+    trrigger_command = f"python3 {config_gen_path} {input_txt_path}"
+    trrigger_process = subprocess.run(trrigger_command, shell=True)
+    trrigger_exit_code = trrigger_process.returncode
+    if trrigger_exit_code == 1:
+        print("\033[91mFailure in triggering generator xml!\033[0m")
+        exit()
+
+    all_workloads = os.listdir(workloads_dir_path)
     for workload in all_workloads :
 
         # Execute the script before running the test
@@ -49,7 +70,7 @@ def process_on_workloads(all_xml_path):
                 continue
             
             # Start workload
-            workload_file_path = os.path.join(all_xml_path, workload)
+            workload_file_path = os.path.join(workloads_dir_path, workload)
             print (workload_file_path)
             Cos_bench_command = subprocess.run(["bash", cosbench_command, submit, workload_file_path], stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
             if Cos_bench_command.returncode == 1:
@@ -260,4 +281,4 @@ def process_on_workloads(all_xml_path):
                 print(f"\033[91mAn error occurred for workload {workload_name}: {str(e)}\033[0m")
                 continue
 '''
-process_on_workloads(all_xml_path)
+process_on_workloads(workloads_dir_path)
