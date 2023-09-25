@@ -27,10 +27,26 @@ max_pre_test_script_failure = 3
 
 # New code starts here
 def process_on_workloads(all_xml_path):
-    print("starting funxtion")
+    #print("starting funxtion")
     all_workloads = os.listdir(all_xml_path)
     for workload in all_workloads :
-        print(workload)
+        #print(workload)
+        # Execute the script before running the test
+        print("\033[1mExecuting pre-test script...\033[0m")
+        time.sleep(1)
+        pre_test_script_failure_num = 0
+        for talash in range(max_pre_test_script_failure):
+            pre_test_script = subprocess.run([pre_test_script_path], shell=True)
+            if pre_test_script.returncode == 0:
+                print("\033[92mPre-test script executed successfully!\033[0m")
+                break
+            else:
+                print("\033[91mPre-test script executed with failure!, try for " + str(3-talash) + " time\033[0m")
+                pre_test_script_failure_num += 1
+                time.sleep(1)
+            if pre_test_script_failure_num == 3:
+                print("\033[91mMaximum pre-test script failures reached. Skipping this workload.\033[0m")
+                continue  # Continue with the next workload if pre-test fails
 
 
 
