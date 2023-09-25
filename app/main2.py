@@ -58,16 +58,17 @@ def process_on_workloads(all_xml_path):
                 continue  # Continue with the next workload if workload starting fails
 
             # Extract ID of workload
-            output_lines = result.stdout.splitlines()
+            workload_id = ""
             for line in output_lines:
-                if line.find("ID"):
-                    output_line = line
-                else:
-                    print("\033[91mExtracting ID of workload failed.\033[0m")
-                    continue # Continue with the next workload if workload starting fails
-            
-            # Assign workload id
-            workload_id = output_line.rsplit(maxsplit=1)[-1]
+                if "ID" in line:
+                    parts = line.split()
+                    if len(parts) > 1:
+                        workload_id = parts[-1]
+                        break
+
+            if not workload_id:
+                print("\033[91mExtracting ID of workload failed.\033[0m")
+                continue  # Continue with the next workload if workload starting fails
 
             # Generate archive file name of workload
             archive_file_name = workload_id + "-swift-sample"
