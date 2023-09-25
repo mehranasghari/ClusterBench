@@ -71,7 +71,8 @@ def process_on_workloads(workloads_dir_path):
             
             # Start workload
             workload_file_path = os.path.join(workloads_dir_path, workload)
-            print (workload_file_path)
+            print("here")
+            print(workload_file_path)
             Cos_bench_command = subprocess.run(["bash", cosbench_command, submit, workload], stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
             if Cos_bench_command.returncode == 1:
                 print("\033[91mStarting workload failed. Skipping this workload.\033[0m")
