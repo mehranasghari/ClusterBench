@@ -16,10 +16,10 @@ def replace_tags(input_text):
             replace_tags(newFile)
     else:
         filename += 1
-        with open(f"./../../workloads/{filename}.xml", 'w') as outfile:
+        with open(f"./workloads/{filename}.xml", 'w') as outfile:
             outfile.write(input_text)
 
 # Read the input file
-with open('./input.txt', 'r') as infile:
+with open('input.txt', 'r') as infile:
     input_text = infile.read()
 replace_tags(input_text)
