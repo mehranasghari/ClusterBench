@@ -59,6 +59,7 @@ def process_on_workloads(all_xml_path):
 
             # Extract ID of workload
             output_lines = result.stdout.splitlines()
+            print(output_lines)
             workload_id = ""
             for line in output_lines:
                 if "ID" in line:
