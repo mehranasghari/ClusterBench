@@ -59,6 +59,9 @@ def process_on_workloads(workloads_dir_path):
 
         if Cos_bench_command.returncode == 1:
             print("\033[91mStarting workload failed. Skipping this workload.\033[0m")
+            continue
+        else :
+            print("\033[92mStarting workload successfully!\033[0m")
 
 
 
