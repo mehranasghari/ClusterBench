@@ -50,6 +50,13 @@ def process_on_workloads(all_xml_path):
             if pre_test_script_failure_num == 3:
                 print("\033[91mMaximum pre-test script failures reached. Skipping this workload.\033[0m")
                 continue  # Continue with the next workload if pre-test fails
+            
+            # Start workload
+            workload_file_path = os.path.join(all_xml_path, workload_dir, "workload.xml")
+            result = subprocess.run(["bash", cosbench_command, submit, workload_file_path], stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
+            if result.returncode == 1:
+                print("\033[91mStarting workload failed. Skipping this workload.\033[0m")
+                continue  # Continue with the next workload if workload starting fails
 
 '''
 
