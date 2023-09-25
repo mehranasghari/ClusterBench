@@ -27,56 +27,39 @@ max_pre_test_script_failure = 3
 
 # New code starts here
 def process_on_workloads(workloads_dir_path):
-    '''
-    # make dir for workloads and check if it is empty or not
-    try :
-        if workloads_dir_path:
-            delete_command = f"rm -rf {workloads_dir_path}/*"
-            delete_process = subprocess.run(delete_command, shell=True)
-            delete_exit_code = delete_process.returncode
-            if delete_exit_code == 1:
-                print("\033[91mFailure in deleting directory!\033[0m")
-        else:
-            os.mkdir(workloads_dir_path)
-    except:
-        print("\033[91mFailure in processing with directory!\033[0m")
 
-    # Trrigger generator xml
-    trrigger_command = f"python3 {config_gen_path} {input_txt_path}"
-    trrigger_process = subprocess.run(trrigger_command, shell=True)
-    trrigger_exit_code = trrigger_process.returncode
-    if trrigger_exit_code == 1:
-        print("\033[91mFailure in triggering generator xml!\033[0m")
-        exit()
-    '''
     all_workloads = os.listdir(workloads_dir_path)
-    for workload in all_workloads :
 
+    for workload in all_workloads:
         # Execute the script before running the test
         print("\033[1mExecuting pre-test script...\033[0m")
         time.sleep(1)
         pre_test_script_failure_num = 0
+
         for talash in range(max_pre_test_script_failure):
             pre_test_script = subprocess.run([pre_test_script_path], shell=True)
+
             if pre_test_script.returncode == 0:
                 print("\033[92mPre-test script executed successfully!\033[0m")
                 break
             else:
-                print("\033[91mPre-test script executed with failure!, try for " + str(2-talash) + " more time\033[0m")
+                print("\033[91mPre-test script executed with failure! Retrying {} more time(s)\033[0m".format(max_pre_test_script_failure - talash - 1))
                 pre_test_script_failure_num += 1
                 time.sleep(1)
-            if pre_test_script_failure_num == 3:
-                print("\033[91mMaximum pre-test script failures reached. Skipping this workload.\033[0m")
-                continue
-            
-            # Start workload
-            workload_file_path = os.path.join(workloads_dir_path, workload)
-            print("here")
-            print(workload_file_path)
-            Cos_bench_command = subprocess.run(["bash", cosbench_command, submit, workload], stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
-            if Cos_bench_command.returncode == 1:
-                print("\033[91mStarting workload failed. Skipping this workload.\033[0m")
-                continue
+
+        if pre_test_script_failure_num == max_pre_test_script_failure:
+            print("\033[91mMaximum pre-test script failures reached. Skipping this workload.\033[0m")
+            continue
+
+        # Start workload
+        workload_file_path = os.path.join(workloads_dir_path, workload)
+        print("here")
+        print(workload_file_path)
+        Cos_bench_command = subprocess.run(["bash", cosbench_command, submit, workload], stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
+
+        if Cos_bench_command.returncode == 1:
+            print("\033[91mStarting workload failed. Skipping this workload.\033[0m")
+
 
 
 '''
@@ -282,4 +265,28 @@ def process_on_workloads(all_xml_path):
                 print(f"\033[91mAn error occurred for workload {workload_name}: {str(e)}\033[0m")
                 continue
 '''
+
+# __________________________________________________ #
+'''
+    # make dir for workloads and check if it is empty or not
+    try :
+        if workloads_dir_path:
+            delete_command = f"rm -rf {workloads_dir_path}/*"
+            delete_process = subprocess.run(delete_command, shell=True)
+            delete_exit_code = delete_process.returncode
+            if delete_exit_code == 1:
+                print("\033[91mFailure in deleting directory!\033[0m")
+        else:
+            os.mkdir(workloads_dir_path)
+    except:
+        print("\033[91mFailure in processing with directory!\033[0m")
+
+    # Trrigger generator xml
+    trrigger_command = f"python3 {config_gen_path} {input_txt_path}"
+    trrigger_process = subprocess.run(trrigger_command, shell=True)
+    trrigger_exit_code = trrigger_process.returncode
+    if trrigger_exit_code == 1:
+        print("\033[91mFailure in triggering generator xml!\033[0m")
+        exit()
+    '''
 process_on_workloads(workloads_dir_path)
