@@ -29,7 +29,8 @@ max_pre_test_script_failure = 3
 def process_on_workloads(all_xml_path):
     print("starting funxtion")
     all_workloads = os.listdir(all_xml_path)
-    print(all_workloads)
+    for workload in all_workloads :
+        print(workload)
 
 
 
