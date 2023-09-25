@@ -56,31 +56,27 @@ def process_on_workloads(workloads_dir_path):
         print("\033[1mExecuting pre-test script...\033[0m")
         time.sleep(1)
         pre_test_script_failure_num = 0
-        print()
-        print("Executing pre-test script ...")
-        time.sleep(1)
-        pre_test_script_failure_num = 0
-        for i in range(max_pre_test_script_failure):
-            pre_test_script = subprocess.run(pre_test_script_path, shell=True)
+        for talash in range(max_pre_test_script_failure):
+            pre_test_script = subprocess.run([pre_test_script_path], shell=True)
             if pre_test_script.returncode == 0:
-                print("Pre-test script executed successfully!")
+                print("\033[92mPre-test script executed successfully!\033[0m")
                 break
             else:
-                print("Pre-test script executed with failure!")
+                print("\033[91mPre-test script executed with failure!, try for " + str(2-talash) + " more time\033[0m")
                 pre_test_script_failure_num += 1
-            time.sleep(1)
-        print()
-        if pre_test_script_failure_num == 3:
-            exit() # all test will be cancelled
+                time.sleep(1)
+            if pre_test_script_failure_num == 3:
+                print("\033[91mMaximum pre-test script failures reached. Skipping this workload.\033[0m")
+                continue
+            
             # Start workload
-
-        workload_file_path = os.path.join(workloads_dir_path, workload)
-        print("here")
-        print(workload_file_path)
-        Cos_bench_command = subprocess.run(["bash", cosbench_command, submit, workload], stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
-        if Cos_bench_command.returncode == 1:
-            print("\033[91mStarting workload failed. Skipping this workload.\033[0m")
-            continue
+            workload_file_path = os.path.join(workloads_dir_path, workload)
+            print("here")
+            print(workload_file_path)
+            Cos_bench_command = subprocess.run(["bash", cosbench_command, submit, workload], stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
+            if Cos_bench_command.returncode == 1:
+                print("\033[91mStarting workload failed. Skipping this workload.\033[0m")
+                continue
 
 
 '''
