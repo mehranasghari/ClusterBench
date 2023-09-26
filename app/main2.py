@@ -63,7 +63,6 @@ def process_on_workloads(workloads_dir_path):
 
         # Extract ID of workload
         output_lines = Cos_bench_command.stdout.splitlines()
-        print(output_lines)
         workload_id = ""
         for line in output_lines:
             if "ID" in line:
@@ -71,7 +70,13 @@ def process_on_workloads(workloads_dir_path):
                 if len(parts) > 1:
                     workload_id = parts[-1]
                     break
-
+        
+        # Generate archive file name of workload
+        archive_file_name = workload_id + "-swift-sample"
+        print(f"Workload Info: ID:{workload_id} Name:{workload}")
+        if workload_id == "":
+            print("\033[91mWorkload ID is empty. Skipping this workload.\033[0m")
+            continue
 
 
 '''
