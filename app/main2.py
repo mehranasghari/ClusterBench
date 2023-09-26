@@ -53,13 +53,10 @@ def process_on_workloads(workloads_dir_path):
 
         # Start workload
         workload_file_path = os.path.join(workloads_dir_path, workload)
-        print(workload_file_path)
         Cos_bench_command = subprocess.run(["bash", cosbench_command, submit, workload_file_path], stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
         if Cos_bench_command.returncode == 1:
             print("\033[91mStarting workload failed. Skipping this workload.\033[0m")
             continue
-        else:
-            print("\033[92mStarting workload successfully!\033[0m")
 
         # Extract ID of workload
         output_lines = Cos_bench_command.stdout.splitlines()
@@ -73,7 +70,7 @@ def process_on_workloads(workloads_dir_path):
         
         # Generate archive file name of workload
         archive_file_name = workload_id + "-swift-sample"
-        print(f"Workload Info: ID:{workload_id} Name:{workload}")
+        print(f"\033[1mWorkload Info:\033[0m ID: {workload_id} Name: {workload}")
         if workload_id == "":
             print("\033[91mWorkload ID is empty. Skipping this workload.\033[0m")
             continue
