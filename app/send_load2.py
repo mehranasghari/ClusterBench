@@ -6,8 +6,6 @@ import getopt
 import os
 import subprocess
 
-mainswitch = sys.argv[1]
-
 def usage():
     print("""
     send_load.py [OPTIONS]
@@ -47,13 +45,11 @@ def main(argv):
             benchmark_file = arg
         elif opt in ("-s", "--script-file"):
             script_file = arg
-    if mainswitch:
+ 
     # Call the main program 
     #print(f"Calling main program with benchmark_file: {benchmark_file}, default_file: {default_file}, script_file: {script_file}")
-        run = f"python3 main2.py {benchmark_file} {default_file} {script_file} -p ./../cosbench-xml/workload-gen/all-xml"
-        run_process = subprocess.run(run,shell=True)
-    else :
-        print ("Not developed yet ! :(")
+    run = f"python3 main2.py {benchmark_file} {default_file} {script_file} -p ./../cosbench-xml/workload-gen/all-xml"
+    run_process = subprocess.run(run,shell=True)
 
 if __name__ == "__main__":
     main(sys.argv[1:])
