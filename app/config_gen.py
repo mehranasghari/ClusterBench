@@ -20,6 +20,6 @@ def replace_tags(input_text):
             outfile.write(input_text)
 
 # Read the input file
-with open('input.txt', 'r') as infile:
+with open('input', 'r') as infile:
     input_text = infile.read()
 replace_tags(input_text)
