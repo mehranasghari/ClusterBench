@@ -104,7 +104,7 @@ def process_input_file(file_path_input):
                 bar()
 
                 # Perform backup using influxd backup command
-                backup_command = f"docker exec -it {Primary_influxdb_container_name} influxd backup -portable -db {Main_influxdb_DB_name} -start {start_time_backup} -end {end_time_backup} {backup_path2}/backup "
+                backup_command = f"docker exec -it {Primary_influxdb_container_name} influxd backup -portable -db {Main_influxdb_DB_name} -start {start_time_backup} -end {end_time_backup} {backup_path2}/backup  "
                 backup_process = subprocess.run(backup_command, shell=True)
                 exit_code = backup_process.returncode
                 if exit_code == 0:
@@ -116,7 +116,7 @@ def process_input_file(file_path_input):
                 print()
 
                 # Tar backup files and delete extra files
-                tar_command = f"tar -cf {Primary_influxdb_address_in_host}/{backup_dir_name}/backup.tar.gz -C {Primary_influxdb_address_in_host}/{backup_dir_name}/backup . > /dev/null 2>&1"
+                tar_command = f"tar -cf {Primary_influxdb_address_in_host}/{backup_dir_name}/backup.tar.gz -C {Primary_influxdb_address_in_host}/{backup_dir_name}/backup . "
                 tar_process = subprocess.run(tar_command, shell=True)
                 exit_code = tar_process.returncode
                 if exit_code == 0:
