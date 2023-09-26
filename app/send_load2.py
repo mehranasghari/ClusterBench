@@ -6,9 +6,9 @@ import getopt
 import os
 import subprocess
 
-# Process given Test name as an arqument
+# Process arqument
 argParser = argparse.ArgumentParser()
-argParser.add_argument("-C", "--Customized", nargs='?', const=True, help="if -C speecified main2 will be excuted, otherwise original main will be excuted")
+argParser.add_argument("-C", "--Customized", action="store_true", help="if -C speecified main2 will be excuted, otherwise original main will be excuted")
 args = argParser.parse_args()
 mainswitch = args.Customized
 
