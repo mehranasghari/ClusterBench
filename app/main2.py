@@ -242,27 +242,4 @@ def process_on_workloads(workloads_dir_path):
             print(f"\033[91mAn error occurred for workload {workload}: {str(e)}\033[0m")
             continue
 
-# __________________________________________________ #
-'''
-    # make dir for workloads and check if it is empty or not
-    try :
-        if workloads_dir_path:
-            delete_command = f"rm -rf {workloads_dir_path}/*"
-            delete_process = subprocess.run(delete_command, shell=True)
-            delete_exit_code = delete_process.returncode
-            if delete_exit_code == 1:
-                print("\033[91mFailure in deleting directory!\033[0m")
-        else:
-            os.mkdir(workloads_dir_path)
-    except:
-        print("\033[91mFailure in processing with directory!\033[0m")
-
-    # Trrigger generator xml
-    trrigger_command = f"python3 {config_gen_path} {input_txt_path}"
-    trrigger_process = subprocess.run(trrigger_command, shell=True)
-    trrigger_exit_code = trrigger_process.returncode
-    if trrigger_exit_code == 1:
-        print("\033[91mFailure in triggering generator xml!\033[0m")
-        exit()
-    '''
 process_on_workloads(workloads_dir_path)
