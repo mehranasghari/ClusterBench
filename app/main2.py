@@ -32,7 +32,7 @@ def process_on_workloads(workloads_dir_path):
 
     for workload in all_workloads:
         # Execute the script before running the test
-        print("\033[1mExecuting pre-test script...\033[0m")
+        print("\033[1m\nExecuting pre-test script...\033[0m")
         time.sleep(1)
         pre_test_script_failure_num = 0
 
