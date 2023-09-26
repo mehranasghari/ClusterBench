@@ -1,9 +1,16 @@
 #!/usr/bin/env python3
 
+import argparse
 import sys
 import getopt
 import os
 import subprocess
+
+# Process given Test name as an arqument
+argParser = argparse.ArgumentParser()
+argParser.add_argument("-C", "--Customized", help="if -C speecified main2 will be excuted, otherwise original main will be excuted")
+args = argParser.parse_args()
+mainswitch = args.Customized
 
 def usage():
     print("""
@@ -44,11 +51,13 @@ def main(argv):
             benchmark_file = arg
         elif opt in ("-s", "--script-file"):
             script_file = arg
-
+    if mainswitch:
     # Call the main program 
     #print(f"Calling main program with benchmark_file: {benchmark_file}, default_file: {default_file}, script_file: {script_file}")
-    run = f"python3 main2.py {benchmark_file} {default_file} {script_file} -p ./../cosbench-xml/workload-gen/all-xml"
-    run_process = subprocess.run(run,shell=True)
-    
+        run = f"python3 main2.py {benchmark_file} {default_file} {script_file} -p ./../cosbench-xml/workload-gen/all-xml"
+        run_process = subprocess.run(run,shell=True)
+    else :
+        print ("Not developed yet ! :(")
+        
 if __name__ == "__main__":
     main(sys.argv[1:])
