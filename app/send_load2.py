@@ -6,11 +6,7 @@ import getopt
 import os
 import subprocess
 
-# Process arqument
-argParser = argparse.ArgumentParser()
-argParser.add_argument("-C", "--Customized", action="store_true", help="if -C speecified main2 will be excuted, otherwise original main will be excuted")
-args = argParser.parse_args()
-mainswitch = args.Customized
+mainswitch = sys.argv[1]
 
 def usage():
     print("""
