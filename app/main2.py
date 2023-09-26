@@ -95,6 +95,25 @@ def process_on_workloads(workloads_dir_path):
         
         os.mkdir(result_file_path)
         final_workload_name = result_file_path.split('/')[-1]
+        
+        # Create and copy workload.log & Add try for copying file up to 2 times
+        archive_log_file = os.path.join(archive_file_path, 'workload.log')
+        result_log_file = os.path.join(result_file_path, 'workload.log')
+        max_retries = 2  # Number of retry attempts
+
+        for retry in range(max_retries + 1):
+            try:
+                shutil.copy2(archive_log_file, result_log_file)
+                break  # Exit the loop if copying is successful
+
+            except Exception as e:
+                print(f"\033[91mAn error occurred: {e}\033[0m")
+
+            if retry < max_retries:
+                # Sleep for a short duration before retrying
+                time.sleep(1)
+            else:
+                print(f"\033[91mMaximum retries reached ({max_retries}). File {archive_log_file} copy failed.\033[0m")
 
 
 '''
