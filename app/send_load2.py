@@ -8,7 +8,7 @@ import subprocess
 
 # Process given Test name as an arqument
 argParser = argparse.ArgumentParser()
-argParser.add_argument("-C", "--Customized", help="if -C speecified main2 will be excuted, otherwise original main will be excuted")
+argParser.add_argument("-C", "--Customized", default=False, help="if -C speecified main2 will be excuted, otherwise original main will be excuted")
 args = argParser.parse_args()
 mainswitch = args.Customized
 
@@ -58,6 +58,6 @@ def main(argv):
         run_process = subprocess.run(run,shell=True)
     else :
         print ("Not developed yet ! :(")
-        
+
 if __name__ == "__main__":
     main(sys.argv[1:])
