@@ -61,6 +61,17 @@ def process_on_workloads(workloads_dir_path):
         else:
             print("\033[92mStarting workload successfully!\033[0m")
 
+        # Extract ID of workload
+        output_lines = Cos_bench_command.stdout.splitlines()
+        print(output_lines)
+        workload_id = ""
+        for line in output_lines:
+            if "ID" in line:
+                parts = line.split()
+                if len(parts) > 1:
+                    workload_id = parts[-1]
+                    break
+
 
 
 '''
