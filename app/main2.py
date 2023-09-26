@@ -77,6 +77,13 @@ def process_on_workloads(workloads_dir_path):
         if workload_id == "":
             print("\033[91mWorkload ID is empty. Skipping this workload.\033[0m")
             continue
+        
+        # Check every second if the workload has ended or not
+        while True:
+            archive_file_path = os.path.join(archive_path, archive_file_name)
+            if os.path.exists(archive_file_path):
+                break
+            time.sleep(3)  # changed to 3 seconds
 
 
 '''
