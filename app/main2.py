@@ -21,12 +21,33 @@ backup_script_path = './../Backup/backup_script.py'
 hosts_file_path = "./../conf/Deployments/Host-names/hosts.txt"
 workloads_dir_path = "./workloads"
 config_gen_path = "config_gen.py"
-input_txt_path = "input.txt"
+input_txt_path = "./input.txt"
 submit = 'submit'
 max_pre_test_script_failure = 3
 
 # New code starts here
 def process_on_workloads(workloads_dir_path):
+
+    # make dir for workloads and check if it is empty or not
+    try :
+        if workloads_dir_path:
+            delete_command = f"rm -rf {workloads_dir_path}/*"
+            delete_process = subprocess.run(delete_command, shell=True)
+            delete_exit_code = delete_process.returncode
+            if delete_exit_code == 1:
+                print("\033[91mFailure in deleting directory!\033[0m")
+        else:
+            os.mkdir(workloads_dir_path)
+    except:
+        print("\033[91mFailure in processing with directory!\033[0m")
+
+    # Trrigger generator xml
+    trrigger_command = f"python3 {config_gen_path} {input_txt_path}"
+    trrigger_process = subprocess.run(trrigger_command, shell=True)
+    trrigger_exit_code = trrigger_process.returncode
+    if trrigger_exit_code == 1:
+        print("\033[91mFailure in triggering generator xml!\033[0m")
+        exit()
 
     all_workloads = os.listdir(workloads_dir_path)
 
