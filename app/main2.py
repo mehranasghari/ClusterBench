@@ -114,6 +114,46 @@ def process_on_workloads(workloads_dir_path):
                 time.sleep(1)
             else:
                 print(f"\033[91mMaximum retries reached ({max_retries}). File {archive_log_file} copy failed.\033[0m")
+            
+        # Create and copy workload-config.xml
+        archive_config_file = os.path.join(archive_file_path, 'workload-config.xml')
+        result_config_file = os.path.join(result_file_path, 'workload-config.xml')
+        max_retries = 2
+
+        for retry in range(max_retries + 1):
+            try:
+                shutil.copy2(archive_config_file, result_config_file)
+                break
+            except Exception as e:
+                print(f"\033[91mAn error occurred: {e}\033[0m")
+
+            if retry < max_retries:
+                time.sleep(3)
+            else:
+                print(f"\033[91mMaximum retries reached ({max_retries}). File {archive_config_file} copy failed.\033[0m")
+        # Create archive csv file
+        archive_csv_path = os.path.join(archive_file_path, archive_file_name)
+        archive_csv_path += ".csv"
+
+        # Create result csv file
+        result_csv_path = os.path.join(result_file_path, workload_name)
+        result_csv_path += ".csv"
+
+        # Copy csv file from archive to result directory
+        max_retries = 2
+
+        for retry in range(max_retries + 1):
+            try:
+                shutil.copy2(archive_csv_path, result_csv_path)
+                break
+            except Exception as e:
+                print(f"\033[91mAn error occurred: {e}\033[0m")
+
+            if retry < max_retries:
+                time.sleep(3)
+            else:
+                print(f"\033[91mMaximum retries reached ({max_retries}). File {archive_csv_path} copy failed.\033[0m")
+
 
 
 '''
