@@ -81,6 +81,20 @@ def process_on_workloads(workloads_dir_path):
             if os.path.exists(archive_file_path):
                 break
             time.sleep(3)  # changed to 3 seconds
+        
+        # Create result directory for workloads
+        result_file_path = os.path.join(result_path, workload)
+        if os.path.exists(result_file_path):
+            result_file_tail = '_' + '1' + '_'
+            result_file_path += result_file_tail
+            while os.path.exists(result_file_path):
+                splitted_result_file = result_file_path.split('_')
+                repeat_number = int(splitted_result_file[-2]) + 1
+                splitted_result_file[-2] = str(repeat_number)
+                result_file_path = '_'.join(splitted_result_file)
+        
+        os.mkdir(result_file_path)
+        final_workload_name = result_file_path.split('/')[-1]
 
 
 '''
