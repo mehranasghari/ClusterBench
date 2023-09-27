@@ -9,6 +9,7 @@ import csv
 # Getting arguments from send-load.py
 # Arguments are: input file, default file and script file
 script_file_path = sys.argv[1]
+sleep_time_between_workloads = 60 #time in Seconds
 
 # Defining paths
 cosbench_command = './../../cli.sh'
@@ -48,7 +49,8 @@ def process_on_workloads(workloads_dir_path):
         exit()
 
     all_workloads = os.listdir(workloads_dir_path)
-
+    all_workloads = sorted(all_workloads)
+    print(all_workloads)
     for workload in all_workloads:
         # Execute the script before running the test
         print("\033[1m\nExecuting pre-test script...\033[0m")
@@ -69,6 +71,10 @@ def process_on_workloads(workloads_dir_path):
         if pre_test_script_failure_num == max_pre_test_script_failure:
             print("\033[91mMaximum pre-test script failures reached. Skipping this workload.\033[0m")
             continue
+
+        # Sleep time for a short duration
+        print("sleep for: ", sleep_time_between_workloads,"s")
+        time.sleep(sleep_time_between_workloads)
 
         # Start workload
         workload_file_path = os.path.join(workloads_dir_path, workload)
@@ -103,7 +109,6 @@ def process_on_workloads(workloads_dir_path):
         
         # Create result directory for workloads
         workload_for_dir_name = workload.replace('.xml', '')
-        print(workload_for_dir_name)
         result_file_path = os.path.join(result_path, workload_for_dir_name)
         if os.path.exists(result_file_path):
             result_file_tail = '_' + '1' + '_'
