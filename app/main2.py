@@ -9,7 +9,7 @@ import csv
 # Getting arguments from send-load.py
 # Arguments are: input file, default file and script file
 script_file_path = sys.argv[1]
-sleep_time_between_workloads = 60 #time in Seconds
+sleep_time_between_workloads = 0 #time in Seconds
 
 # Defining paths
 cosbench_command = './../../cli.sh'
