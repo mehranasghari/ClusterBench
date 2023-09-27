@@ -102,7 +102,7 @@ def process_on_workloads(workloads_dir_path):
             time.sleep(3)  # changed to 3 seconds
         
         # Create result directory for workloads
-        workload_for_dir_name = workload.replace('xml', '')
+        workload_for_dir_name = workload.replace('.xml', '')
         print(workload_for_dir_name)
         result_file_path = os.path.join(result_path, workload_for_dir_name)
         if os.path.exists(result_file_path):
