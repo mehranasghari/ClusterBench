@@ -104,6 +104,7 @@ def process_input_file(file_path_input):
                 bar()
 
                 # Perform backup using influxd backup command
+                print("*-*-**-*-*-*-*-*-*-* Backup logs *-*-**-*-*-*-*-*-*-*") >> f"{backup_path}/backup.log"
                 backup_command = f"docker exec -it {Primary_influxdb_container_name} influxd backup -portable -db {Main_influxdb_DB_name} -start {start_time_backup} -end {end_time_backup} {backup_path2}/backup > {backup_path}/backup.log 2>&1"
                 backup_process = subprocess.run(backup_command, shell=True)
                 exit_code = backup_process.returncode
