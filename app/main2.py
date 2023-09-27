@@ -8,9 +8,7 @@ import csv
 
 # Getting arguments from send-load.py
 # Arguments are: input file, default file and script file
-input_file_path = sys.argv[1]
-default_file_path = sys.argv[2]
-script_file_path = sys.argv[3]
+script_file_path = sys.argv[1]
 
 # Defining paths
 cosbench_command = './../../cli.sh'
@@ -104,7 +102,9 @@ def process_on_workloads(workloads_dir_path):
             time.sleep(3)  # changed to 3 seconds
         
         # Create result directory for workloads
-        result_file_path = os.path.join(result_path, workload)
+        workload_for_dir_name = workload.replace('xml', '')
+        print(workload_for_dir_name)
+        result_file_path = os.path.join(result_path, workload_for_dir_name)
         if os.path.exists(result_file_path):
             result_file_tail = '_' + '1' + '_'
             result_file_path += result_file_tail
@@ -207,6 +207,7 @@ def process_on_workloads(workloads_dir_path):
                             last_main_completed_time = row[24]
 
             if first_main_launching_time and last_main_completed_time:
+                
                 # Write time of workload in time file
                 time_file_path = os.path.join(result_file_path, 'time')
                 time_file = open(time_file_path, "w")
