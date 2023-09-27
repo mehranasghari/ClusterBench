@@ -50,7 +50,6 @@ def process_on_workloads(workloads_dir_path):
 
     all_workloads = os.listdir(workloads_dir_path)
     all_workloads = sorted(all_workloads)
-    print(all_workloads)
     for workload in all_workloads:
         # Execute the script before running the test
         print("\033[1m\nExecuting pre-test script...\033[0m")
@@ -76,8 +75,6 @@ def process_on_workloads(workloads_dir_path):
         if sleep_time_between_workloads > 0:
             print("Wait for: ",sleep_time_between_workloads,"s")
             time.sleep(sleep_time_between_workloads)
-        else:
-            print("No wating between tests")
 
         # Start workload
         workload_file_path = os.path.join(workloads_dir_path, workload)
