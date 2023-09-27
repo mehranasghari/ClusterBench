@@ -73,8 +73,11 @@ def process_on_workloads(workloads_dir_path):
             continue
 
         # Sleep time for a short duration
-        print("sleep for: ", sleep_time_between_workloads,"s")
-        time.sleep(sleep_time_between_workloads)
+        if sleep_time_between_workloads > 0:
+            print("Wait for: ",sleep_time_between_workloads,"s")
+            time.sleep(sleep_time_between_workloads)
+        else:
+            print("No wating between tests")
 
         # Start workload
         workload_file_path = os.path.join(workloads_dir_path, workload)
