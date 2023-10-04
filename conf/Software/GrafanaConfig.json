@@ -1,5 +1,7 @@
 {
     "api_key" : "?",
     "URL" : "localhost",
-    "port" : "3001"
+    "port" : "3000",
+    "uid" : "l9W36T24z",
+    "dashboard_name" : "partial_monitoring"
 }

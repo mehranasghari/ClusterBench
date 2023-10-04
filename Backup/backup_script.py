@@ -104,7 +104,8 @@ def process_input_file(file_path_input):
                 bar()
 
                 # Perform backup using influxd backup command
-                backup_command = f"docker exec -it {Primary_influxdb_container_name} influxd backup -portable -db {Main_influxdb_DB_name} -start {start_time_backup} -end {end_time_backup} {backup_path2}/backup > /dev/null "
+                #print("*-*-**-*-*-*-*-*-*-* Backup logs *-*-**-*-*-*-*-*-*-*") >> f"{backup_path}/backup.log"
+                backup_command = f"docker exec -it {Primary_influxdb_container_name} influxd backup -portable -db {Main_influxdb_DB_name} -start {start_time_backup} -end {end_time_backup} {backup_path2}/backup > /dev/null 2>&1"
                 backup_process = subprocess.run(backup_command, shell=True)
                 exit_code = backup_process.returncode
                 if exit_code == 0:
@@ -116,7 +117,7 @@ def process_input_file(file_path_input):
                 print()
 
                 # Tar backup files and delete extra files
-                tar_command = f"tar -cf {Primary_influxdb_address_in_host}/{backup_dir_name}/backup.tar.gz -C {Primary_influxdb_address_in_host}/{backup_dir_name}/backup . > /dev/null 2>&1"
+                tar_command = f"tar -cf {Primary_influxdb_address_in_host}/{backup_dir_name}/backup.tar.gz -C {Primary_influxdb_address_in_host}/{backup_dir_name}/backup . "
                 tar_process = subprocess.run(tar_command, shell=True)
                 exit_code = tar_process.returncode
                 if exit_code == 0:
@@ -141,7 +142,7 @@ def process_input_file(file_path_input):
 
                 #MV BACKUP.TAR.GZ TO influxdb2 and delete original file
                 os.makedirs(Secondary_influxdb_address_in_host, exist_ok=True)
-                mv_command = f"mv -f {Primary_influxdb_address_in_host}/{backup_dir_name}  {Secondary_influxdb_address_in_host}/" # specified to move to influxdb 
+                mv_command = f"mv -f -u {Primary_influxdb_address_in_host}/{backup_dir_name}  {Secondary_influxdb_address_in_host}/" # specified to move to influxdb 
                 mv_process = subprocess.run(mv_command, shell=True)
                 exit_code = mv_process.returncode
                 if exit_code == 0:
