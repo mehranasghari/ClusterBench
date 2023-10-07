@@ -27,7 +27,7 @@ tz = grafana_config_data["Time_zone"]
 
 # Import hosts lists
 with open (hosts_file_path, 'r') as file:
-    all_hosts = file.readlines
+    all_hosts = file.readlines()
 
 # time environment
 tehran_time_zone = pytz.timezone('Asia/Tehran')
