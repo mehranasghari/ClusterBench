@@ -32,28 +32,28 @@ with open (hosts_file_path, 'r') as file:
 # time environment
 tehran_time_zone = pytz.timezone('Asia/Tehran')
 
-# process on argumants
+# Process on argumants
 argParser = argparse.ArgumentParser()
 argParser.add_argument("-s", "--Start", help="Start-time (Start-time for taking pictures)")
 argParser.add_argument("-e", "--End", help="End-time (End-time for taking pictures)")
 argParser.add_argument("-p", "--path", help="path (path to save pictures)")
 args = argParser.parse_args()
 
+# Process on start time
 start_date_time = args.Start
 start_date_time = datetime.strptime(start_date_time, '%Y-%m-%d %H:%M:%S')
 start_date_time = tehran_time_zone.localize(start_date_time)
 start_utc_datetime = start_date_time.astimezone(pytz.UTC)
 start_timestamp = int(start_utc_datetime.timestamp() * 1000)
 
-print (start_timestamp)
-
+# Process on end time
 End_date_time = args.End
 End_date_time = datetime.strptime(End_date_time, '%Y-%m-%d %H:%M:%S')
 End_date_time = tehran_time_zone.localize(End_date_time)
 end_utc_datetime = End_date_time.astimezone(pytz.UTC)
 end_timestamp = int(end_utc_datetime.timestamp() * 1000)
-print (end_timestamp)
 
+# Process on path
 save_path = args.path if args.path else "./Pictures"
 
 # Start renderring
@@ -63,7 +63,6 @@ def renderer(address, port, uid, dashboard_name, org_id, timeVariable, DataSourc
             host = line.strip().split(",")
             if len(host) >= 4:
                 host = host[3]
-                print("Host is :", host)
                 i = 0
                 # Recive panles id from grafana
                 id_curl_command = f"curl -s -H \"Authorization: Bearer {key}\" \
@@ -81,11 +80,13 @@ def renderer(address, port, uid, dashboard_name, org_id, timeVariable, DataSourc
                 for panel_id in panel_ids:
 
                     pix_curl_command = f"""curl -s -o {save_path}/{panel_names[0+i]}.png -H "Authorization: Bearer {key}" 'http://{address}:{port}/render/d-solo/{uid}/{dashboard_name}?orgId={org_id}&var-hostIs={host}&var-timeVariable={timeVariable}&var-DataSource={DataSource}&from={start_timestamp}&to={end_timestamp}&panelId={panel_id}&width={width}&height={height}&tz={tz}'"""
-                    pix_curl_process = subprocess.run(pix_curl_command, shell=True)
+                    pix_curl_process = subprocess.run(pix_curl_command, shell=True, stdout=subprocess.PIPE)
                     curl_exit_code = pix_curl_process.returncode
                     if curl_exit_code == 0:
                         print("Success")
-                    i += 1
+                        i += 1
+                    else:
+                        print(pix_curl_process.stdout)
             else:
                 print("Error, there is no host in the list")
     except Exception as e:
