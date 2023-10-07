@@ -61,7 +61,7 @@ def renderer(address, port, uid, dashboard_name, org_id, timeVariable, DataSourc
         for host in all_hosts:
             host = host.strip().spilt(',')
             if len(host) >= 4:
-                host = host[3].strip()
+                host = host[3]
                 i = 0
                 # Recive panles id from grafana
                 id_curl_command = f"curl -s -H \"Authorization: Bearer {key}\" \
