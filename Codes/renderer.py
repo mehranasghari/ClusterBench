@@ -43,14 +43,15 @@ start_date_time = args.Start
 start_date_time = datetime.strptime(start_date_time, '%Y-%m-%d %H:%M:%S')
 start_date_time = tehran_time_zone.localize(start_date_time)
 start_utc_datetime = start_date_time.astimezone(pytz.UTC)
-start_timestamp = start_utc_datetime.timestamp()
+start_timestamp = int(start_utc_datetime.timestamp() * 1000)
+
 print (start_timestamp)
 
 End_date_time = args.End
 End_date_time = datetime.strptime(End_date_time, '%Y-%m-%d %H:%M:%S')
 End_date_time = tehran_time_zone.localize(End_date_time)
 end_utc_datetime = End_date_time.astimezone(pytz.UTC)
-end_timestamp = end_utc_datetime.timestamp()
+end_timestamp = int(end_utc_datetime.timestamp() * 1000)
 print (end_timestamp)
 
 save_path = args.path if args.path else "./Pictures"
@@ -60,6 +61,7 @@ def renderer(address, port, uid, dashboard_name, org_id, timeVariable, DataSourc
     try:
         for line in all_hosts:
             host = line.strip().split(",")
+            print("Host is :", host)
             if len(host) >= 4:
                 host = host[3]
                 i = 0
