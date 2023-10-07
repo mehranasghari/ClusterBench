@@ -24,6 +24,7 @@ DataSource = grafana_config_data["DataSource"]
 width = grafana_config_data["picture_width"]
 height = grafana_config_data["picture_height"]
 tz = grafana_config_data["Time_zone"]
+
 # Import hosts lists
 with open (hosts_file_path, 'r') as file:
     all_hosts = file.readlines
@@ -34,7 +35,10 @@ tehran_time_zone = pytz.timezone('Asia/Tehran')
 # process on argumants
 argParser = argparse.ArgumentParser()
 argParser.add_argument("-s", "--Start", help="Start-time (Start-time for taking pictures)")
+argParser.add_argument("-e", "--End", help="End-time (End-time for taking pictures)")
+argParser.add_argument("-p", "--path", help="path (path to save pictures)")
 args = argParser.parse_args()
+
 start_date_time = args.Start
 start_date_time = datetime.strptime(start_date_time, '%Y-%m-%d %H:%M:%S')
 start_date_time = tehran_time_zone.localize(start_date_time)
@@ -42,9 +46,6 @@ start_utc_datetime = start_date_time.astimezone(pytz.UTC)
 start_timestamp = start_utc_datetime.timestamp()
 print (start_timestamp)
 
-argParser = argparse.ArgumentParser()
-argParser.add_argument("-e", "--End", help="End-time (End-time for taking pictures)")
-args = argParser.parse_args()
 End_date_time = args.End
 End_date_time = datetime.strptime(End_date_time, '%Y-%m-%d %H:%M:%S')
 End_date_time = tehran_time_zone.localize(End_date_time)
@@ -52,10 +53,6 @@ end_utc_datetime = End_date_time.astimezone(pytz.UTC)
 end_timestamp = end_utc_datetime.timestamp()
 print (end_timestamp)
 
-# process on path 
-argParser = argparse.ArgumentParser()
-argParser.add_argument("-p", "--path", help="path (path to save pictures)")
-args = argParser.parse_args()
 save_path = args.path if args.path else "./Pictures"
 
 # Start renderring
