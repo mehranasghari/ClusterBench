@@ -61,9 +61,9 @@ def renderer(address, port, uid, dashboard_name, org_id, timeVariable, DataSourc
     try:
         for line in all_hosts:
             host = line.strip().split(",")
-            print("Host is :", host)
             if len(host) >= 4:
                 host = host[3]
+                print("Host is :", host)
                 i = 0
                 # Recive panles id from grafana
                 id_curl_command = f"curl -s -H \"Authorization: Bearer {key}\" \
@@ -85,8 +85,6 @@ def renderer(address, port, uid, dashboard_name, org_id, timeVariable, DataSourc
                     curl_exit_code = pix_curl_process.returncode
                     if curl_exit_code == 0:
                         print("Success")
-                    else:
-                        print("Error")
                     i += 1
             else:
                 print("Error, there is no host in the list")
