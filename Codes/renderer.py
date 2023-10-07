@@ -58,8 +58,8 @@ save_path = args.path if args.path else "./Pictures"
 # Start renderring
 def renderer(address, port, uid, dashboard_name, org_id, timeVariable, DataSource, start_timestamp, end_timestamp, width, height, all_hosts, save_path, tz):
     try:
-        for host in all_hosts:
-            host = host.strip().spilt(',')
+        for line in all_hosts:
+            host = line.strip().spilt(",")
             if len(host) >= 4:
                 host = host[3]
                 i = 0
