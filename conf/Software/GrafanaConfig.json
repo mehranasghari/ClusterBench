@@ -6,5 +6,8 @@
     "dashboard_name" : "partial_monitoring" ,
     "org_id" : "1",
     "timeVariable" : "10s" ,
-    "DataSource" : "influxdb"
+    "DataSource" : "influxdb" ,
+    "picture_width" : "1000",
+    "picture_height" : "500" ,
+    "Time_zone" : "Asia%2FTehran"
 }
