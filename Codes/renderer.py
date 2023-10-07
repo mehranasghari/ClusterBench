@@ -88,6 +88,7 @@ def renderer(address, port, uid, dashboard_name, org_id, timeVariable, DataSourc
                     i += 1
             else:
                 print("Error, there is no host in the list")
-    except:
+    except Exception as e:
         print("Error, in try part")
+        print(e)
 renderer(address, port, uid, dashboard_name, org_id, timeVariable, DataSource, start_timestamp, end_timestamp, width, height, all_hosts, save_path, tz)
