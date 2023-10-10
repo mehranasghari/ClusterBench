@@ -58,6 +58,7 @@ end_timestamp = int(end_utc_datetime.timestamp() * 1000)
 
 # Process on path
 save_path = args.path if args.path else "./Pictures"
+os.rmdir(save_path)
 os.makedirs(save_path,exist_ok=True)
 
 # Start renderring
@@ -86,7 +87,6 @@ def renderer(address, port, uid, dashboard_name, org_id, timeVariable, DataSourc
                     pix_curl_command = f"""curl -s -o {save_path}/{host}-{panel_names[0+i]}.png -H "Authorization: Bearer {key}" 'http://{address}:{port}/render/d-solo/{uid}/{dashboard_name}?orgId={org_id}&var-hostIs={host}&var-timeVariable={timeVariable}&var-DataSource={DataSource}&from={start_timestamp}&to={end_timestamp}&panelId={panel_id}&width={width}&height={height}&tz={tz}'"""
                     pix_curl_process = subprocess.run(pix_curl_command, shell=True, stdout=subprocess.PIPE)
                     curl_exit_code = pix_curl_process.returncode
-                    print(pix_curl_command)
                     if curl_exit_code == 0:
                         print("Success")
                         i += 1
