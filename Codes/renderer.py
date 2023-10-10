@@ -90,6 +90,7 @@ def renderer(address, port, uid, dashboard_name, org_id, timeVariable, DataSourc
                     pix_curl_command = f"""curl -s -o {save_path}/{host}-{panel_names[0+i]}.png -H "Authorization: Bearer {key}" 'http://{address}:{port}/render/d-solo/{uid}/{dashboard_name}?orgId={org_id}&var-hostIs={host}&var-timeVariable={timeVariable}&var-DataSource={DataSource}&from={start_timestamp}&to={end_timestamp}&panelId={panel_id}&width={width}&height={height}&tz={tz}'"""
                     pix_curl_process = subprocess.run(pix_curl_command, shell=True, stdout=subprocess.PIPE)
                     curl_exit_code = pix_curl_process.returncode
+                    print(i , panel_names[0+i])
                     print(pix_curl_command)
                     if curl_exit_code == 0:
                         print("\033[92mSuccess\033[0m")
