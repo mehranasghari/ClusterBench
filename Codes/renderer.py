@@ -54,8 +54,15 @@ end_timestamp = int(end_utc_datetime.timestamp() * 1000)
 
 # Process on path
 save_path = args.path if args.path else "./Pictures"
-delete_process = subprocess.run(f"rm -rf {save_path}/*", shell=True)
-create_process = subprocess.run(f"mkdir -p {save_path}", shell=True)
+try:
+    delete_process = subprocess.run(f"rm -rf {save_path}/*", shell=True)
+    if delete_process.returncode != 0:
+        print(f"Error in deleting {save_path}")
+    create_process = subprocess.run(f"mkdir -p {save_path}", shell=True)
+    if create_process.returncode != 0:
+        print(f"Error in creating {save_path}")
+except:
+    exit()
 
 # Start renderring
 def renderer(address, port, uid, dashboard_name, org_id, timeVariable, DataSource, start_timestamp, end_timestamp, width, height, all_hosts, save_path, tz):
