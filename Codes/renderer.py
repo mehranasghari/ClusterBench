@@ -1,10 +1,10 @@
 import os
 import subprocess
 import json
-import jq
 import argparse
 from datetime import datetime
 import pytz
+import jq
 
 # Define pathes
 grafana_config_file_path = "./../conf/Software/GrafanaConfig.json"
@@ -34,20 +34,21 @@ tehran_time_zone = pytz.timezone('Asia/Tehran')
 
 # Process on argumants
 argParser = argparse.ArgumentParser()
-argParser.add_argument("-s", "--Start", help="Start-time (Start-time for taking pictures)")
-argParser.add_argument("-e", "--End", help="End-time (End-time for taking pictures)")
+argParser.add_argument("-i", "--Input", help="File Which contain times")
 argParser.add_argument("-p", "--path", help="path (path to save pictures)")
 args = argParser.parse_args()
+with open (args.Input, 'r') as file:
+    all_times = file.readlines()
+    for time in all_times:
+        start_date_time , End_date_time = time.strip().split(",")
 
 # Process on start time
-start_date_time = args.Start
 start_date_time = datetime.strptime(start_date_time, '%Y-%m-%d %H:%M:%S')
 start_date_time = tehran_time_zone.localize(start_date_time)
 start_utc_datetime = start_date_time.astimezone(pytz.UTC)
 start_timestamp = int(start_utc_datetime.timestamp() * 1000)
 
 # Process on end time
-End_date_time = args.End
 End_date_time = datetime.strptime(End_date_time, '%Y-%m-%d %H:%M:%S')
 End_date_time = tehran_time_zone.localize(End_date_time)
 end_utc_datetime = End_date_time.astimezone(pytz.UTC)
@@ -55,9 +56,8 @@ end_timestamp = int(end_utc_datetime.timestamp() * 1000)
 
 # Process on path
 save_path = args.path if args.path else "./Pictures"
+os.makedirs(save_path,exist_ok=True)
 
-start_timestamp = "1696917995297"
-end_timestamp = "1696931076418"
 # Start renderring
 def renderer(address, port, uid, dashboard_name, org_id, timeVariable, DataSource, start_timestamp, end_timestamp, width, height, all_hosts, save_path, tz):
     try:
@@ -84,6 +84,7 @@ def renderer(address, port, uid, dashboard_name, org_id, timeVariable, DataSourc
                     pix_curl_command = f"""curl -s -o {save_path}/{panel_names[0+i]}.png -H "Authorization: Bearer {key}" 'http://{address}:{port}/render/d-solo/{uid}/{dashboard_name}?orgId={org_id}&var-hostIs={host}&var-timeVariable={timeVariable}&var-DataSource={DataSource}&from={start_timestamp}&to={end_timestamp}&panelId={panel_id}&width={width}&height={height}&tz={tz}'"""
                     pix_curl_process = subprocess.run(pix_curl_command, shell=True, stdout=subprocess.PIPE)
                     curl_exit_code = pix_curl_process.returncode
+                    print(pix_curl_command)
                     if curl_exit_code == 0:
                         print("Success")
                         i += 1
