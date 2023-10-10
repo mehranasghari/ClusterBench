@@ -97,10 +97,10 @@ def renderer(address, port, uid, dashboard_name, org_id, timeVariable, DataSourc
                         failes += 1
             else:
                 print("\033[91mError, there is no host in the list\033[0m")
-        if failes != 0:
-            print(f"\033[91m{failes} on host {host} failed\033[0m")
-        else:
-            print(f"\033[92mAll Pictures On Host {host} Taken Successfully\033[0m")
+            if failes != 0:
+                print(f"\033[91m{failes} on host {host} failed\033[0m")
+            else:
+                print(f"\033[92mAll Pictures On Host {host} Taken Successfully\033[0m")
     except Exception as e:
         print("\033[91mError, in try part\033[0m")
         print(e)
