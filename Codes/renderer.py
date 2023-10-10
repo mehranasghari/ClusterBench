@@ -37,6 +37,8 @@ argParser = argparse.ArgumentParser()
 argParser.add_argument("-i", "--Input", help="File Which contain times")
 argParser.add_argument("-p", "--path", help="path (path to save pictures)")
 args = argParser.parse_args()
+
+# Process on input
 with open (args.Input, 'r') as file:
     all_times = file.readlines()
     for time in all_times:
@@ -81,7 +83,7 @@ def renderer(address, port, uid, dashboard_name, org_id, timeVariable, DataSourc
                 panel_names = name_result.strip().split("\n")
                 for panel_id in panel_ids:
 
-                    pix_curl_command = f"""curl -s -o {save_path}/{panel_names[0+i]}.png -H "Authorization: Bearer {key}" 'http://{address}:{port}/render/d-solo/{uid}/{dashboard_name}?orgId={org_id}&var-hostIs={host}&var-timeVariable={timeVariable}&var-DataSource={DataSource}&from={start_timestamp}&to={end_timestamp}&panelId={panel_id}&width={width}&height={height}&tz={tz}'"""
+                    pix_curl_command = f"""curl -s -o {save_path}/{host}-{panel_names[0+i]}.png -H "Authorization: Bearer {key}" 'http://{address}:{port}/render/d-solo/{uid}/{dashboard_name}?orgId={org_id}&var-hostIs={host}&var-timeVariable={timeVariable}&var-DataSource={DataSource}&from={start_timestamp}&to={end_timestamp}&panelId={panel_id}&width={width}&height={height}&tz={tz}'"""
                     pix_curl_process = subprocess.run(pix_curl_command, shell=True, stdout=subprocess.PIPE)
                     curl_exit_code = pix_curl_process.returncode
                     print(pix_curl_command)
