@@ -56,6 +56,8 @@ end_timestamp = int(end_utc_datetime.timestamp() * 1000)
 # Process on path
 save_path = args.path if args.path else "./Pictures"
 
+start_timestamp = "1696917995297"
+end_timestamp = "1696931076418"
 # Start renderring
 def renderer(address, port, uid, dashboard_name, org_id, timeVariable, DataSource, start_timestamp, end_timestamp, width, height, all_hosts, save_path, tz):
     try:
