@@ -92,9 +92,9 @@ def renderer(address, port, uid, dashboard_name, org_id, timeVariable, DataSourc
                     curl_exit_code = pix_curl_process.returncode
                     print(i , panel_names[0+i])
                     print(pix_curl_command)
+                    i += 1
                     if curl_exit_code == 0:
                         print("\033[92mSuccess\033[0m")
-                        i += 1
                     else:
                         print(pix_curl_process.stdout)
             else:
