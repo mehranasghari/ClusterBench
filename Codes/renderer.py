@@ -72,6 +72,7 @@ def renderer(address, port, uid, dashboard_name, org_id, timeVariable, DataSourc
             if len(host) >= 4:
                 host = host[3]
                 i = 0
+                failes = 0
                 # Recive panles id from grafana
                 id_curl_command = f"curl -s -H \"Authorization: Bearer {key}\" \
                 -H \"Content-Type: application/json\" \
@@ -90,15 +91,14 @@ def renderer(address, port, uid, dashboard_name, org_id, timeVariable, DataSourc
                     pix_curl_command = f"""curl -s -o {save_path}/{host}-{panel_names[0+i]}.png -H "Authorization: Bearer {key}" 'http://{address}:{port}/render/d-solo/{uid}/{dashboard_name}?orgId={org_id}&var-hostIs={host}&var-timeVariable={timeVariable}&var-DataSource={DataSource}&from={start_timestamp}&to={end_timestamp}&panelId={panel_id}&width={width}&height={height}&tz={tz}'"""
                     pix_curl_process = subprocess.run(pix_curl_command, shell=True, stdout=subprocess.PIPE)
                     curl_exit_code = pix_curl_process.returncode
-                    print(i , panel_names[0+i])
-                    print(pix_curl_command)
                     i += 1
-                    if curl_exit_code == 0:
-                        print("\033[92mSuccess\033[0m")
-                    else:
+                    if curl_exit_code != 0:
                         print(pix_curl_process.stdout)
+                        failes += 1
             else:
                 print("\033[91mError, there is no host in the list\033[0m")
+        if failes != 0:
+            print(f"\033[91m{failes} on host {host} failed\033[0m")
     except Exception as e:
         print("\033[91mError, in try part\033[0m")
         print(e)
