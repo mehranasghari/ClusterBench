@@ -11,5 +11,5 @@
     "Backup_influxdb_address_in_host" : "/mnt/sdb/influx-test/influxdb-data/MBT_BACKUP",
     "Backup_influxdb_in_container_address" : "/var/lib/influxdb/MBT_BACKUP",
     "Time_add_to_end_of_test" : "600",
-
+    "Time_reduce_from_first_of_test" : "600"
 }
