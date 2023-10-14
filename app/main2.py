@@ -51,28 +51,25 @@ def process_on_workloads(workloads_dir_path):
     all_workloads = os.listdir(workloads_dir_path)
     all_workloads = sorted(all_workloads)
     for workload in all_workloads:
-        def pre_test_function(pre_test_script_path):
-            # Execute the script before running the test
-            print("\033[1m\nExecuting pre-test script...\033[0m")
-            time.sleep(1)
-            pre_test_script_failure_num = 0
+        # Execute the script before running the test
+        print("\033[1m\nExecuting pre-test script...\033[0m")
+        time.sleep(1)
+        pre_test_script_failure_num = 0
 
-            for talash in range(max_pre_test_script_failure):
-                pre_test_script = subprocess.run([pre_test_script_path], shell=True)
+        for talash in range(max_pre_test_script_failure):
+            pre_test_script = subprocess.run([pre_test_script_path], shell=True)
 
-                if pre_test_script.returncode == 0:
-                    print("\033[92mPre-test script executed successfully!\033[0m")
-                    break
-                else:
-                    print("\033[91mPre-test script executed with failure! Retrying {} more time(s)\033[0m".format(max_pre_test_script_failure - talash - 1))
-                    pre_test_script_failure_num += 1
-                    time.sleep(1)
+            if pre_test_script.returncode == 0:
+                print("\033[92mPre-test script executed successfully!\033[0m")
+                break
+            else:
+                print("\033[91mPre-test script executed with failure! Retrying {} more time(s)\033[0m".format(max_pre_test_script_failure - talash - 1))
+                pre_test_script_failure_num += 1
+                time.sleep(1)
 
-            if pre_test_script_failure_num == max_pre_test_script_failure:
-                print("\033[91mMaximum pre-test script failures reached. Skipping this workload.\033[0m")
-                continue
-
-        pre_test_function(pre_test_script_path)
+        if pre_test_script_failure_num == max_pre_test_script_failure:
+            print("\033[91mMaximum pre-test script failures reached. Skipping this workload.\033[0m")
+            continue
 
         # Sleep time for a short duration
         if sleep_time_between_workloads > 0:
@@ -80,18 +77,11 @@ def process_on_workloads(workloads_dir_path):
             time.sleep(sleep_time_between_workloads)
 
         # Start workload
-        max_talash2 = 0
-        for talash2 in range(max_talash2):
-            workload_file_path = os.path.join(workloads_dir_path, workload)
-            Cos_bench_command = subprocess.run(["bash", cosbench_command, submit, workload_file_path], stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
-            if Cos_bench_command.returncode == 1:
-                max_talash2 += 1
-                time.sleep(30)
-                pre_test_function(backup_script_path)
-                Cos_bench_command = subprocess.run(["bash", cosbench_command, submit, workload_file_path], stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
-            if max_talash2 > 3:
-                print("\033[91mMaximum Tries reached. Skipping this workload.\033[0m")
-                continue
+        workload_file_path = os.path.join(workloads_dir_path, workload)
+        Cos_bench_command = subprocess.run(["bash", cosbench_command, submit, workload_file_path], stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
+        if Cos_bench_command.returncode == 1:
+            print("\033[91mStarting workload failed. Skipping this workload.\033[0m")
+            continue
 
         # Extract ID of workload
         output_lines = Cos_bench_command.stdout.splitlines()
